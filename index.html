@@ -258,21 +258,12 @@ header h1 small{display:block; font-size:10px; letter-spacing:3px; color:var(--m
 /* ═══ Fleet Command v2 "Overdrive" ═══
    Reads fleet-registry.json from Drive, then every registered feed.
    Any AI can publish a feed (see START HERE readme in the Drive folder). */
-const REGISTRY_ID = "171CYV4j-kGAGbZrI0kHSepiVvsyC6WQJ";
-/* primary: direct download host (no redirect hop, session-independent).
-   fallback: classic uc endpoint. */
-const dl = id => "https://drive.usercontent.google.com/download?id=" + id + "&export=download&confirm=t&t=" + Date.now();
-const dl2 = id => "https://drive.google.com/uc?export=download&id=" + id + "&t=" + Date.now();
-async function fetchJSON(id){
-  let lastErr = "";
-  for(const u of [dl(id), dl2(id)]){
-    try{
-      const r = await fetch(u);
-      if(!r.ok){ lastErr = "HTTP " + r.status; continue; }
-      return await r.json();
-    }catch(e){ lastErr = e.message || String(e); }
-  }
-  throw new Error(lastErr || "fetch failed");
+/* Data: same-origin JSON synced from Drive by the repo's GitHub Action
+   (.github/workflows/sync-fleet.yml) every 5 minutes. No CORS possible. */
+async function fetchJSON(path){
+  const r = await fetch("data/" + path + "?t=" + Date.now());
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  return await r.json();
 }
 const STALE_MS = 15 * 60 * 1000;
 const SEEN_KEY = "fc_seen_v2";
@@ -392,9 +383,9 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;"
 /* ── sync ── */
 async function sync(silent){
   try{
-    const reg = await fetchJSON(REGISTRY_ID);
+    const reg = await fetchJSON("registry.json");
     const results = await Promise.allSettled((reg.feeds||[]).map(async f => {
-      try{ return { meta:f, feed: await fetchJSON(f.fileId), ok:true }; }
+      try{ return { meta:f, feed: await fetchJSON(f.file), ok:true }; }
       catch(e){ return { meta:f, feed:null, ok:false }; }
     }));
     S.feeds = results.map(r => r.status==="fulfilled" ? r.value : {meta:{}, feed:null, ok:false});
