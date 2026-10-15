@@ -17,6 +17,11 @@
       "file": "fleet-grok.json"
     },
     {
+      "ai": "gemini",
+      "label": "Gemini",
+      "file": "fleet-gemini.json"
+    },
+    {
       "ai": "chatgpt",
       "label": "ChatGPT",
       "file": "fleet-chatgpt.json"
