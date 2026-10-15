@@ -403,6 +403,7 @@ async function sync(silent){
 }
 function feedState(e){
   if(!e.ok || !e.feed) return "nosig";
+  if(e.feed.placeholder && (e.feed.live||[]).length === 0) return "nosig";
   return (Date.now() - new Date(e.feed.updated_at).getTime()) > STALE_MS ? "lost" : "on";
 }
 function findShip(key){
