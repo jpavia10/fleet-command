@@ -1,0 +1,57 @@
+name: Sync fleet history from repo data
+
+on:
+  schedule:
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Append daily rollup
+        run: |
+          python3 - <<'PYEOF'
+          import json, os, glob, datetime
+          today = datetime.date.today().isoformat()
+          hist_path = "data/history.json"
+          hist = {}
+          if os.path.exists(hist_path):
+              hist = json.load(open(hist_path))
+          for fp in glob.glob("data/fleet-*.json"):
+              ai = os.path.basename(fp)[len("fleet-"):-len(".json")]
+              try:
+                  feed = json.load(open(fp))
+              except Exception as e:
+                  print(f"skip {ai}: {e}"); continue
+              live = feed.get("live", [])
+              recent = feed.get("recent", [])
+              done = sum(1 for r in recent if r.get("status") == "done")
+              failed = sum(1 for r in recent if r.get("status") in ("failed", "stopped"))
+              days = hist.get(ai, [])
+              days = [d for d in days if d.get("date") != today]
+              days.append({"date": today, "live": len(live),
+                           "scheduled": len(feed.get("scheduled", [])),
+                           "done": done, "failed": failed})
+          hist[ai] = days[-30:]
+          os.makedirs("data", exist_ok=True)
+          json.dump(hist, open(hist_path, "w"), indent=2)
+          print(f"history updated for {today}")
+          PYEOF
+
+      - name: Commit if changed
+        run: |
+          git config user.name "fleet-command-sync"
+          git config user.email "fleet-command-sync@users.noreply.github.com"
+          git pull --rebase origin main || true
+          git add data/history.json
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "fleet history rollup $(date -u +%Y-%m-%d)"
+            git push
+          fi
