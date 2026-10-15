@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet Command — Joseph's AI Fleet</title>
+<meta name="description" content="Live tactical display of every AI agent across Joseph's fleet: Muse, Claude, Grok, Gemini, ChatGPT.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,4 44,40 32,34 20,40' fill='%235ff2ff'/%3E%3Cpolygon points='32,34 44,40 40,52 24,52 20,40' fill='%231b6f8a'/%3E%3Ccircle cx='32' cy='46' r='4' fill='%23ff9f43'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#04060d">
+<style>
+:root{
+  --bg:#04060d; --panel:rgba(10,18,32,.82); --line:rgba(95,242,255,.22);
+  --cyan:#5ff2ff; --green:#51ff9e; --amber:#ffbf47; --red:#ff5470;
+  --text:#e6f0ff; --muted:#8b9bb8; --dim:#4a5872;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  overflow:hidden; font-size:16px;
+}
+#stars{position:fixed; inset:0; z-index:0;}
+#app{position:relative; z-index:1; height:100vh; display:flex; flex-direction:column;}
+.mono{font-family:ui-monospace,"Cascadia Mono","JetBrains Mono",Consolas,monospace;}
+
+/* ── header ─────────────────────────────── */
+header{
+  display:flex; align-items:center; gap:18px; padding:12px 20px;
+  border-bottom:1px solid var(--line); background:rgba(4,8,16,.85);
+  backdrop-filter:blur(6px); flex:0 0 auto;
+}
+header h1{font-size:22px; letter-spacing:6px; color:var(--cyan); font-weight:700; white-space:nowrap;}
+header h1 small{display:block; font-size:10px; letter-spacing:3px; color:var(--muted); font-weight:400;}
+.hstats{display:flex; gap:22px; margin-left:auto; align-items:center;}
+.hstat{text-align:center;}
+.hstat b{display:block; font-size:22px; color:var(--text);}
+.hstat span{font-size:10px; letter-spacing:2px; color:var(--muted);}
+.hstat.alert b{color:var(--red);}
+#clock{text-align:right;}
+#clock b{display:block; font-size:18px;}
+#clock span{font-size:10px; letter-spacing:2px; color:var(--muted);}
+#syncBtn{
+  background:transparent; border:1px solid var(--line); color:var(--cyan);
+  padding:8px 14px; font-size:12px; letter-spacing:2px; cursor:pointer; border-radius:4px;
+}
+#syncBtn:hover{background:rgba(95,242,255,.12);}
+#alertbar{
+  display:none; padding:10px 20px; background:rgba(255,84,112,.14);
+  border-bottom:1px solid var(--red); color:#ffb3c2; font-size:14px; letter-spacing:1px;
+  flex:0 0 auto;
+}
+#alertbar.show{display:block;}
+
+/* ── filter chips ───────────────────────── */
+#filters{
+  display:flex; gap:8px; padding:10px 20px; flex:0 0 auto; flex-wrap:wrap;
+  border-bottom:1px solid rgba(95,242,255,.12); background:rgba(4,8,16,.6);
+}
+.chip{
+  border:1px solid var(--dim); background:transparent; color:var(--muted);
+  padding:6px 14px; border-radius:20px; font-size:12px; letter-spacing:2px; cursor:pointer;
+}
+.chip.on{border-color:var(--cyan); color:var(--cyan); background:rgba(95,242,255,.1);}
+.chip:hover{border-color:var(--cyan);}
+
+/* ── main layout ────────────────────────── */
+#main{flex:1 1 auto; display:flex; min-height:0;}
+#squads{width:250px; flex:0 0 auto; border-right:1px solid var(--line); overflow-y:auto; padding:14px; background:rgba(4,8,16,.7);}
+#tactical{flex:1 1 auto; overflow-y:auto; padding:18px 22px; position:relative;}
+#detail{
+  width:340px; flex:0 0 auto; border-left:1px solid var(--line);
+  background:var(--panel); padding:18px; overflow-y:auto; display:none;
+}
+#detail.show{display:block;}
+
+/* ── squadron cards ─────────────────────── */
+.squad{
+  border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:12px;
+  cursor:pointer; background:rgba(12,22,40,.6); transition:border-color .2s;
+}
+.squad:hover{border-color:var(--cyan);}
+.squad.sel{border-color:var(--cyan); box-shadow:0 0 14px rgba(95,242,255,.25);}
+.squad .row1{display:flex; align-items:center; gap:10px;}
+.dot{width:12px; height:12px; border-radius:50%; flex:0 0 auto;}
+.dot.on{background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2s infinite;}
+.dot.lost{background:var(--amber); box-shadow:0 0 8px var(--amber);}
+.dot.nosig{background:var(--dim);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.squad h3{font-size:15px; letter-spacing:1px;}
+.squad .meta{font-size:12px; color:var(--muted); margin-top:6px; line-height:1.7;}
+.squad .tag{font-size:10px; letter-spacing:2px; padding:2px 8px; border-radius:3px; margin-top:8px; display:inline-block;}
+.tag.lost{background:rgba(255,191,71,.15); color:var(--amber); border:1px solid var(--amber);}
+.tag.nosig{background:rgba(74,88,114,.2); color:var(--muted); border:1px solid var(--dim);}
+
+/* ── tactical bands ─────────────────────── */
+.band{margin-bottom:26px;}
+.band > h2{
+  font-size:13px; letter-spacing:4px; color:var(--cyan); margin-bottom:4px;
+  display:flex; align-items:center; gap:10px;
+}
+.band > h2 .age{font-size:11px; color:var(--muted); letter-spacing:1px;}
+.band.lostband > h2{color:var(--amber);}
+.band .ships{display:flex; flex-wrap:wrap; gap:14px; margin-top:12px;}
+.noships{color:var(--dim); font-size:14px; padding:18px; border:1px dashed var(--dim); border-radius:8px; letter-spacing:1px;}
+
+/* ── ship cards ─────────────────────────── */
+.ship{
+  width:190px; border:1px solid var(--line); border-radius:10px; padding:12px 10px 10px;
+  background:rgba(10,20,36,.72); cursor:pointer; text-align:center; position:relative;
+  transition:transform .18s, box-shadow .18s, border-color .18s;
+  animation:drift 7s ease-in-out infinite;
+}
+.ship:nth-child(2n){animation-duration:9s; animation-delay:-3s;}
+.ship:nth-child(3n){animation-duration:11s; animation-delay:-5s;}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.ship:hover{transform:translateY(-4px); border-color:var(--cyan); box-shadow:0 6px 24px rgba(95,242,255,.25);}
+.ship.sel{border-color:var(--cyan); box-shadow:0 0 18px rgba(95,242,255,.4);}
+.ship.dim{opacity:.28; filter:grayscale(.6);}
+.ship svg{width:84px; height:84px; display:block; margin:0 auto 6px;}
+.ship h4{font-size:14px; letter-spacing:.5px; line-height:1.3; min-height:36px;}
+.ship .proj{
+  display:inline-block; font-size:10px; letter-spacing:2px; margin-top:6px;
+  padding:3px 10px; border-radius:3px; background:rgba(95,242,255,.1); color:var(--cyan);
+  border:1px solid rgba(95,242,255,.35);
+}
+.ship .st{font-size:11px; margin-top:6px; letter-spacing:1px;}
+.st.running{color:var(--green);} .st.idle{color:var(--amber);} .st.failed{color:var(--red);}
+.st .mono{color:var(--muted);}
+.engine{animation:engpulse 1.6s ease-in-out infinite;}
+@keyframes engpulse{0%,100%{opacity:.85}50%{opacity:.3}}
+.ship.failed{border-color:var(--red); animation:drift 7s ease-in-out infinite, alertblink 1.2s steps(2) infinite;}
+@keyframes alertblink{50%{box-shadow:0 0 22px rgba(255,84,112,.55);}}
+
+/* ── rest state ─────────────────────────── */
+#atrest{text-align:center; padding:60px 20px; color:var(--muted);}
+#atrest h2{font-size:20px; letter-spacing:8px; color:var(--cyan); margin-bottom:10px;}
+#atrest p{font-size:14px; letter-spacing:1px;}
+#patrol{width:120px; margin:26px auto; animation:flyby 14s linear infinite;}
+@keyframes flyby{0%{transform:translateX(-46vw)}100%{transform:translateX(46vw)}}
+
+/* ── detail panel ───────────────────────── */
+#detail h2{font-size:18px; letter-spacing:2px; margin-bottom:4px;}
+#detail .ai{font-size:12px; color:var(--cyan); letter-spacing:2px; margin-bottom:14px;}
+.kv{margin-bottom:12px;}
+.kv .k{font-size:10px; letter-spacing:3px; color:var(--muted); margin-bottom:3px;}
+.kv .v{font-size:15px; line-height:1.55;}
+#detailClose{
+  float:right; background:none; border:1px solid var(--dim); color:var(--muted);
+  width:30px; height:30px; border-radius:4px; cursor:pointer; font-size:16px;
+}
+#detailClose:hover{color:var(--text); border-color:var(--text);}
+.pill{display:inline-block; padding:4px 12px; border-radius:4px; font-size:12px; letter-spacing:2px;}
+.pill.running{background:rgba(81,255,158,.14); color:var(--green); border:1px solid var(--green);}
+.pill.idle{background:rgba(255,191,71,.14); color:var(--amber); border:1px solid var(--amber);}
+.pill.done{background:rgba(139,155,184,.14); color:var(--muted); border:1px solid var(--dim);}
+.pill.failed{background:rgba(255,84,112,.14); color:var(--red); border:1px solid var(--red);}
+
+/* ── bottom dock ────────────────────────── */
+#dock{
+  flex:0 0 auto; border-top:1px solid var(--line); background:rgba(4,8,16,.88);
+  display:flex; min-height:172px; max-height:230px;
+}
+.dockpane{flex:1; padding:12px 18px; overflow-y:auto; min-width:0;}
+.dockpane + .dockpane{border-left:1px solid var(--line);}
+.dockpane h3{font-size:11px; letter-spacing:4px; color:var(--cyan); margin-bottom:10px;}
+.logrow{display:flex; gap:12px; padding:7px 0; border-bottom:1px solid rgba(95,242,255,.08); font-size:13px; align-items:baseline;}
+.logrow .t{color:var(--muted); font-size:11px; white-space:nowrap;}
+.logrow .n{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.logrow .p{font-size:10px; letter-spacing:1px; color:var(--cyan); border:1px solid rgba(95,242,255,.3); padding:1px 7px; border-radius:3px; white-space:nowrap;}
+.logrow .s-ok{color:var(--green);} .logrow .s-err{color:var(--red);} .logrow .s-never{color:var(--dim);}
+.cronrow{display:flex; gap:12px; padding:7px 0; border-bottom:1px solid rgba(95,242,255,.08); font-size:13px; align-items:baseline;}
+.cronrow .n{flex:1;}
+.cronrow .nx{color:var(--muted); font-size:12px; white-space:nowrap;}
+.empty-note{color:var(--dim); font-size:13px; padding:8px 0; letter-spacing:1px;}
+
+#uplinkdown{
+  position:absolute; inset:0; display:none; align-items:center; justify-content:center;
+  background:rgba(4,6,13,.9); z-index:5; text-align:center;
+}
+#uplinkdown.show{display:flex;}
+#uplinkdown h2{font-size:24px; letter-spacing:8px; color:var(--red); margin-bottom:12px;}
+#uplinkdown p{color:var(--muted); margin-bottom:18px;}
+
+@media (max-width:1100px){
+  #squads{display:none;}
+  #detail{position:fixed; right:0; top:0; bottom:0; z-index:10; width:min(360px,92vw); box-shadow:-8px 0 30px rgba(0,0,0,.6);}
+  #dock{flex-direction:column; max-height:300px;}
+  .dockpane + .dockpane{border-left:none; border-top:1px solid var(--line);}
+  header h1{font-size:16px; letter-spacing:3px;}
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div id="app">
+  <header>
+    <h1>FLEET COMMAND<small>JOSEPH'S AI FLEET · LIVE</small></h1>
+    <div class="hstats">
+      <div class="hstat"><b id="stShips">–</b><span>SHIPS ACTIVE</span></div>
+      <div class="hstat"><b id="stAI">–</b><span>AI ONLINE</span></div>
+      <div class="hstat"><b id="stCron">–</b><span>SCHEDULED</span></div>
+      <div class="hstat" id="stAlertWrap"><b id="stAlert">0</b><span>ALERTS</span></div>
+      <div id="clock"><b class="mono" id="clockUtc">--:--:--</b><span>UTC · <span class="mono" id="clockPt">--:--</span> PT</span></div>
+      <button id="syncBtn" title="Refresh now (R)">SYNC</button>
+    </div>
+  </header>
+  <div id="alertbar"></div>
+  <div id="filters"></div>
+  <div id="main">
+    <aside id="squads"></aside>
+    <section id="tactical">
+      <div id="uplinkdown">
+        <div><h2>UPLINK DOWN</h2><p>Cannot reach the fleet registry on Drive.<br>Check connection, then retry.</p>
+        <button id="syncBtn2" class="chip on">RETRY</button></div>
+      </div>
+      <div id="bands"></div>
+    </section>
+    <aside id="detail"></aside>
+  </div>
+  <div id="dock">
+    <div class="dockpane"><h3>MISSION LOG — RECENT</h3><div id="log"></div></div>
+    <div class="dockpane"><h3>SCHEDULED ROSTER</h3><div id="crons"></div></div>
+  </div>
+</div>
+<script>
+"use strict";
+/* ═══ Fleet Command — bridge ═══
+   Reads fleet-registry.json from Drive, then every registered feed.
+   Registry + feeds are plain JSON any AI can publish (see START HERE readme). */
+const REGISTRY_ID = "171CYV4j-kGAGbZrI0kHSepiVvsyC6WQJ";
+const dl = id => "https://drive.google.com/uc?export=download&id=" + id + "&t=" + Date.now();
+const STALE_MS = 15 * 60 * 1000;
+
+const S = { feeds: [], sel: null, proj: "ALL", squad: null, lastSync: null, projs: [] };
+
+/* ── starfield ── */
+const cv = document.getElementById("stars"), cx = cv.getContext("2d");
+let stars = [], shoot = null;
+function sizeStars(){
+  cv.width = innerWidth; cv.height = innerHeight; stars = [];
+  const n = Math.floor(innerWidth * innerHeight / 4200);
+  for (let i = 0; i < n; i++) stars.push({
+    x: Math.random()*cv.width, y: Math.random()*cv.height,
+    z: Math.random(), r: Math.random()*1.4+.3, tw: Math.random()*Math.PI*2
+  });
+}
+function tick(t){
+  cx.clearRect(0,0,cv.width,cv.height);
+  for (const s of stars){
+    const a = .25 + .55*Math.abs(Math.sin(t/900 + s.tw)) * (0.4 + s.z);
+    cx.fillStyle = "rgba(200,225,255," + a.toFixed(3) + ")";
+    cx.beginPath(); cx.arc(s.x, s.y, s.r*(0.5+s.z), 0, 7); cx.fill();
+  }
+  if (!shoot && Math.random() < .004) shoot = {x: Math.random()*cv.width*.8, y: Math.random()*cv.height*.3, v: 9};
+  if (shoot){
+    cx.strokeStyle = "rgba(160,220,255,.8)"; cx.lineWidth = 1.6;
+    cx.beginPath(); cx.moveTo(shoot.x, shoot.y); cx.lineTo(shoot.x - 70, shoot.y + 28); cx.stroke();
+    shoot.x += shoot.v; shoot.y -= shoot.v*.4;
+    if (shoot.x > cv.width + 100) shoot = null;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ── ship art ── */
+function hash(s){ let h=0; for (let i=0;i<s.length;i++) h=(h*31 + s.charCodeAt(i))|0; return Math.abs(h); }
+function shipSVG(cls, status){
+  const eng = status === "running" ? ' class="engine"' : "";
+  const hull = "#9fd8ff", dark = "#3d6a94";
+  const flame = '<ellipse'+eng+' cx="32" cy="56" rx="5" ry="10" fill="#ff9f43" opacity=".85"/>';
+  const shapes = {
+    interceptor: '<polygon points="32,6 46,44 32,38 18,44" fill="'+hull+'"/><polygon points="32,6 38,38 32,44 26,38" fill="'+dark+'"/>',
+    frigate: '<polygon points="32,8 40,34 58,52 36,46 28,46 6,52 24,34" fill="'+hull+'"/><polygon points="32,8 36,40 28,40" fill="'+dark+'"/>',
+    cruiser: '<polygon points="22,10 42,10 48,40 38,54 26,54 16,40" fill="'+hull+'"/><rect x="28" y="16" width="8" height="26" fill="'+dark+'"/>',
+    scout: '<polygon points="32,10 44,32 32,54 20,32" fill="'+hull+'"/><polygon points="32,10 38,32 32,54 26,32" fill="'+dark+'"/>'
+  };
+  return '<svg viewBox="0 0 64 64">' + flame + (shapes[cls]||shapes.interceptor) + "</svg>";
+}
+const CLS = ["interceptor","frigate","cruiser","scout"];
+
+/* ── time helpers ── */
+function ago(iso){
+  if (!iso) return "—";
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime())/1000);
+  if (s < 60) return Math.floor(s) + "s ago";
+  if (s < 3600) return Math.floor(s/60) + "m ago";
+  return Math.floor(s/3600) + "h " + Math.floor(s%3600/60) + "m ago";
+}
+function dur(sec){
+  if (sec == null) return "—";
+  if (sec < 60) return sec + "s";
+  if (sec < 3600) return Math.floor(sec/60) + "m " + Math.floor(sec%60) + "s";
+  return Math.floor(sec/3600) + "h " + Math.floor(sec%3600/60) + "m";
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function until(iso){
+  if (!iso) return "";
+  const s = (new Date(iso).getTime() - Date.now())/1000;
+  if (s < 0) return "now";
+  if (s < 3600) return "in " + Math.floor(s/60) + "m";
+  if (s < 86400) return "in " + Math.floor(s/3600) + "h " + Math.floor(s%3600/60) + "m";
+  return "in " + Math.floor(s/86400) + "d";
+}
+
+/* ── sync ── */
+async function sync(){
+  const t0 = Date.now();
+  try {
+    const reg = await (await fetch(dl(REGISTRY_ID))).json();
+    const results = await Promise.allSettled((reg.feeds||[]).map(async f => {
+      try {
+        const j = await (await fetch(dl(f.fileId))).json();
+        return { meta: f, feed: j, ok: true };
+      } catch(e){ return { meta: f, feed: null, ok: false }; }
+    }));
+    S.feeds = results.map(r => r.status === "fulfilled" ? r.value : { meta:{}, feed:null, ok:false });
+    S.lastSync = new Date();
+    document.getElementById("uplinkdown").classList.remove("show");
+  } catch(e){
+    document.getElementById("uplinkdown").classList.add("show");
+  }
+  collectProjects();
+  render();
+  // keep selection if ship still live
+  if (S.sel && !findShip(S.sel)) { S.sel = null; }
+}
+function feedState(e){
+  if (!e.ok || !e.feed) return "nosig";
+  const age = Date.now() - new Date(e.feed.updated_at).getTime();
+  return age > STALE_MS ? "lost" : "on";
+}
+function findShip(key){
+  for (const e of S.feeds){
+    if (!e.feed) continue;
+    const s = (e.feed.live||[]).find(x => e.feed.ai + ":" + x.id === key);
+    if (s) return { e, s };
+  }
+  return null;
+}
+function collectProjects(){
+  const set = new Set();
+  for (const e of S.feeds){
+    if (!e.feed) continue;
+    (e.feed.live||[]).forEach(x => x.project && set.add(x.project));
+    (e.feed.recent||[]).forEach(x => x.project && set.add(x.project));
+    (e.feed.scheduled||[]).forEach(x => x.project && set.add(x.project));
+  }
+  S.projs = [...set].sort();
+}
+function visible(e, item){
+  if (S.squad && e.feed.ai !== S.squad) return false;
+  if (S.proj !== "ALL" && item.project !== S.proj) return false;
+  return true;
+}
+
+/* ── render ── */
+function render(){
+  renderHeader(); renderFilters(); renderSquads(); renderBands(); renderDetail(); renderDock();
+}
+function renderHeader(){
+  let ships = 0, ai = 0, crons = 0, alerts = [];
+  for (const e of S.feeds){
+    const st = feedState(e);
+    if (st === "on"){ ai++; ships += (e.feed.live||[]).length; crons += (e.feed.scheduled||[]).length; }
+    for (const x of (e.feed && e.feed.live)||[])
+      if (x.status === "failed") alerts.push(x.name);
+  }
+  document.getElementById("stShips").textContent = ships;
+  document.getElementById("stAI").textContent = ai + "/" + S.feeds.length;
+  document.getElementById("stCron").textContent = crons;
+  document.getElementById("stAlert").textContent = alerts.length;
+  document.getElementById("stAlertWrap").classList.toggle("alert", alerts.length > 0);
+  const ab = document.getElementById("alertbar");
+  if (alerts.length){ ab.classList.add("show"); ab.textContent = "⚠ ALERT — failed agents: " + alerts.join(" · "); }
+  else ab.classList.remove("show");
+}
+function renderFilters(){
+  const f = document.getElementById("filters");
+  const chips = ["ALL", ...S.projs];
+  if (!chips.includes(S.proj)) S.proj = "ALL";
+  f.innerHTML = chips.map(p =>
+    '<button class="chip' + (p===S.proj?" on":"") + '" data-p="'+esc(p)+'">' + esc(p.toUpperCase()) + "</button>"
+  ).join("");
+  f.querySelectorAll(".chip").forEach(c => c.onclick = () => { S.proj = c.dataset.p; render(); });
+}
+function renderSquads(){
+  const w = document.getElementById("squads");
+  w.innerHTML = S.feeds.map(e => {
+    const st = feedState(e), fd = e.feed || {};
+    const label = esc(e.meta.label || fd.label || e.meta.ai || "?");
+    const dot = st==="on"?"on":st==="lost"?"lost":"nosig";
+    const live = (fd.live||[]).length, sch = (fd.scheduled||[]).length;
+    const tag = st==="lost" ? '<span class="tag lost">SIGNAL LOST</span>'
+              : st==="nosig" ? '<span class="tag nosig">NO SIGNAL</span>' : "";
+    const meta = st==="on"
+      ? live + " live · " + sch + " scheduled<br>updated " + ago(fd.updated_at)
+      : st==="lost" ? "last seen " + ago(fd.updated_at) + "<br>feed stale &gt; 15 min"
+      : "in registry — awaiting first report";
+    return '<div class="squad' + (S.squad===(fd.ai||e.meta.ai)?" sel":"") + '" data-ai="'+esc(fd.ai||e.meta.ai||"")+'">' +
+      '<div class="row1"><span class="dot '+dot+'"></span><h3>'+label+'</h3></div>' +
+      '<div class="meta">'+meta+'</div>' + tag + "</div>";
+  }).join("");
+  w.querySelectorAll(".squad").forEach(el => el.onclick = () => {
+    S.squad = S.squad === el.dataset.ai ? null : el.dataset.ai; render();
+  });
+}
+function renderBands(){
+  const w = document.getElementById("bands");
+  let anyLive = false, html = "";
+  for (const e of S.feeds){
+    const fd = e.feed; if (!fd) continue;
+    const st = feedState(e);
+    if (S.squad && fd.ai !== S.squad) continue;
+    const ships = (fd.live||[]).filter(x => visible(e, x));
+    if (st === "on") anyLive = anyLive || ships.length > 0;
+    const cards = ships.map(x => {
+      const key = fd.ai + ":" + x.id;
+      const cls = CLS[hash(key) % CLS.length];
+      const failed = x.status === "failed";
+      const dimd = S.proj !== "ALL" && x.project !== S.proj;
+      return '<div class="ship' + (failed?" failed":"") + (S.sel===key?" sel":"") + (dimd?" dim":"") + '" data-key="'+esc(key)+'">' +
+        shipSVG(cls, x.status) +
+        "<h4>" + esc(x.name) + "</h4>" +
+        '<span class="proj">' + esc((x.project||"—").toUpperCase()) + "</span>" +
+        '<div class="st ' + esc(x.status) + '">' + esc(x.status.toUpperCase()) +
+        ' <span class="mono">· ' + dur(x.elapsed_s) + "</span></div></div>";
+    }).join("");
+    html += '<div class="band' + (st!=="on"?" lostband":"") + '"><h2>' + esc(fd.label || fd.ai) +
+      ' <span class="age">' + (st==="on" ? "updated " + ago(fd.updated_at) : st==="lost" ? "SIGNAL LOST — " + ago(fd.updated_at) : "NO SIGNAL") + "</span></h2>" +
+      '<div class="ships">' + (cards || '<div class="noships">No live agents on this squadron.</div>') + "</div></div>";
+  }
+  if (!anyLive && !S.squad && S.proj === "ALL"){
+    html += '<div id="atrest"><h2>FLEET AT REST</h2><p>All squadrons docked. The bridge is listening.</p>' +
+      '<div id="patrol">' + shipSVG("interceptor","idle") + "</div></div>";
+  }
+  w.innerHTML = html;
+  w.querySelectorAll(".ship").forEach(el => el.onclick = () => {
+    S.sel = S.sel === el.dataset.key ? null : el.dataset.key; render();
+  });
+}
+function renderDetail(){
+  const d = document.getElementById("detail");
+  const f = S.sel && findShip(S.sel);
+  if (!f){ d.classList.remove("show"); d.innerHTML = ""; return; }
+  const { e, s } = f, fd = e.feed;
+  d.classList.add("show");
+  d.innerHTML = '<button id="detailClose">✕</button>' +
+    "<h2>" + esc(s.name) + "</h2>" +
+    '<div class="ai">' + esc(fd.label || fd.ai) + " · " + esc((s.project||"—").toUpperCase()) + "</div>" +
+    '<div class="kv"><div class="k">STATUS</div><div class="v"><span class="pill ' + esc(s.status) + '">' + esc(s.status.toUpperCase()) + "</span></div></div>" +
+    (s.task ? '<div class="kv"><div class="k">MISSION</div><div class="v">' + esc(s.task) + "</div></div>" : "") +
+    (s.summary ? '<div class="kv"><div class="k">RESULT</div><div class="v">' + esc(s.summary) + "</div></div>" : "") +
+    '<div class="kv"><div class="k">ELAPSED</div><div class="v mono">' + dur(s.elapsed_s) + "</div></div>" +
+    (s.started_at ? '<div class="kv"><div class="k">LAUNCHED</div><div class="v mono">' + ago(s.started_at) + "</div></div>" : "") +
+    (s.last_activity_s != null ? '<div class="kv"><div class="k">LAST CONTACT</div><div class="v mono">' + dur(s.last_activity_s) + " ago</div></div>" : "") +
+    (s.completed_at ? '<div class="kv"><div class="k">COMPLETED</div><div class="v mono">' + ago(s.completed_at) + "</div></div>" : "");
+  document.getElementById("detailClose").onclick = () => { S.sel = null; render(); };
+}
+function renderDock(){
+  // mission log
+  const items = [];
+  for (const e of S.feeds){
+    if (!e.feed) continue;
+    for (const x of e.feed.recent || []){
+      if (S.squad && e.feed.ai !== S.squad) continue;
+      if (S.proj !== "ALL" && x.project !== S.proj) continue;
+      items.push({ e, x });
+    }
+  }
+  items.sort((a,b) => new Date(b.x.completed_at) - new Date(a.x.completed_at));
+  document.getElementById("log").innerHTML = items.slice(0, 25).map(({e,x}) => {
+    const cls = x.status === "done" ? "s-ok" : x.status === "failed" ? "s-err" : "s-never";
+    return '<div class="logrow"><span class="t mono">' + ago(x.completed_at) + '</span>' +
+      '<span class="n" title="' + esc(x.summary||"") + '">' + esc(x.name) +
+      ' <span style="color:var(--dim)">· ' + esc(e.feed.label||e.feed.ai) + "</span></span>" +
+      (x.project ? '<span class="p">' + esc(x.project.toUpperCase()) + "</span>" : "") +
+      '<span class="' + cls + '">' + esc(x.status.toUpperCase()) + "</span></div>";
+  }).join("") || '<div class="empty-note">No recent missions reported.</div>';
+
+  // scheduled roster
+  const crons = [];
+  for (const e of S.feeds){
+    if (!e.feed) continue;
+    for (const c of e.feed.scheduled || []){
+      if (S.squad && e.feed.ai !== S.squad) continue;
+      if (S.proj !== "ALL" && c.project !== S.proj) continue;
+      crons.push({ e, c });
+    }
+  }
+  document.getElementById("crons").innerHTML = crons.slice(0, 25).map(({e,c}) => {
+    const cls = c.last_status === "ok" ? "s-ok" : c.last_status === "error" ? "s-err" : "s-never";
+    return '<div class="cronrow"><span class="n">' + esc(c.name) +
+      ' <span style="color:var(--dim)">· ' + esc(e.feed.label||e.feed.ai) + "</span><br>" +
+      '<span style="color:var(--muted);font-size:12px">' + esc(c.schedule||"") + "</span></span>" +
+      (c.project ? '<span class="p">' + esc(c.project.toUpperCase()) + "</span>" : "") +
+      '<span class="nx mono">' + until(c.next_run) + "</span>" +
+      '<span class="' + cls + '">' + esc((c.last_status||"—").toUpperCase()) + "</span></div>";
+  }).join("") || '<div class="empty-note">No scheduled jobs reported.</div>';
+}
+
+/* ── clock ── */
+function clock(){
+  const n = new Date();
+  document.getElementById("clockUtc").textContent = n.toISOString().slice(11,19);
+  document.getElementById("clockPt").textContent = n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",timeZone:"America/Los_Angeles"});
+}
+
+/* ── boot ── */
+document.getElementById("syncBtn").onclick = sync;
+document.getElementById("syncBtn2").onclick = sync;
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape"){ S.sel = null; render(); }
+  if (e.key === "r" || e.key === "R"){ sync(); }
+});
+sizeStars(); addEventListener("resize", sizeStars); requestAnimationFrame(tick);
+setInterval(clock, 1000); clock();
+sync(); setInterval(sync, 60000);
+</script>
+</body>
+</html>
