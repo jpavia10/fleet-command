@@ -236,7 +236,7 @@ header h1 small{display:block; font-size:10px; letter-spacing:3px; color:var(--m
   <div id="main">
     <aside id="squads"></aside>
     <section id="tactical">
-      <div id="uplinkdown"><div><h2>UPLINK DOWN</h2><p>Cannot reach the fleet registry on Drive.<br>Check connection, then retry.</p><button id="syncBtn2" class="chip on">RETRY</button></div></div>
+      <div id="uplinkdown"><div><h2>UPLINK DOWN</h2><p>Cannot reach the fleet registry on Drive.<br>Check connection, then retry.</p><p id="uplinkErr" class="mono" style="color:var(--dim);font-size:11px;margin-bottom:14px;max-width:420px;"></p><button id="syncBtn2" class="chip on">RETRY</button></div></div>
       <div id="timeline"><h4>FLEET ACTIVITY — COMPLETIONS PER HOUR (12H)</h4><canvas id="tlcanvas"></canvas></div>
       <div id="bands"></div>
     </section>
@@ -259,7 +259,21 @@ header h1 small{display:block; font-size:10px; letter-spacing:3px; color:var(--m
    Reads fleet-registry.json from Drive, then every registered feed.
    Any AI can publish a feed (see START HERE readme in the Drive folder). */
 const REGISTRY_ID = "171CYV4j-kGAGbZrI0kHSepiVvsyC6WQJ";
-const dl = id => "https://drive.google.com/uc?export=download&id=" + id + "&t=" + Date.now();
+/* primary: direct download host (no redirect hop, session-independent).
+   fallback: classic uc endpoint. */
+const dl = id => "https://drive.usercontent.google.com/download?id=" + id + "&export=download&confirm=t&t=" + Date.now();
+const dl2 = id => "https://drive.google.com/uc?export=download&id=" + id + "&t=" + Date.now();
+async function fetchJSON(id){
+  let lastErr = "";
+  for(const u of [dl(id), dl2(id)]){
+    try{
+      const r = await fetch(u);
+      if(!r.ok){ lastErr = "HTTP " + r.status; continue; }
+      return await r.json();
+    }catch(e){ lastErr = e.message || String(e); }
+  }
+  throw new Error(lastErr || "fetch failed");
+}
 const STALE_MS = 15 * 60 * 1000;
 const SEEN_KEY = "fc_seen_v2";
 
@@ -378,15 +392,19 @@ function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;"
 /* ── sync ── */
 async function sync(silent){
   try{
-    const reg = await (await fetch(dl(REGISTRY_ID))).json();
+    const reg = await fetchJSON(REGISTRY_ID);
     const results = await Promise.allSettled((reg.feeds||[]).map(async f => {
-      try{ return { meta:f, feed: await (await fetch(dl(f.fileId))).json(), ok:true }; }
+      try{ return { meta:f, feed: await fetchJSON(f.fileId), ok:true }; }
       catch(e){ return { meta:f, feed:null, ok:false }; }
     }));
     S.feeds = results.map(r => r.status==="fulfilled" ? r.value : {meta:{}, feed:null, ok:false});
     S.lastSync = new Date();
     document.getElementById("uplinkdown").classList.remove("show");
-  }catch(e){ document.getElementById("uplinkdown").classList.add("show"); }
+  }catch(e){
+    document.getElementById("uplinkdown").classList.add("show");
+    const ee = document.getElementById("uplinkErr");
+    if(ee) ee.textContent = "detail: " + (e.message || e);
+  }
   if(S.sel && !findShip(S.sel)) S.sel = null;
   collectProjects();
   render();
