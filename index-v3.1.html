@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Fleet Command — Joseph's AI Fleet</title>
+<link rel="icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#04060d">
+<style>
+/* ══════════ Fleet Command v3 — DOM shell ══════════ */
+:root{
+  --bg:#04060d;
+  --panel:rgba(10,18,32,.85);
+  --line:rgba(95,242,255,.22);
+  --cyan:#5ff2ff; --green:#51ff9e; --amber:#ffbf47; --red:#ff5470;
+  --dim:#4a5872; --muted:#8b9bb8; --text:#e6f0ff;
+  --seb:#5ff2ff; --claude:#ff9f43; --grok:#c084fc; --gemini:#2dd4bf; --chatgpt:#a3e635;
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-l:env(safe-area-inset-left,0px); --safe-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+[hidden]{display:none !important;}
+html,body{overflow-x:hidden;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+button{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  font:inherit; color:inherit; background:none; border:none; cursor:pointer;
+}
+/* ── app frame ── */
+#app{
+  min-height:100vh; min-height:100dvh;
+  padding:var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);
+  display:flex; flex-direction:column; gap:8px;
+}
+/* ── header ── */
+#topbar{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px;
+  padding:8px 12px;
+  background:var(--panel);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border:1px solid var(--line); border-radius:10px;
+}
+.brand h1{font-size:20px; letter-spacing:6px; color:var(--cyan); text-shadow:0 0 12px rgba(95,242,255,.5); white-space:nowrap;}
+.brand p{font-size:11px; color:var(--muted); letter-spacing:1px; margin-top:2px;}
+.stats{display:flex; gap:14px; margin-left:auto;}
+.stat{display:flex; flex-direction:column; align-items:center; min-width:52px;}
+.stat-num{font-size:18px; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums;}
+.stat-num.alert{color:var(--red);}
+.stat-lab{font-size:9px; letter-spacing:2px; color:var(--muted);}
+.clock{display:flex; flex-direction:column; align-items:flex-end; line-height:1.35;}
+.clock div{font-size:12px; font-variant-numeric:tabular-nums; color:var(--muted);}
+.clock .tz{color:var(--cyan); font-size:10px; margin-right:4px;}
+.actions{display:flex; gap:8px; align-items:center;}
+.hbtn{
+  min-height:44px; padding:0 14px;
+  border:1px solid var(--line); border-radius:8px;
+  background:rgba(95,242,255,.06); color:var(--text);
+  font-size:12px; letter-spacing:2px; font-weight:600;
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.hbtn:active{background:rgba(95,242,255,.18);}
+#btn-help{padding:0; width:44px; font-size:18px; border-radius:50%;}
+#btn-crew{display:none;}
+/* ── filter bar ── */
+#filters{
+  display:flex; flex-direction:column; gap:6px;
+  padding:8px 12px;
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+}
+.chiprow{display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.chiprow .chip-label{font-size:10px; letter-spacing:2px; color:var(--muted); min-width:58px;}
+.chip{
+  min-height:44px; padding:6px 14px;
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--line); border-radius:999px;
+  font-size:12px; letter-spacing:1px; color:var(--muted);
+  background:rgba(10,18,32,.6);
+}
+.chip .dot{width:10px; height:10px; border-radius:50%; background:var(--dim); flex-shrink:0;}
+.chip.on{color:var(--text); border-color:var(--cyan); background:rgba(95,242,255,.10);}
+.chip:active{background:rgba(95,242,255,.20);}
+/* ── stage (canvas + roster) ── */
+#stage{position:relative; display:flex; gap:8px; flex:1; min-height:0;}
+#deckwrap{
+  position:relative; flex:1; min-width:0; min-height:320px;
+  background:radial-gradient(ellipse at 50% 40%, rgba(20,34,58,.55), var(--bg) 75%);
+  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+}
+#deck{display:block; width:100%; height:100%; position:absolute; inset:0;}
+#decklabel{
+  position:absolute; pointer-events:none; z-index:3;
+  background:rgba(4,8,16,.92); border:1px solid var(--cyan); border-radius:6px;
+  padding:6px 10px; font-size:12px; letter-spacing:1px; color:var(--text);
+  transform:translate(-50%,-130%); white-space:nowrap;
+}
+/* ── roster ── */
+#roster{
+  width:340px; flex-shrink:0;
+  background:var(--panel);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  border:1px solid var(--line); border-radius:10px;
+  display:flex; flex-direction:column; overflow:hidden;
+  max-height:calc(100vh - 320px); max-height:calc(100dvh - 320px);
+}
+.panelhead{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; border-bottom:1px solid var(--line);
+  position:sticky; top:0; background:var(--panel); z-index:2;
+}
+.panelhead h2{font-size:13px; letter-spacing:4px; color:var(--cyan);}
+.panelhead .xbtn{
+  width:44px; height:44px; font-size:18px; color:var(--muted);
+  border:1px solid var(--line); border-radius:8px;
+  display:inline-flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.panelhead .xbtn:active{background:rgba(255,84,112,.15); color:var(--red);}
+#roster-groups{overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px 0 12px;}
+.rgroup{margin-top:6px;}
+.rgroup-title{
+  font-size:10px; letter-spacing:3px; color:var(--muted);
+  padding:8px 14px 4px; display:flex; justify-content:space-between; align-items:center;
+}
+.rgroup-title .cnt{color:var(--dim);}
+.rstation{
+  font-size:9px; letter-spacing:2px; color:var(--dim);
+  padding:6px 14px 2px; text-transform:uppercase;
+}
+.row{
+  display:flex; align-items:center; gap:10px; width:100%;
+  min-height:44px; padding:8px 14px; text-align:left;
+  border-left:3px solid transparent;
+}
+.row:active{background:rgba(95,242,255,.08);}
+.row.sel{background:rgba(95,242,255,.10); border-left-color:var(--cyan);}
+.row .dot{width:10px; height:10px; border-radius:50%; flex-shrink:0; background:var(--dim);}
+.row-main{display:flex; flex-direction:column; min-width:0; flex:1;}
+.row-name{font-size:14px; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.row-sub{font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.statuspill{
+  font-size:10px; letter-spacing:1px; padding:3px 8px; border-radius:999px;
+  border:1px solid var(--line); color:var(--muted); flex-shrink:0;
+}
+.statuspill.ok{color:var(--green); border-color:rgba(81,255,158,.4);}
+.statuspill.warn{color:var(--amber); border-color:rgba(255,191,71,.4);}
+.statuspill.bad{color:var(--red); border-color:rgba(255,84,112,.4);}
+.rempty{font-size:12px; color:var(--dim); padding:6px 14px; font-style:italic;}
+/* ── detail panel ── */
+#detail{
+  position:absolute; top:0; right:0; z-index:6;
+  width:min(360px, calc(100% - 24px)); max-height:100%;
+  background:rgba(6,12,24,.96);
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  border:1px solid var(--cyan); border-radius:10px; overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 8px 40px rgba(0,0,0,.6);
+}
+#detail-body{overflow-y:auto; padding:6px 0 12px; -webkit-overflow-scrolling:touch;}
+.kv{display:flex; gap:10px; padding:8px 14px; font-size:13px; align-items:baseline;}
+.kv + .kv{border-top:1px solid rgba(95,242,255,.08);}
+.kv .k{flex-shrink:0; width:88px; font-size:10px; letter-spacing:2px; color:var(--muted);}
+.kv .v{color:var(--text); word-break:break-word;}
+.kv .v .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px;}
+/* ── ship's log ── */
+#shiplog{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:10px 14px 14px;
+}
+#log-list{max-height:220px; overflow-y:auto; -webkit-overflow-scrolling:touch;}
+.logrow{
+  display:flex; gap:10px; align-items:center; padding:7px 2px; font-size:13px;
+  border-bottom:1px solid rgba(95,242,255,.07);
+}
+.logrow .t{color:var(--dim); font-size:11px; min-width:64px; flex-shrink:0; font-variant-numeric:tabular-nums;}
+.logrow .dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.logrow .n{flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.logrow .n .sub{color:var(--muted); font-size:11px;}
+.history-title{font-size:10px; letter-spacing:3px; color:var(--muted); margin:14px 0 8px;}
+.hist-grid{display:grid; grid-template-columns:72px repeat(7,1fr); gap:4px; align-items:end;}
+.hist-corner,.hist-day{font-size:10px; color:var(--dim); text-align:center; padding-bottom:2px; font-variant-numeric:tabular-nums;}
+.hist-ai{display:flex; align-items:center; gap:6px; font-size:10px; letter-spacing:1px; color:var(--muted); min-height:30px;}
+.hist-ai .dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.hist-cell{height:44px; display:flex; align-items:flex-end; justify-content:center; background:rgba(95,242,255,.04); border-radius:4px; padding:2px;}
+.hist-bar{width:70%; min-height:3px; border-radius:2px; background:var(--green); opacity:.9;}
+.hist-bar.failed{background:var(--red);}
+.hist-legend{display:flex; gap:16px; margin-top:6px; font-size:10px; color:var(--dim);}
+.hist-legend .sw{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:4px;}
+.nohistory{color:var(--dim); font-size:12px; letter-spacing:2px; padding:14px 4px;}
+/* ── overlays ── */
+.overlay{
+  position:fixed; inset:0; z-index:50;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(2,4,10,.85);
+  -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+  padding:20px;
+}
+/* #help visibility is class-driven (.show) so the coordinator's
+   FleetApp.toggleHelp (classList.toggle("show")) and panel fallbacks agree */
+#help{display:none;}
+#help.show{display:flex;}
+.overlay-card{
+  background:rgba(8,14,26,.97); border:1px solid var(--cyan); border-radius:12px;
+  padding:20px 22px; max-width:440px; width:100%; max-height:80vh; overflow-y:auto;
+}
+.overlay-card h2{font-size:14px; letter-spacing:5px; color:var(--cyan); margin-bottom:12px;}
+.overlay-card table{border-collapse:collapse; font-size:13px; width:100%;}
+.overlay-card td{padding:7px 8px; vertical-align:top;}
+.overlay-card td:first-child{color:var(--cyan); font-family:ui-monospace,monospace; white-space:nowrap; font-size:12px;}
+.overlay-card p{font-size:13px; color:var(--muted); margin-bottom:14px; line-height:1.5;}
+#uplinkdown .overlay-card{border-color:var(--red); text-align:center;}
+#uplinkdown h2{color:var(--red);}
+#uplinkdown .hbtn{border-color:var(--red); color:var(--red); min-width:160px;}
+/* ── red alert veil ── */
+#redveil{
+  position:fixed; inset:0; z-index:40; pointer-events:none;
+  border:3px solid var(--red);
+  box-shadow:inset 0 0 120px rgba(255,84,112,.25);
+  animation:veilpulse 2s ease-in-out infinite;
+}
+@keyframes veilpulse{
+  0%,100%{opacity:.55;} 50%{opacity:1;}
+}
+.only-mobile{display:none !important;}
+/* ── ≤1100px: roster becomes a drawer ── */
+@media (max-width:1100px){
+  .only-mobile{display:inline-flex !important;}
+  #roster{
+    position:fixed; top:0; right:0; bottom:0; z-index:45;
+    width:min(380px, 92vw); max-height:none; border-radius:0;
+    transform:translateX(102%); transition:transform .22s ease-out;
+    background:rgba(6,12,24,.97);
+  }
+  #roster.open{transform:translateX(0);}
+  #detail{position:fixed; top:auto; bottom:0; left:0; right:0; width:auto; max-height:62vh; border-radius:14px 14px 0 0; z-index:46;}
+}
+/* ── ≤640px: compact phone layout ── */
+@media (max-width:640px){
+  #app{gap:6px;}
+  #topbar{padding:6px 8px; gap:6px 10px;}
+  .brand h1{font-size:15px; letter-spacing:3px;}
+  .brand p{font-size:9px;}
+  .stats{gap:8px; margin-left:0;}
+  .stat{min-width:44px;}
+  .stat-num{font-size:14px;}
+  .stat-lab{font-size:8px; letter-spacing:1px;}
+  .clock{display:none;}
+  .actions{margin-left:auto; gap:6px;}
+  .hbtn{min-height:44px; padding:0 10px; font-size:11px; letter-spacing:1px;}
+  #deckwrap{min-height:260px;}
+  .chip{min-height:44px; padding:6px 12px; font-size:11px;}
+  .hist-grid{grid-template-columns:52px repeat(7,1fr);}
+  .hist-ai{font-size:9px;}
+  .logrow .t{min-width:52px;}
+}
+@media (prefers-reduced-motion:reduce){
+  #redveil{animation:none;}
+  #roster{transition:none;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══ header ══ -->
+  <header id="topbar">
+    <div class="brand">
+      <h1>FLEET COMMAND</h1>
+      <p>JOSEPH'S AI FLEET · SPACESHIP OPS</p>
+    </div>
+    <div class="stats" role="status" aria-label="Fleet stats">
+      <div class="stat"><span class="stat-num" id="stat-crew">–</span><span class="stat-lab">CREW</span></div>
+      <div class="stat"><span class="stat-num" id="stat-onduty">–</span><span class="stat-lab">ON DUTY</span></div>
+      <div class="stat"><span class="stat-num" id="stat-aionline">–</span><span class="stat-lab">AI ONLINE</span></div>
+      <div class="stat"><span class="stat-num" id="stat-alerts">0</span><span class="stat-lab">ALERTS</span></div>
+    </div>
+    <div class="clock" aria-label="Clocks">
+      <div><span class="tz">UTC</span><span id="clock-utc">--:--:--</span></div>
+      <div><span class="tz">PT</span><span id="clock-pt">--:--:--</span></div>
+    </div>
+    <div class="actions">
+      <button class="hbtn only-mobile" id="btn-crew" aria-label="Open crew roster">CREW</button>
+      <button class="hbtn" id="btn-sound" aria-label="Toggle sound">SOUND: OFF</button>
+      <button class="hbtn" id="btn-help" aria-label="Help">?</button>
+      <button class="hbtn" id="btn-sync" aria-label="Sync now">SYNC</button>
+    </div>
+  </header>
+
+  <!-- ══ filters ══ -->
+  <nav id="filters" aria-label="Fleet filters">
+    <div class="chiprow" id="ai-chips"><span class="chip-label">AI</span></div>
+    <div class="chiprow" id="project-chips"><span class="chip-label">PROJECT</span></div>
+  </nav>
+
+  <!-- ══ stage: canvas deck + roster + detail ══ -->
+  <main id="stage">
+    <section id="deckwrap" aria-label="Ship deck">
+      <canvas id="deck"></canvas>
+      <div id="decklabel" hidden></div>
+    </section>
+
+    <aside id="roster" aria-label="Crew roster">
+      <div class="panelhead">
+        <h2>CREW ROSTER</h2>
+        <button class="xbtn only-mobile" id="roster-close" aria-label="Close roster">✕</button>
+      </div>
+      <div id="roster-groups"></div>
+    </aside>
+
+    <aside id="detail" hidden aria-label="Entity detail">
+      <div class="panelhead">
+        <h2 id="detail-title">DETAIL</h2>
+        <button class="xbtn" id="detail-close" aria-label="Close detail">✕</button>
+      </div>
+      <div id="detail-body"></div>
+    </aside>
+  </main>
+
+  <!-- ══ ship's log + 7-day history ══ -->
+  <section id="shiplog" aria-label="Ship's log">
+    <div class="panelhead"><h2>SHIP'S LOG</h2></div>
+    <div id="log-list"></div>
+    <div class="history-title">7-DAY HISTORY</div>
+    <div id="history-strip"></div>
+    <div class="hist-legend">
+      <span><span class="sw" style="background:var(--green)"></span>done</span>
+      <span><span class="sw" style="background:var(--red)"></span>failed</span>
+    </div>
+  </section>
+
+</div><!-- /#app -->
+
+<!-- ══ help overlay ══ -->
+<div id="help" class="overlay" role="dialog" aria-modal="true" aria-label="Help">
+  <div class="overlay-card">
+    <div class="panelhead"><h2>HELP</h2><button class="xbtn" id="help-close" aria-label="Close help">✕</button></div>
+    <div style="padding:6px 4px 12px;">
+    <table>
+      <tr><td>TAP CREW</td><td>Tap a crew row (or a ship on the deck) to inspect it.</td></tr>
+      <tr><td>AI CHIPS</td><td>Filter the roster and deck by AI crew member.</td></tr>
+      <tr><td>PROJECT CHIPS</td><td>Filter by project (Titan, fleet, deck build, …).</td></tr>
+      <tr><td>SYNC</td><td>Pull the latest feeds from Google Drive.</td></tr>
+      <tr><td>SOUND</td><td>Toggle alert sounds.</td></tr>
+      <tr><td>CREW</td><td>Open/close the crew roster drawer (mobile).</td></tr>
+      <tr><td>ESC</td><td>Close help, detail, or the roster drawer.</td></tr>
+    </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ uplink down overlay ══ -->
+<div id="uplinkdown" class="overlay" hidden role="alertdialog" aria-modal="true" aria-label="Uplink down">
+  <div class="overlay-card">
+    <h2>UPLINK DOWN</h2>
+    <p>Could not reach the fleet feeds. Check your connection and retry.</p>
+    <button class="hbtn" id="btn-retry">RETRY</button>
+  </div>
+</div>
+
+<!-- ══ red alert veil ══ -->
+<div id="redveil" hidden></div>
+
+<!-- Combined by the coordinator into index-v3.html.
+     Standalone order: scene.js (canvas ship scene) then panels.js (this DOM shell logic). -->
+
+<!-- ═══ Fleet Command v3 — inlined modules ═══ -->
+<script>
+"use strict";
+/* scene.js — canvas ship + crew */
+/* ═══════════════════════════════════════════════════════════════════
+   Fleet Command v3 — scene.js — canvas spaceship crew scene engine
+   Zero-dependency. Inlined into index-v3.html inside a <script> tag.
+   Draws a side-view spaceship cross-section (virtual 1400×800) with tiny
+   procedural astronaut crew figures driven by the fleet data contract.
+
+   INTEGRATION (see wiring.js / shell.html):
+     - canvas element id="deck" (auto-attached on DOMContentLoaded;
+       or call window.FleetScene.init(canvasOrId) manually)
+     - window.FleetScene.setData({captain, specialists, live, scheduled,
+       chats, recent, awaiting})   ← same shape wiring.js builds
+     - window.FleetScene.setFilter({ai, project})  ("ALL" = no filter)
+     - window.FleetScene.setRedAlert(bool)
+     - window.FleetScene.onTap(cb)            → cb(entityKey)
+     - window.FleetScene.setHover(fn)         → fn(entityKey|null) on hover
+       …also accepts a key string: setHover("some:key") pins the name
+       label (wiring.js uses this for the selected entity on mobile).
+     - window.FleetScene.resize()
+
+   PERFORMANCE: dpr capped at 2; setTransform(dpr,…) once per resize;
+   static room art pre-rendered to an offscreen canvas, redrawn only on
+   resize; per-frame work is sin-bobbing, linear waypoint walking,
+   ~44 drifting stars clipped to the bridge viewport.
+   ═══════════════════════════════════════════════════════════════════ */
+(function () {
+'use strict';
+
+/* ── palette ─────────────────────────────────────────────────────── */
+var PAL = {
+  bg: '#04060d', cyan: '#5ff2ff', green: '#51ff9e', amber: '#ffbf47',
+  red: '#ff5470', dim: '#4a5872', muted: '#8b9bb8', text: '#e6f0ff'
+};
+var AI_COLORS = {
+  sebastian: '#5ff2ff', claude: '#ff9f43', grok: '#c084fc',
+  gemini: '#2dd4bf', chatgpt: '#a3e635'
+};
+var AI_ORDER = ['sebastian', 'claude', 'grok', 'gemini', 'chatgpt'];
+var AI_NAMES = {
+  sebastian: 'SEBASTIAN', claude: 'CLAUDE', grok: 'GROK',
+  gemini: 'GEMINI', chatgpt: 'CHATGPT'
+};
+/* specialty → suit color */
+function suitColorFor(specialty) {
+  var s = String(specialty || '').toLowerCase();
+  if (/command|captain/.test(s)) return '#ffd700';
+  if (/titan/.test(s)) return '#5ff2ff';
+  if (/finan/.test(s)) return '#ffd166';
+  if (/email|comm/.test(s)) return '#c084fc';
+  if (/data/.test(s)) return '#2dd4bf';
+  if (/clean/.test(s)) return '#a3e635';
+  if (/build|engineer|deck|renovat/.test(s)) return '#ff9f43';
+  return '#8b9bb8'; /* general */
+}
+
+var VW = 1400, VH = 800; /* virtual coordinate system */
+var FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+/* ── layout ──────────────────────────────────────────────────────── */
+var ROOMS = {
+  bridge:      { x: 60,  y: 90,  w: 380, h: 210, label: 'BRIDGE' },
+  titanlab:    { x: 460, y: 90,  w: 480, h: 210, label: 'TITAN LAB' },
+  ops:         { x: 960, y: 90,  w: 380, h: 210, label: 'OPS BAY' },
+  engineering: { x: 960, y: 320, w: 380, h: 200, label: 'ENGINEERING' },
+  dock:        { x: 60,  y: 540, w: 380, h: 200, label: 'DOCK' },
+  quarters:    { x: 460, y: 540, w: 480, h: 200, label: 'QUARTERS' },
+  lounge:      { x: 960, y: 540, w: 380, h: 200, label: 'LOUNGE' }
+};
+var VIEWPORT = { x: 84, y: 112, w: 300, h: 96 }; /* bridge star window */
+
+/* station → figure feet positions (side view) */
+var STATION_SLOTS = {
+  bridge:      [[120, 262], [200, 262]],
+  finance:     [[1020, 262]],
+  comms:       [[1240, 262]],
+  data:        [[1130, 262]],
+  engineering: [[1040, 482], [1140, 482], [1240, 482]],
+  quarters:    [[520, 688], [620, 688]]
+};
+var STATION_ROOM = { /* station → wander room */
+  bridge: 'bridge', titanlab: 'titanlab', finance: 'ops', comms: 'ops',
+  data: 'ops', engineering: 'engineering', quarters: 'quarters'
+};
+function titanSlotX(ai) { /* one slot per AI across the Titan Lab */
+  var i = AI_ORDER.indexOf(String(ai || '').toLowerCase());
+  if (i < 0) i = 2;
+  return 530 + i * 90;
+}
+function resolveStation(sp) {
+  var st = String((sp && sp.station) || '').toLowerCase();
+  if (STATION_SLOTS[st]) return st;
+  var s = String((sp && sp.specialty) || '').toLowerCase();
+  if (/titan/.test(s)) return 'titanlab';
+  if (/finan/.test(s)) return 'finance';
+  if (/email|comm/.test(s)) return 'comms';
+  if (/clean|data/.test(s)) return 'data';
+  if (/build|engineer|deck|renovat/.test(s)) return 'engineering';
+  if (/command|captain/.test(s)) return 'bridge';
+  return 'quarters'; /* general → quarters edge */
+}
+/* wander bounds (feet positions) per room */
+var WANDER = {
+  bridge:      { x: 90,  y: 196, w: 320, h: 58 },
+  titanlab:    { x: 490, y: 186, w: 420, h: 62 },
+  ops:         { x: 990, y: 186, w: 320, h: 68 },
+  engineering: { x: 990, y: 380, w: 320, h: 94 },
+  quarters:    { x: 490, y: 596, w: 420, h: 82 }
+};
+var DOCK_STATIONS = [ /* 8 pads, 2 rows × 4 */
+  [110, 620], [190, 620], [270, 620], [350, 620],
+  [110, 694], [190, 694], [270, 694], [350, 694]
+];
+var LOUNGE_TABLES = [[1050, 640], [1170, 640], [1290, 640]];
+
+/* ── state ───────────────────────────────────────────────────────── */
+var state = {
+  canvas: null, ctx: null, bg: null, /* offscreen static art */
+  figures: [], stars: [],
+  filter: { ai: null, project: null },
+  redAlert: false,
+  hoverKey: null, pinnedKey: null,
+  tapCb: null, hoverCb: null,
+  running: false, lastT: 0, dpr: 1,
+  view: { s: 1, ox: 0, oy: 0, cw: 0, ch: 0 }
+};
+
+/* ══ v3.1 INSERT 1 — ambient namespace ══════════════════════════════ */
+var AMB = {
+  t: 0,                  /* ambient clock, advanced by updateAmbient(dt) */
+  dust: [],              /* drifting dust motes (capped ~20, wrap around) */
+  sparks: [],            /* reactor + tool sparks (capped) */
+  zs: [],                /* sleeping "z" particles */
+  leds: [],              /* blinking console LEDs */
+  wander: null,          /* filled by initAmbient(): WANDER copy + lounge */
+  chatPhase: [0, 0, 0],  /* per lounge-table nod-sync clock */
+  sparkCD: 3,            /* reactor spark cooldown (s) */
+  typeTick: 0,           /* typing-flag refresh timer */
+  MAX_SPARKS: 16,
+  MAX_SLEEPERS: 6,
+  DUST_N: 20
+};
+/* corridor door points per room (feet coords); paths route door → corridor → door */
+var AMB_DOORS = {
+  bridge: [250, 310], titanlab: [700, 310], ops: [1150, 310],
+  engineering: [952, 428], dock: [250, 530],
+  quarters: [700, 530], lounge: [952, 560]
+};
+/* rooms eligible for off-duty inter-room wandering */
+var AMB_ROOM_KEYS = ['bridge', 'titanlab', 'ops', 'engineering', 'quarters', 'lounge'];
+/* lounge bar loiter zone (feet coords) — idle figures here may join a cluster */
+var AMB_LOUNGE_ZONE = { x: 985, y: 590, w: 350, h: 115 };
+/* bunk geometry for sleepers (matches renderStatic bunks at x 500/720) */
+var AMB_BUNKS = [{ x: 500, rows: [606, 648] }, { x: 720, rows: [606, 648] }];
+var AMB_LED_COLS = ['#5ff2ff', '#51ff9e', '#ffbf47', '#ff5470'];
+
+
+/* ── small helpers ───────────────────────────────────────────────── */
+function rr(c, x, y, w, h, r) {
+  r = Math.min(r, w / 2, h / 2);
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+function shade(hex, f) { /* darken/lighten #rrggbb by factor f */
+  var n = parseInt(hex.slice(1), 16);
+  var r = Math.min(255, Math.max(0, Math.round(((n >> 16) & 255) * f)));
+  var g = Math.min(255, Math.max(0, Math.round(((n >> 8) & 255) * f)));
+  var b = Math.min(255, Math.max(0, Math.round((n & 255) * f)));
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+function fmtCountdown(nextRun) {
+  if (!nextRun) return '—';
+  var ms = new Date(nextRun).getTime() - Date.now();
+  if (isNaN(ms) || ms <= 0) return 'now';
+  var m = Math.round(ms / 60000);
+  if (m < 60) return 'in ' + m + 'm';
+  var h = Math.floor(m / 60);
+  if (h < 48) return 'in ' + h + 'h';
+  return 'in ' + Math.floor(h / 24) + 'd';
+}
+function aiColor(ai) {
+  return AI_COLORS[String(ai || '').toLowerCase()] || PAL.muted;
+}
+function aiName(ai) {
+  return AI_NAMES[String(ai || '').toLowerCase()] || String(ai || '').toUpperCase();
+}
+
+/* ── static room art (offscreen, redrawn only on resize) ─────────── */
+function renderStatic() {
+  if (typeof document === 'undefined') return;
+  var off = document.createElement('canvas');
+  off.width = VW; off.height = VH;
+  var c = off.getContext('2d');
+  var i, k, x, y;
+
+  c.fillStyle = PAL.bg;
+  c.fillRect(0, 0, VW, VH);
+
+  /* hull */
+  rr(c, 24, 44, 1352, 712, 36);
+  c.fillStyle = '#060b14'; c.fill();
+  c.lineWidth = 3; c.strokeStyle = '#1c2a44'; c.stroke();
+  rr(c, 40, 60, 1320, 680, 28);
+  c.lineWidth = 1; c.strokeStyle = '#12203a'; c.stroke();
+
+  /* engine glow — left edge */
+  var eg = c.createLinearGradient(24, 0, 90, 0);
+  eg.addColorStop(0, 'rgba(255,150,60,0.30)');
+  eg.addColorStop(1, 'rgba(255,150,60,0)');
+  c.fillStyle = eg;
+  c.fillRect(24, 64, 66, 672);
+  for (i = 0; i < 3; i++) { /* engine nozzles */
+    y = 190 + i * 210;
+    rr(c, 26, y - 26, 22, 52, 5);
+    c.fillStyle = '#101b30'; c.fill();
+    c.strokeStyle = PAL.dim; c.lineWidth = 1; c.stroke();
+    c.fillStyle = 'rgba(255,180,80,0.55)';
+    c.fillRect(48, y - 10, 8, 20);
+  }
+
+  /* rooms */
+  var keys = Object.keys(ROOMS);
+  for (i = 0; i < keys.length; i++) {
+    var r = ROOMS[keys[i]];
+    c.fillStyle = '#070d18';
+    c.fillRect(r.x, r.y, r.w, r.h);
+    c.lineWidth = 1; c.strokeStyle = '#1b2c47';
+    c.strokeRect(r.x, r.y, r.w, r.h);
+    c.font = '700 13px ' + FONT;
+    c.fillStyle = '#4a5872';
+    c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+    c.fillText(r.label, r.x + 12, r.y + 22);
+  }
+  /* floor lines */
+  c.strokeStyle = '#16263f'; c.lineWidth = 1;
+  var floors = { bridge: 262, titanlab: 258, ops: 262, engineering: 482,
+                 dock: 0, quarters: 688, lounge: 700 };
+  for (i = 0; i < keys.length; i++) {
+    var fr = ROOMS[keys[i]], fy = floors[keys[i]];
+    if (!fy) continue;
+    c.beginPath(); c.moveTo(fr.x + 8, fy); c.lineTo(fr.x + fr.w - 8, fy); c.stroke();
+  }
+
+  /* ops bay sub-labels */
+  c.font = '700 9px ' + FONT; c.fillStyle = '#3a4a66';
+  c.fillText('FINANCE', 972, 116);
+  c.textAlign = 'right'; c.fillText('COMMS', 1328, 116); c.textAlign = 'left';
+  c.fillText('DATA', 1108, 288);
+
+  /* corridor between decks */
+  c.fillStyle = '#05080f';
+  c.fillRect(60, 320, 880, 200);
+  c.strokeStyle = '#16263f';
+  c.setLineDash([14, 12]);
+  c.beginPath(); c.moveTo(84, 420); c.lineTo(916, 420); c.stroke();
+  c.setLineDash([]);
+  c.font = '700 10px ' + FONT; c.fillStyle = '#33445f';
+  c.fillText('DECK B · CORRIDOR', 84, 346);
+
+  /* bridge viewport */
+  rr(c, 78, 106, 312, 108, 8);
+  c.fillStyle = '#04070d'; c.fill();
+  c.lineWidth = 2; c.strokeStyle = 'rgba(95,242,255,0.5)'; c.stroke();
+  /* bridge consoles */
+  for (i = 0; i < 3; i++) {
+    x = 92 + i * 100;
+    rr(c, x, 232, 88, 18, 3);
+    c.fillStyle = '#0d1626'; c.fill();
+    c.strokeStyle = PAL.dim; c.lineWidth = 1; c.stroke();
+    c.fillStyle = ['#5ff2ff', '#51ff9e', '#ffbf47'][i];
+    c.fillRect(x + 6, 238, 20, 3);
+    c.fillStyle = 'rgba(139,155,184,0.5)';
+    c.fillRect(x + 30, 238, 44, 3);
+  }
+
+  /* portholes along hull */
+  for (i = 0; i < 5; i++) {
+    x = 500 + i * 100;
+    for (k = 0; k < 2; k++) {
+      y = k ? 728 : 72;
+      c.beginPath(); c.arc(x, y, 9, 0, 6.2832);
+      c.fillStyle = '#04070d'; c.fill();
+      c.lineWidth = 2; c.strokeStyle = '#2a3c5c'; c.stroke();
+      c.beginPath(); c.arc(x - 3, y - 3, 2.5, 0, 6.2832);
+      c.fillStyle = 'rgba(95,242,255,0.25)'; c.fill();
+    }
+  }
+
+  /* titan lab: 5 AI slot pads */
+  for (i = 0; i < AI_ORDER.length; i++) {
+    x = titanSlotX(AI_ORDER[i]);
+    var acol = AI_COLORS[AI_ORDER[i]];
+    rr(c, x - 24, 252, 48, 9, 4);
+    c.fillStyle = acol + '22'; c.fill();
+    c.lineWidth = 1; c.strokeStyle = acol + '66'; c.stroke();
+    c.font = '700 8px ' + FONT; c.textAlign = 'center';
+    c.fillStyle = acol + '99';
+    c.fillText(AI_NAMES[AI_ORDER[i]], x, 276);
+    c.textAlign = 'left';
+  }
+
+  /* ops consoles behind finance/comms/data slots */
+  var consoles = [[1020, 210], [1240, 210], [1130, 210]];
+  for (i = 0; i < consoles.length; i++) {
+    x = consoles[i][0]; y = consoles[i][1];
+    rr(c, x - 16, y, 32, 24, 3);
+    c.fillStyle = '#0a1322'; c.fill();
+    c.lineWidth = 1; c.strokeStyle = PAL.dim; c.stroke();
+    c.fillStyle = 'rgba(95,242,255,0.35)';
+    c.fillRect(x - 11, y + 5, 22, 3);
+    c.fillStyle = 'rgba(81,255,158,0.3)';
+    c.fillRect(x - 11, y + 11, 14, 3);
+  }
+
+  /* engineering: reactor + pipes */
+  c.beginPath(); c.arc(1290, 400, 42, 0, 6.2832);
+  c.lineWidth = 2; c.strokeStyle = 'rgba(95,242,255,0.35)'; c.stroke();
+  c.beginPath(); c.arc(1290, 400, 26, 0, 6.2832);
+  c.fillStyle = 'rgba(95,242,255,0.10)'; c.fill();
+  c.lineWidth = 1; c.strokeStyle = 'rgba(95,242,255,0.5)'; c.stroke();
+  c.beginPath(); c.arc(1290, 400, 10, 0, 6.2832);
+  c.fillStyle = 'rgba(95,242,255,0.5)'; c.fill();
+  c.strokeStyle = '#22314d'; c.lineWidth = 6;
+  c.beginPath(); c.moveTo(1248, 400); c.lineTo(990, 400); c.stroke();
+  c.beginPath(); c.moveTo(1290, 442); c.lineTo(1290, 500); c.stroke();
+
+  /* dock station pads */
+  for (i = 0; i < DOCK_STATIONS.length; i++) {
+    x = DOCK_STATIONS[i][0]; y = DOCK_STATIONS[i][1];
+    rr(c, x - 22, y + 2, 44, 8, 4);
+    c.fillStyle = 'rgba(255,191,71,0.10)'; c.fill();
+    c.lineWidth = 1; c.strokeStyle = 'rgba(255,191,71,0.30)'; c.stroke();
+  }
+  c.font = '700 9px ' + FONT; c.fillStyle = '#3a4a66';
+  c.fillText('SCHEDULED', 72, 562);
+
+  /* quarters: bunk beds */
+  var bunks = [500, 720];
+  for (i = 0; i < bunks.length; i++) {
+    var bx = bunks[i];
+    c.fillStyle = '#22314d';
+    c.fillRect(bx, 600, 6, 100); c.fillRect(bx + 144, 600, 6, 100);
+    for (k = 0; k < 2; k++) {
+      y = 606 + k * 42;
+      rr(c, bx, y, 150, 12, 4);
+      c.fillStyle = '#16263f'; c.fill();
+      c.lineWidth = 1; c.strokeStyle = PAL.dim; c.stroke();
+      rr(c, bx + 8, y, 58, 12, 4);
+      c.fillStyle = '#1d3a5f'; c.fill();
+    }
+  }
+
+  /* lounge: mess bar */
+  rr(c, 995, 644, 310, 12, 4);
+  c.fillStyle = '#16263f'; c.fill();
+  c.lineWidth = 1; c.strokeStyle = PAL.dim; c.stroke();
+  c.fillStyle = '#0d1626';
+  c.fillRect(1000, 620, 300, 4);
+  for (i = 0; i < 6; i++) { /* bottles on the back shelf */
+    x = 1015 + i * 46;
+    c.fillStyle = 'rgba(95,242,255,0.25)';
+    c.fillRect(x, 606, 6, 14);
+  }
+
+  state.bg = off;
+}
+
+/* ── v3.1 sprite crew ────────────────────────────────────────────── */
+/* Chibi-astronaut strips embedded as data URIs (walk frames 0–3,
+   idle frames 4–5, all facing RIGHT — mirrored when f.dir < 0).
+   Specialty → variant mapping mirrors suitColorFor(). Captain uses the
+   48×48 strip drawn at /1.5 so its geometry matches the 32px figures. */
+var SPRITE_URI = {
+  "command": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAAD0ElEQVR4nO2cvUscQRjGH8MV6cJZaREICJ5yB8ELpDJyESxMGUhpodiIZbr8AXaW4RrR/yClFgcmmBQhkIhwwQ8QApJodcZOQbgUd3OZuZ2dm9mdudmP9wFh92533uc3rzOzOzt7IzBUuVpr8/s/f3waMS0jjsrVWnt99goA8P7LmJf4/D7xDz9+88MrAEDl9W7s+A+inLQ+ewWWhDyK+LPDX/BtIIpmVvY6G1+WAz0Sr2H3TsNS3vm//n3T3dqNzR+pASQpAQf7e9LP5+YXe95s+yD+7PAbGyxXa+2t7R0AwOrKstIAk62K4Cs7LK5rH8SfLX4jYz4TwGLrxg3zYcODiQ/iTza/tiGfCYgbOwkeiD+Z/FpmfCegXK21w2KPni4Azz93dr69CC2jVWr0PESJDxB/Fvm1b4JtGDjY3xOGRB2pbrKiqlyttU2TQPzZ5B/YAIadAFk8Vc/TKjUwMT6tjHd+ciiUZZIE4s82f6ABJCEBbJZBRxNTM73t68tjAECx64ff5z2oRPzp5VcdE8YvHQF8JcBGb1N59lLYbn7/aFwG8aeTXxU/TEIDSEICmvV74G5J+KyFxsDzrjc2A6C//1wBO7vasYk/W/zF8Wlcb2wqzwuMAD4TEEXnJ4eYmJpB8d3bjo/LY6EHMBn+AeLPG3/stUC2ExBXxfFpraHPlog/3fzWF8NFSUD/0Ht2dCF8P4mF3jyuTKyC2fUoiyureNNpOFMRf7r4C74NMPVuvO6WMPn0cWgslXR7mv4pOOLPL39vBPCZAB3NzS9aexIpE/Hnk1/7hRgbQ6duGWdHF8KfDQ9xF4MRfzb5pfcAgSGw2yPEaYWDErC6sgwAaNah7IFYOS5XIxJ/fvhHAPEasFm/lxZUWRPbiosElKu1tio+O5/53dreweSTMStx2Tbx54u/wB8w6EEIf9zc/KK1BOhK5u/sV/DdVNab6MYm/vzyG02DukoAr/6ehld/ryOLzR9ne8qP+LPHH4jmMwGyylKtBQ/rfeKI+PPFL9AmIQEqjZ4uhH7Hz1OPPnrYXZtu9pyP+PPHb1RDMgNC4MDLEan81ZVQqRLApHpglHa5boA+lHyH+F/xuv9crZtboNQA4Pax/7BE/O74tRqAroFWqQHc3HZ2ugaivH6n8lFZKwjr1dlPc/C9k+o6NmpcwH/vnhZ+Vw3QBX/kSyAWJGzetvOd/WT0L9dt1gFIhmYXP8rEEqBiFmV/gPXNryPbOedlmz8Vl0B8her/82VHaeS32QBd8g80aeMtIZcPQpIU06UPUy+++V2MQD74SaRM6x92U0UR8mTDjAAAAABJRU5ErkJggg==",
+  "titan": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAADz0lEQVR4nO2cP0scQRjGH48rUl24pIlFICAE5STgBkIQcmystLNKGTg5/ALpYq2d3+BQSB+wilbmMGAhRCEYlAQhEKI2emhlEy+FzGX2dnZuZnfmZv+8Dwi7d7vzPr95nZnd2dkbgaZqnt/l97/vt0d0y0iimud3O7OTAIDq1qGT+Pw+8Q8/fvPLBwBA69XbxPFLcU7qzE6CJaGIIv788JddG4ijj2/eAQCaW41Qj8Rr2L3TsFR0/pc//wIAWgiPSLxU+GM1gDQlYGd7U/h5fWau5820D+LPD7+2wZrnd1tr6wCA5kJDaoDJVEXwlR0V17YP4s8Xv5YxlwlgsVXjRvkw4UHHB/Gnm1/ZkMsEJI2dBg/En05+JTOuE1Dz/G5UbP96H98eTwMAnv3ejSyjXfF6HuLEB4g/j/zKN8EmDOxsbwaGRBXJbrLiqub5Xd0kEH8++Qc2gGEnQBRP1vO0Kx6qoxPSeCfHB4GydJJA/PnmDzWANCSAzTKoaGx8qrfdOTsCgJ4ffp/3IBPxZ5dfdkwUv3AEcJUAE73N5PPXge3Dr5+1yyD+bPLL4kcp0ADSkIDSxjIWcRr4rI1HA8/rrKyGQP+cngPrn5RjE3+++KujE+isrErPC40ALhMQRyfHBxgbn0L1/d3Tyc7ZUaAH0Bn+AeIvGn/itUCmE5BU1dEJpaHPlIg/2/zGF8PFSUD/0Huxuxf43p/+P48rEqtgdj3K4ooqXncaTlfEny3+smsDTOzGaxGneDj9IjKWTKo9Tf8UHPEXl783ArhMgIrqM3PGnkSKRPzF5Fd+IcbE0KlaxsXuXuDPhIeki8GIP5/8wnuA/iGQ9QhJWuGgBDQXGgDuZiFkPRArx+ZqROIvDv8IELwGLG0sCwu6nV8K7NtIQM3zu7L47Hzmt7W2jqdPxFN0unHZNvEXi7/MHzDoQQh/XH1mzlgCVCXy9+PXeeg41puoxib+4vJrTYPaSgCv/p6GV3+vI4rNH2d6yo/488cfagAuEyCqLNla8KjeJ4mIv1j8gQaQhgTI5F/vR37Hz1M/uH9PujY9SsRfPH6tSyCRAT6w6ssRWZUsAUyyB0ZZl+0G6EKZ+F0gVvGq/1yXVzdoVzzUbZoaoojfHr9SA1A10K54uLy66W3XEe/1O5mP2/mlwHp19tMcfO8ku46NGxdw37tnhd9WA7TBH/sSiAWJmrdl35lORv9y3dLGsnBotvGjTCwBMmbbcs2vItM552WaPxOXQHyFuvznc6Us8ptsgDb5B5o08ZaQzQchaYpp04euF9f8NkYgF/wkUq71D6NHUI7CNtiaAAAAAElFTkSuQmCC",
+  "comms": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAADx0lEQVR4nO2cT0sbQRjGnxQP3kp6aughglAMqYLpPSSeEnq3pxQMfoFS8FDoSfAg+A2sQnOq91ZPpni3gm1JKAh6sHpSvOVQ2B7CpLPZ3cnM7kxm/7wPCLvJ7r7Pb1/nnd3Z2eSgqHKl5vDrv75/y6keI4rKlZrjLK4CAHI/DqzE59eJf/rxP3zqAgA239Qjx38UZidncRUsCVkU8aeHf8a2gTD6+LYJAFhvH3gqEq9pV6dpKev8xb+Xo+Wo/KEaQJwScHJ86Pt5daU58qbbB/Gnh1/ZYLlSc3b39gEA6+01oQEmXSeCP9lBcU37IP508SsZs5kAFls2bpAPHR5UfBB/vPmlDdlMQNTYcfBA/PHklzJjOwHlSs0Jit06msWX18PlV5+Dj9FpDEYewsQHiD+N/NI3wToMnBwfurpEGYlussKqXKk5qkkg/nTyT2wA006AXzxR5ek0BsgXloXxLvpnrmOpJIH4083vaQBxSAAbZZDR/ML/2Pc3PQBAvlDyrPMeRCL+5PKLtgni9+0BbCVAR7V58bLuWv552lU+BvEnk18UP0iuBhCHBBQ3utjsuz/rzA0m7ne/teMBvf5zC+x/lY5N/OnizxdKuN/aEe7n6QFsJiCMLvpnmF9YRv79u6GPm56rAqh0/wDxZ40/8lwg3QmIqnyhJNX16RLxJ5tf+2S4MAkY73qve+eu71tYGo3j+omdYHY9yuL6nXjVYThVEX+y+GdsG2BiN16bfeBZaSkwlkiylWZ8CI74s8s/6gFsJkBG1ZWmtieRfiL+bPJLvxCjo+uUPcZ179z1p8ND1MlgxJ9Oft97gPEukFWEKK1wUgLW22sAhqMQogrEjmNyNiLxZ4c/B7ivAYsb/uO2V9t117qJBJQrNUcUn+3P/O7u7eP53FMtcdky8WeLf4bfYNKDEH676kpTWwJk5efv9+WtZztWTWRjE392+ZWGQU0lgNd4peE1XnX8YvPb6R7yI/708XsagM0E+J0s0VzwoOoTRcSfLX5XA4hDAkRqHc0GfsePUz95PCucmx4k4s8ev9IlkJ8BPrDsyxFJlSgBTKIHRkmX6QZoQ4n4XSB24mX/ue4eBug0gOq2SVfTE/Gb45dqALIGOo0B7h7Y8tBAmNfvRD6utuuu+erspzn46iS6jg0bF7Bf3ZPCb6oBmuAPfQnEggSN27LvdCdjfLpucaOL1pF3OxM/ysQSIGI2Ldv8MtKdc166+RNxCcSfUJv/fLaURH6dDdAk/0STOt4SMvkgJE4xTfpQ9WKb30QPZIOfREq1/gH8i04EJUJRhgAAAABJRU5ErkJggg==",
+  "finance": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAAD0UlEQVR4nO2cT0sbQRjGH0sO9dKSglApgYJQtPFQ0/Ya0kBRv0Ahl4gipRdPvZUei4eC91JE0YvQD1CNBVu8llYPVqUgFKRVEBS96C09yCyzyexkZncms3/eB4TdZHfe5zevM7M7O5seaKpYqjT5/V8/v/XolhFFxVKleTHWBwC4tXbiJD6/T/zdj//qyzsAwIfnbyPHvxHmpIuxPrAkZFHEnx7+nGsDYfTpxXsAwPTaZFuPxKvbvVO3lHX+J4f3vO2o/KEaQJwSsLmxKvy8XB33vJn2Qfzp4dc2WCxVmvMLiwCA6alJqQEmUxXBV3ZQXNs+iD9d/FrGXCaAxVaNG+TDhAcdH8Qfb35lQy4TEDV2HDwQfzz5lcy4TkCxVGkGxR49XMb34ZcAgKc7HwPLaBTqnocw8QHiTyO/8k2wCQObG6u+IVFFspussCqWKk3dJBB/Ovk7NoBuJ0AUT9bzNAp15PuHpPEO9rd8ZekkgfjTzd/WAOKQADbLoKKBwRFv++xoDwA8P/w+70Em4k8uv+yYIH7hCOAqASZ6m+HHz3zbOz++apdB/Mnkl8UPkq8BxCEBvUs1zGDd91kD9Y7nnc3OtYH+/XcMLH5Wjk386eLP9w/hbHZOel7bCOAyAWF0sL+FgcER5N+8vvZxtOfrAXSGf4D4s8YfeS2Q6QREVb5/SGnoMyXiTza/8cVwYRLQOvSebO/6vh/FsjePKxKrYHY9yuKKKl53Gk5XxJ8s/pxrA0zsxmsG6+h79DAwlkyqPU3rFBzxZ5ffGwFcJkBF5eq4sSeRIhF/NvmVX4gxMXSqlnGyvev7M+Eh6mIw4k8nv/AeoHUIZD1ClFbYKQHTU5MArmchZD0QK8fmakTizw5/D+C/BuxdqgkLupxY8e3bSECxVGnK4rPzmd/5hUU8uH/XSFy2TfzZ4s/xB3R6EMIfV66OG0uAqkT+fv85bjuO9SaqsYk/u/xa06C2EsCrtafh1drriGLzx5me8iP+9PG3NQCXCRBVlmwteFDvE0XEny1+XwOIQwJkGj1cDvyOn6e+c/umdG16kIg/e/xal0AiA3xg1ZcjkipZAphkD4ySLtsN0IUS8btArOJV/7lOz6/QKNRRRvBwniQRvz1+pQagaqBRqOP0/MrbLmMl1Ot3Mh+XEyu+9erspzn43kl2HRs2LuC+d08Kv60GaIM/9CUQCxI0b8u+M52M1uW6vUs14dBs40eZWAJkzLblml9FpnPOyzR/Ii6B+Ap1+c/nSknkN9kAbfJ3NGniLSGbD0LiFNOmD10vrvltjEAu+EmkVOs/twFUrNyrEP8AAAAASUVORK5CYII=",
+  "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAADuklEQVR4nO2cT0sbQRjGH6uFnlrSk7kVFFFSWkw9S/QQ8BuYi6AY6LHQnkqO4qlC7xEFL/oJKqyg4rmtCBWlKOTS6kkReiiUkB50ltns7mRmdyazf94HApvNZN/nN29mZncyuwNQVKlc6fDvT78fDqgeI45K5UpnangBAPD1estKfP498fc//s7nAwDA/LuZ2PEfRfnS1PACWBLyKOLPDv+QbQNR9HZ1BgCwvLTl65F49bt36pfyzv/nacvdjssfqQEkKQFH+7uB+6dn51xvun0Qf3b4lQ2WypXO+sYmAGB5aVFogElXRfCVHRbXtA/izxa/kjGbCWCxZeOG+dDhQcUH8SebX9qQzQTEjZ0ED8SfTH4pM7YTUCpXOmGxneYg5j88BgDsfPoXeoxqve16iBIfIP4s8ktfBOswcLS/6xkSZSS6yIqqUrnSUU0C8WeTv2cD6HcCguKJep5qvY1C8ZUw3uX5sedYKkkg/mzz+xpAEhLAZhlkNDI+6W7fXp0BAArFCd973oNIxJ9eflGZMP7AEcBWAnT0Ni/fzHi2f3w7UD4G8aeTXxQ/TJ4GkIQENGoOWnvefWMPFzAi3a6u+UB//b4GNr9Ixyb+bPEXihO4XV0Tfs83AthMQBRdnh9jZHwShY/v731cnXl6AJXhHyD+vPHHXgukOwFxVShOSA19ukT86ebXvhguSgJ8S2xPLrwFmqPuPG6QWAWz81EWN6jiVafhVEX86eIfsm2AiV14tfaA0uvR0FgiyfY03VNwxJ9ffncEsJkAGU3Pzmn7JzJIxJ9PfukbYnQMnbLHOD258Lx0eIi7GIz4s8kfeA3QPQSyHiFOK+yVgOWlRQD3sxCiHogdx+RqROLPD7/bAGwmgO3vNQ/Nl5uencP6xibGXgxHjsuL+PPJP2TbgIqC/P1sXfvKsWTKxib+/PIrTYOaSgCvle1q6GfdvU5QbL6c7ik/4s8ev68B2ExAUGWJ1oKH9T5xRPz54vc0gCQkQCSnORj6GT9P/fzZE+Ha9DARf/74lU6BggzwgWVvjkirRAlgEv1hlHaZboA2lIrnArGKl/1x3dz9RbUOrGybdNU/Eb85fqkGIGugWm/j5q79sH1vIMrtdyIfK9tVz3p19mgOvncSncdGjQvY793Twm+qAZrgj3wKxII0ak5o+UbN0Z6M7uW6jZoDp+kvZ+KhTCwBImbTss0vI90556WbPxWnQHyF2vzx2VIa+XU2QJP8PU3quEvI5B8hSYpp0oeqF9v8JkYgG/wkUqb1Hz/HV/2AkIBfAAAAAElFTkSuQmCC",
+  "build": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAAD1klEQVR4nO2cT0sbQRjGH0sO7cWSnuqhVBHEGA+aniupkINfoWCI4i301FuhV2+eijdR8eBHqIeALZFCL605WBVBWpFWTxVz8iCkh2TS2ezuZGZ3JrN/3geE3WR33uc3rzOzOzubISgqXyi2+P0f3z8PqZYRRvlCsVUdOwMArP+csBKf3yf+wcc/Wn8NAJiu7oaO/yDISdWxM7AkpFHEnxz+jG0DQTT7/kt7Y3nJ1SPxGnTvNCilnf/ro1Jnazc0f6AGEKUE1Pf3PD+fm1/oetPtg/iTw69sMF8otjY2twAAK8tLQgNMuiqCr2y/uKZ9EH+y+JWM2UwAiy0b18+HDg8qPog/2vzShmwmIGzsKHgg/mjyS5mxnYB8odjyiz28U0LmzQEA4P7DS98ymuVa10OQ+ADxJ5Ff+iZYh4H6/p5jSJSR6CYrqPKFYks1CcSfTP6+DWDQCfCKJ+p5muUaxkdywnjnp4eOslSSQPzJ5nc1gCgkgM0yyGh8cra7fXN1AgDIdvzw+7wHkYg/vvyiY/z4PUcAWwnQ0dtMv3jl2D769km5DOKPJ78ovp8cDSAKCWhU7oH6ouOz5mit73k3q2su0N9/roGtj9KxiT9Z/NmRHG5W14TnuUYAmwkIovPTQ4xPziL77m3bx9WJowdQGf4B4k8bf+i1QLoTEFbZkZzU0KdLxB9vfu2L4YIkoHfoPb64dHw/tVPqzuN6iVUwux5lcb0qXnUaTlXEHy/+jG0DTN0br/oipp4/840lkmxP0zsFR/zp5e+OADYTIKO5+QVtTyK9RPzp5Jd+IUbH0ClbxvHFpeNPh4ewi8GIP5n8nvcAriGw0yOEaYX9ErCyvAQAaFQg7IFYOSZXIxJ/eviHAOc1YKNy71nQzLazrZhIQL5QbInis/OZ343NLUyMPtUSl20Tf7r4M/wB/R6E8MfNzS9oS4CsvPyd/bp2Hcd6E9nYxJ9efqVpUFMJ4NXb0/Dq7XW8YvPH6Z7yI/7k8bui2UyAV2WJ1oL79T5hRPzp4nfQRiEBIg3vlHy/4+epnzx+2Fmbrvacj/jTx69UQ14G+MDulyNi+asrvhIlgEn0wCjuMt0AbSj6DvG/4mX/uf7e3gHlGrBt9rH/oET85vilGoCsgWa5BtzetXc6BoK8fifyMbOdcaxXZz/NwfdOouvYoHEB+717XPhNNUAT/IEvgVgQv3nb9nf6k9G7XLdRAeAxNJv4USaWABGzU/oHWNv8MtKdc166+WNxCcRXqPw/X3IUR36dDdAkf1+TOt4SMvkgJEoxTfpQ9WKb38QIZIOfREq0/gGCA1HDqZlghAAAAABJRU5ErkJggg==",
+  "general": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAAAgCAYAAABEmHeFAAADtElEQVR4nO2cv2/aQBTHXyqGbhWdylYpEkritFLojigSAwMTaxdoOiNol/YPyBYQc1NYumZCaoZIaZU9jRTTJooUqUubTEHZMtUd0LlnY5/v7DvOP95XQjJw+H0/97g7+3z2CgjKKFUs+v2P799WRPcRRUapYhkbxXnsn5da4tPvkX/58UfjTwAA0G69jhz/QSgTG0UgSciikD89/DndBsKo++49AABst1sLPRKtZfdOy1LW+f9a//vtqPyhGkCcEnB8dOD5eblat73J9oH86eEXNmiUKtbeaAwA8wpgGSCSVRF0ZfvFVe0D+dPFL2RMZwJIbN64fj5keBDxgfzx5uc2pDMBUWPHwQPyx5Ofy4zuBBiliuUXe39yCG9eNQAA4OPnie8+mo2a7SFMfADkTyM/90mwDAPHRweOIZFHrJOssDJKFUs0CcifTv7ABrDsBHjFY/U8zUYN8oV1Zryri1PHvkSSgPzp5l9oAHFIAJll4NHq2pa9Pbs+BwCw/dDvaQ8sIX9y+Vll/Pg9RwBdCZDR22y+eOnYnp58Fd4H8ieTnxXfT44GEIcEdLo9ME3T8Vnx6ZPA3812dhdAf/+5ARh/4Y6N/OnizxfWYbazy/zdwgigMwFhdHVxCqtrW5D/8Hbu4/rc0QOIDP8AyJ81/shrgWQnIKryhXWuoU+WkD/Z/NIXw4VJgHvonZpnC2XIPK6XSAWT41ES16viRafhRIX8yeLP6TZARE68TNOEzWfPfWOxxNvTuKfgkD+7/PYIoDMBPCpX69KuRHoJ+bPJz31DjIyhk3cfU/PM8ZLhIepiMORPJ7/nOYB7CCQ9QpRWGJSA7XYLAOazEKweiOxH5WpE5M8Ov90AdCaAfB40D02XK1frsDca+07RiSYe+bPJn9NtQERe/i5/3SyUI8nkjY382eUXmgZVlQBaw0Hf9zt3r+MVmy4ne8oP+dPHz5wOC2uA9Aph1p67xVoLHiTR+MifPX7HCOBVmGWA5xK5TO1PDn2/o+epHz96yFyb7ifkzx6/0CGQlwE6MO/NEUkVKwFErAtGSZfqBqhDiXguEKl43j/X7d09NBs15vFkkoT86vi5GgCvgWajBrd39/b2cNAPdfsdy8dw0HesVyeP5qB7J9mJF02AKiWFX1UDVMEf+hCIBOl0e77lO92e9EpwL9ftdHueQ7OKhzKRBLCYVUs3P49Ujjyy+RNxCERXqM4/ny4lkV9mA1TJH2hSxl1CKi+ExCmmSh+iXnTzqxiBdPCjUKnWP6IHXBc+0O41AAAAAElFTkSuQmCC",
+  "captain": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAAwCAYAAACxIqevAAAFqElEQVR4nO2dv2sVSxTHTySFnSSVFsKDgFEMSBSsnkEDKWIpWFoYbMTSzj/AzlLSiPkPLE0R0IfPQgSfPLiiCQQE8UeVaKcgaHGdzdzdmb3z48yc2b3fT3Wz2bt7zmdnZ+buzs5OEQOnz178Zfvfm//+meLYR0pU/Lf+/lItu//8KBF1K34TXYof/mVQ8Q8eXa6WLVx5TETp45/m3JipAIF8wL8s8O8PawXUR9paN0UXWrmuAv+ypPaPCkhjcW3z4I/n152/px8knAzhwL8sL75e1f567Py9GP+sFZCpALnUoIpSC8+zJ5vG5UvLq41lKl+JXOAf/lOQ0n9RPaCSWjKbdNs69YMheSKEAv+yTKJ/liTVzh483KiW3Vi77pQEkbkmJUp/EEytk2vMNky55MoD/uHfhxL8RyfInUSuApRCvk49j1SFCf7NwH87pfiPSqyeBFcCOQ6CHjuneJ3UJwH8twP/dkrxH5xUKvk6egKcByCHfEWqkwD+3YD/JiX5D0oqh3wF90HwjX12e4Xo/L8HC15ecN7X3vwWEcnnEIN07PDfb/+HnLdmIXUNquNzS9OFXLGn3A/8y+4H/uP2430b3rf7FluDPnuyab1LEEPOgqNz+uzFXzEtGfzHAf9DSvFf1DggG/pBcClAnC3F3vwWzR075f293XevuUIQB/5l6bN/YwXkkoBUDZqbuZOLLNvxacng/wD4lyW1/+Q9IK4aNKQrqg8M0znxV/iTyvuf31afZ7S86svnTi4W0QrDvyx98++Kq//WCsiWwI019wcF6zWoawEKhftCnY2Fc5eMfw9ePWXbB/zbgX8zqf1zx9+4C1ZK95Or69c14F8W+M+L2EXo1C3YYP0n0Y9rxv/t0VbQNvfv3rPW7h8//ZmMasN9GgNJ4F+WvvlXy/fv3vPaprUCQgFqMnPndvV5//NbYxdULYu9/gD/TeBflhT+owcipiLlBcTZ7ZUi4igZ+JdlUvwn/wm2++519XvWpwYtCT0HxcyxU9YLbyWdNPAvC/y3E1QBzW6vVM95hMJZgGwXDnf+/2Bc/8SZ417bVzGZDoJpPROco1nhfwj8D+my/2mi9LfuTMG3rWuCezh6SCFSsdVziW1x4d8N+OejFP+tPSDuGpRoNPh6DRpbkEbGbfy4FhSnC75xhj7RDP9m4N9MF/2PVEA+CYR2Q2Mlc86LsrS8mn0+lDbgnx/4t1OC/6i7YCme0s29n1w5EPHPagf/fsB/3m3XMfkv/mn4GEGuXehULUGqGe1yAv+y9N1/9DWglN043+k09Wd0But+v9U58+BqVeA/DPjvjn+WgYhLy6vsXblcbzWo7zM2D4nXwsD/6DbqwL/7PnP7nyIy34YcrP8cu7OFm80OlPR7nVQuofErHjzccJ62IPa9TvDfBP4P6LN/9mtAKhjfAyH1crY2dt5/af1/27QMUnHD/xD4jyeH/+n6ylyDsvTgbTVpW3evqxcNQ+KGfz7gXxbfuLPcBRtXk+pwiW/rXurYWiqXmNvejV0S8C8L/NuxRtmVBEJw6R7nmLayDfiH/1SU5L/4cUC+tLUguaYLnWTgX5au+W9UQC4JlFSDxuIzN0p96P3skcPDDy8vEFddDv924J8faf/RR21cAo2g1fqNl7X1rjOWBZ8CpBM7nQQYIn0Cd51iZ0QEAPSfiax29VYrpiew9+378MP8FhGVexemNOBflpL8B8+IWAXhmUC1vgqeaCQB9Ts71zgIlcvCzenGe6DUQCv1m7/e3Xa9U8INVwEqgUn2X0IFKu0fP8EAAGIkuQit14wuz6QM12t+Nyem17ComGjMhUbJUat6C+bq2ozsr/Gu+w9BqqybkPJfjoGMmA583MkLfIB/WUryP5EVEAAl0dXnvjjwSjznSMpcB4Ujpy7FOo7cJwP8y1ZA0v5xERoAAAAAk8dvuLcaU4ySazQAAAAASUVORK5CYII=",
+};
+var SPR = { img: {}, ready: false };
+function spriteFor(f) {
+  if (f.kind === 'captain') return 'captain';
+  var s = String(f.specialty || '').toLowerCase();
+  if (/titan/.test(s)) return 'titan';
+  if (/finan/.test(s)) return 'finance';
+  if (/email|comm/.test(s)) return 'comms';
+  if (/data|cleanup/.test(s)) return 'data';
+  if (/build|engineer|deck|renovat/.test(s)) return 'build';
+  if (/command|captain/.test(s)) return 'command';
+  return 'general';
+}
+function loadSprites() {
+  var ks = Object.keys(SPRITE_URI), i;
+  for (i = 0; i < ks.length; i++) (function (k) {
+    var im = new Image();
+    im.onload = im.onerror = function () {
+      SPR.img[k] = im;
+      if (Object.keys(SPR.img).length === ks.length) SPR.ready = true;
+    };
+    im.src = SPRITE_URI[k];
+  })(ks[i]);
+}
+/* sprite body drawn inside the ambient pose transform (INSERT 8).
+   Feet stay at local (0,0); returns false while a strip is still loading. */
+function drawSpriteBody(c, f, t, s) {
+  var key = spriteFor(f);
+  var im = SPR.img[key];
+  if (!im || !im.naturalWidth) return false;
+  var fw = 32, fh = 32, ss = 1;
+  if (key === 'captain') { fw = 48; fh = 48; ss = 1.5; }
+  var fr;
+  if (f.moving) fr = Math.floor(f.walkPhase / 2) % 4;             /* walk 0–3 */
+  else fr = 4 + (Math.floor(AMB.t * 1.2 + (f.bob || 0)) % 2);     /* idle 4–5 */
+  if (f.moving && f.tx !== null) f.dir = (f.tx >= f.x) ? 1 : -1;
+  if (!f.dir) f.dir = 1;
+  var dw = fw * s / ss, dh = fh * s / ss;
+  c.save();
+  if (f.dir < 0) c.scale(-1, 1);   /* mirror: strips face right */
+  if (f.seated) {                 /* lounge bar: perch cropped torso on stool */
+    var sh = dh * 0.72;
+    c.drawImage(im, fr * fw, 0, fw, fh * 0.72, -dw / 2, -6 * s - sh, dw, sh);
+  } else {
+    c.drawImage(im, fr * fw, 0, fw, fh, -dw / 2, -dh, dw, dh);
+  }
+  c.restore();
+  return true;
+}
+
+
+/* ── crew figures ────────────────────────────────────────────────── */
+/* [v3.1] Chibi-astronaut sprite crew (feet at 0,0); see sprite block above. */
+function drawCrew(c, f, t) {
+  var s = f.scale;
+  var flashing = f.failed && (Math.floor(t * 4 + f.bob) % 2 === 0);
+
+  /* soft shadow */
+  c.fillStyle = 'rgba(0,0,0,0.35)';
+  c.beginPath();
+  c.ellipse(f.x, f.y + 1.5 * s, 7.5 * s, 2.4 * s, 0, 0, 6.2832);
+  c.fill();
+
+  c.save();
+  ambientPreFigure(c, f, t, s);   /* [v3.1 pose hook] */
+  if (f.dimmed) c.globalAlpha = 0.25;
+
+  /* filter-match / active / selected glow ring */
+  if (f.glow) {
+    c.beginPath();
+    c.arc(0, -13 * s, 16 * s, 0, 6.2832);
+    c.lineWidth = 2;
+    c.strokeStyle = f.aiCol;
+    c.globalAlpha = (f.dimmed ? 0.25 : 1) * (0.35 + 0.2 * Math.sin(t * 3 + f.bob));
+    c.stroke();
+    c.globalAlpha = f.dimmed ? 0.25 : 1;
+  }
+
+  /* stool under seated lounge-bar figures (kept from v3) */
+  if (f.seated) {
+    c.fillStyle = '#22314d';
+    c.fillRect(-5 * s, -5.5 * s, 10 * s, 5.5 * s);
+  }
+
+  /* [v3.1] sprite body replaces the procedural astronaut */
+  drawSpriteBody(c, f, t, s);
+
+  if (flashing) { /* red wash on failed live figures */
+    c.save();
+    c.globalAlpha = 0.35; c.fillStyle = PAL.red;
+    c.fillRect(-16 * s, -33 * s, 32 * s, 33 * s);
+    c.restore();
+  }
+  c.restore();
+
+  if (flashing) { /* red alert pulse on failed live figures */
+    c.save();
+    c.globalAlpha = 0.35 + 0.2 * Math.sin(t * 8);
+    c.beginPath(); c.arc(f.x, f.y - 13 * s, 14 * s, 0, 6.2832);
+    c.lineWidth = 2; c.strokeStyle = PAL.red; c.stroke();
+    c.restore();
+  }
+}
+
+/* dashed empty crew slot */
+function drawAwaiting(c, f, t) {
+  var s = f.scale;
+  c.save();
+  c.translate(f.x, f.y);
+  if (f.dimmed) c.globalAlpha = 0.25;
+  c.setLineDash([5, 4]);
+  c.lineWidth = 1.5;
+  c.strokeStyle = f.aiCol;
+  c.globalAlpha = (f.dimmed ? 0.25 : 1) * (0.55 + 0.25 * Math.sin(t * 2 + f.bob));
+  rr(c, -9 * s, -28 * s, 18 * s, 28 * s, 6 * s);
+  c.stroke();
+  c.beginPath(); c.arc(0, -32 * s, 6 * s, 0, 6.2832); c.stroke();
+  c.setLineDash([]);
+  c.globalAlpha = f.dimmed ? 0.25 : 1;
+  c.font = '700 8px ' + FONT; c.textAlign = 'center';
+  c.fillStyle = f.aiCol;
+  c.fillText('AWAITING', 0, 12);
+  c.fillText(aiName(f.ai), 0, -42 * s);
+  c.textAlign = 'left';
+  c.restore();
+}
+
+/* name tag above a figure (hover / selected only) */
+function drawNameTag(c, f) {
+  var label = f.name || f.key || '';
+  if (!label) return;
+  c.font = '600 11px ' + FONT;
+  var w = c.measureText(label).width;
+  var x = clamp(f.x, 70 + w / 2, VW - 70 - w / 2);
+  var y = f.y - 34 * f.scale - 12;
+  if (y < 70) y = f.y + 16;
+  c.fillStyle = 'rgba(4,8,16,0.9)';
+  rr(c, x - w / 2 - 7, y - 10, w + 14, 19, 5); c.fill();
+  c.lineWidth = 1; c.strokeStyle = f.aiCol; c.stroke();
+  c.fillStyle = PAL.text; c.textAlign = 'center';
+  c.fillText(label, x, y + 4);
+  c.textAlign = 'left';
+}
+
+/* countdown pill under a dock station */
+function drawCountdown(c, x, y, text) {
+  c.font = '700 9px ' + FONT;
+  var w = c.measureText(text).width;
+  c.fillStyle = 'rgba(4,8,16,0.9)';
+  rr(c, x - w / 2 - 6, y, w + 12, 15, 4); c.fill();
+  c.lineWidth = 1; c.strokeStyle = 'rgba(255,191,71,0.5)'; c.stroke();
+  c.fillStyle = PAL.amber; c.textAlign = 'center';
+  c.fillText(text, x, y + 11);
+  c.textAlign = 'left';
+}
+
+/* ── figure factory ──────────────────────────────────────────────── */
+function baseFig(key, kind, name, aiv, x, y, scale, suit, visor) {
+  return {
+    key: key, kind: kind, name: name || key, ai: aiv || null,
+    project: null, x: x, y: y, scale: scale || 1,
+    suit: suit, visor: visor || aiColor(aiv), aiCol: aiColor(aiv),
+    bob: Math.random() * 6.2832, bobAmp: 1, walkPhase: 0, moving: false,
+    tx: null, ty: null, pauseT: Math.random() * 2, speed: 42,
+    room: null, status: null, seated: false, dashed: false,
+    failed: false, dimmed: false, glow: false,
+    slotX: 0, slotY: 0, tag: null, specialty: null
+  };
+}
+
+/* ── setData: rebuild figures from the fleet entity model ────────── */
+var CAPS = { live: 24, scheduled: 8, chats: 12, recent: 10 };
+
+function setData(entities) {
+  var E = entities || {};
+  var old = {};
+  var i;
+  for (i = 0; i < state.figures.length; i++) old[state.figures[i].key] = state.figures[i];
+  state.figures = [];
+
+  function push(f) { state.figures.push(f); return f; }
+
+  /* captain — fixed near the bridge viewport, gold suit, larger */
+  if (E.captain) {
+    var cap = baseFig(E.captain.key, 'captain', E.captain.name,
+      E.captain.ai || 'sebastian', 330, 262, 1.55, '#ffd700', '#5ff2ff');
+    cap.bobAmp = 1.4; cap.glow = true;
+    push(cap);
+  }
+
+  /* specialists — stand at their station slot */
+  var slotN = {};
+  var specs = E.specialists || [];
+  var specByKey = {};
+  for (i = 0; i < specs.length; i++) {
+    var sp = specs[i];
+    var st = resolveStation(sp);
+    var sx, sy;
+    if (st === 'titanlab') {
+      sx = titanSlotX(sp.ai); sy = 258;
+    } else {
+      var slots = STATION_SLOTS[st] || STATION_SLOTS.quarters;
+      var n = slotN[st] || 0;
+      var sl = slots[n % slots.length];
+      slotN[st] = n + 1;
+      sx = sl[0] + (n >= slots.length ? (n - slots.length + 1) * 14 : 0);
+      sy = sl[1];
+    }
+    var f = baseFig(sp.key, 'specialist', sp.name, sp.ai, sx, sy,
+      1.27, suitColorFor(sp.specialty), null);
+    f.status = sp.status || 'standby';
+    f.specialty = sp.specialty;
+    f.station = st;
+    f.bobAmp = 0.7;
+    if (f.status === 'active') f.glow = true;
+    specByKey[sp.key] = f;
+    push(f);
+  }
+
+  /* live — green suits wander their specialist's room (cap 24) */
+  var live = (E.live || []).slice(0, CAPS.live);
+  for (i = 0; i < live.length; i++) {
+    var lv = live[i];
+    var roomKey = 'titanlab';
+    var msp = lv.specialistKey && specByKey[lv.specialistKey];
+    if (msp && msp.station && STATION_ROOM[msp.station]) {
+      roomKey = STATION_ROOM[msp.station];
+    }
+    var wb = WANDER[roomKey] || WANDER.titanlab;
+    var lx = wb.x + Math.random() * wb.w;
+    var ly = wb.y + Math.random() * wb.h;
+    var lf = baseFig(lv.key, 'live', lv.name, lv.ai, lx, ly, 1, '#51ff9e', null);
+    lf.project = lv.project || null;
+    lf.room = wb; lf.roomKey = roomKey;
+    lf.failed = (lv.status === 'failed');
+    var prev = old[lv.key];
+    if (prev && prev.kind === 'live' && prev.roomKey === roomKey) {
+      lf.x = prev.x; lf.y = prev.y;
+      lf.tx = prev.tx; lf.ty = prev.ty;
+      lf.pauseT = prev.pauseT; lf.moving = prev.moving;
+      lf.walkPhase = prev.walkPhase;
+    }
+    push(lf);
+  }
+
+  /* scheduled — amber figures at dock stations + countdown tags */
+  var sched = (E.scheduled || []).slice(0, CAPS.scheduled);
+  for (i = 0; i < sched.length; i++) {
+    var sc = sched[i];
+    var ds = DOCK_STATIONS[i % DOCK_STATIONS.length];
+    var sf = baseFig(sc.key, 'scheduled', sc.name, sc.ai, ds[0], ds[1], 1, '#ffbf47', null);
+    sf.project = sc.project || null;
+    sf.slotX = ds[0]; sf.slotY = ds[1];
+    sf.nextRun = sc.next_run; /* tag recomputed each frame in draw() */
+    sf.bobAmp = 0.6;
+    push(sf);
+  }
+
+  /* side chats — cyan figures in quarters, drift between bunks */
+  var chats = (E.chats || []).slice(0, CAPS.chats);
+  var bunkSpots = [];
+  for (var b = 0; b < 12; b++) bunkSpots.push([505 + b * 36, 690]);
+  for (i = 0; i < chats.length; i++) {
+    var ch = chats[i];
+    var spot = bunkSpots[i % bunkSpots.length];
+    var cf = baseFig(ch.key, 'chat', ch.name, ch.ai, spot[0], spot[1], 1, '#5ff2ff', null);
+    cf.spots = bunkSpots; cf.shiftT = 4 + Math.random() * 6;
+    cf.bobAmp = 0.8;
+    var pc = old[ch.key];
+    if (pc && pc.kind === 'chat') { cf.x = pc.x; cf.y = pc.y; cf.shiftT = pc.shiftT; }
+    push(cf);
+  }
+
+  /* recent completions — dim figures seated at the lounge bar (cap 10) */
+  var recent = (E.recent || []).slice(0, CAPS.recent);
+  for (i = 0; i < recent.length; i++) {
+    var rc = recent[i];
+    var rf = baseFig(rc.key, 'recent', rc.name, rc.ai,
+      1012 + i * 30, 698, 1, '#5a6b8c', null);
+    rf.project = rc.project || null;
+    rf.seated = true; rf.bobAmp = 0.4;
+    push(rf);
+  }
+
+  /* awaiting — dashed empty slots */
+  var awN = {};
+  var awaiting = E.awaiting || [];
+  for (i = 0; i < awaiting.length; i++) {
+    var aw = awaiting[i];
+    var ast = resolveStation(aw);
+    var ax, ay;
+    if (ast === 'titanlab') {
+      ax = titanSlotX(aw.ai); ay = 258;
+    } else {
+      var aslots = STATION_SLOTS[ast] || STATION_SLOTS.quarters;
+      var an = awN[ast] || 0;
+      var asl = aslots[an % aslots.length];
+      awN[ast] = an + 1;
+      ax = asl[0] + (an >= aslots.length ? (an - aslots.length + 1) * 14 : 0) + 30;
+      ay = asl[1];
+    }
+    var af = baseFig(aw.key, 'awaiting', aw.name, aw.ai, ax, ay, 1.1, '#8b9bb8', null);
+    af.dashed = true; af.specialty = aw.specialty;
+    push(af);
+  }
+
+  applyFilter();
+}
+
+/* ── filter ──────────────────────────────────────────────────────── */
+function normFilterVal(v) {
+  if (v === null || v === undefined || v === '' || v === 'ALL') return null;
+  return String(v);
+}
+function setFilter(f) {
+  f = f || {};
+  state.filter.ai = normFilterVal(f.ai);
+  state.filter.project = normFilterVal(f.project);
+  applyFilter();
+}
+function applyFilter() {
+  var fa = state.filter.ai, fp = state.filter.project;
+  var active = !!(fa || fp);
+  for (var i = 0; i < state.figures.length; i++) {
+    var f = state.figures[i];
+    var kindGlow = (f.kind === 'captain') ||
+                   (f.kind === 'specialist' && f.status === 'active');
+    if (!active) { f.dimmed = false; f.glow = kindGlow; continue; }
+    var m = true;
+    if (fa && f.ai !== fa) m = false;
+    if (fp && f.project !== fp) m = false;
+    f.dimmed = !m;
+    f.glow = m || kindGlow;
+  }
+}
+
+/* ── per-frame updates ───────────────────────────────────────────── */
+function moveToward(f, dt) {
+  var dx = f.tx - f.x, dy = f.ty - f.y;
+  var d = Math.sqrt(dx * dx + dy * dy);
+  if (d < 3) {
+    if (f.wps && f.wps.length) {  /* [v3.1: corridor queue] */
+      var wq = f.wps.shift();
+      f.tx = wq[0]; f.ty = wq[1]; f.moving = true;
+      return;
+    }
+    f.tx = null; f.ty = null; f.moving = false;
+    f.pauseT = 1 + Math.random() * 3;
+    return;
+  }
+  var step = Math.min(d, f.speed * dt);
+  f.x += dx / d * step;
+  f.y += dy / d * step;
+  f.walkPhase += dt * 11;
+}
+function update(dt) {
+  for (var i = 0; i < state.figures.length; i++) {
+    var f = state.figures[i];
+    if (f.kind === 'live') {
+      if (f.tx === null) {
+        f.pauseT -= dt;
+        if (f.pauseT <= 0 && f.room) {
+          pickWanderTarget(f);   /* [v3.1: corridor routing] */
+        }
+      } else {
+        moveToward(f, dt);
+      }
+    } else if (f.kind === 'chat') {
+      if (f.sleeping || f.chatting) {
+        /* [v3.1: ambient behavior owns this figure] */
+      } else if (f.tx === null) {
+        f.shiftT -= dt;
+        if (f.shiftT <= 0 && f.spots) {
+          var sp = f.spots[(Math.random() * f.spots.length) | 0];
+          f.tx = sp[0]; f.ty = sp[1];
+          f.moving = true;
+          f.shiftT = 5 + Math.random() * 7;
+        }
+      } else {
+        moveToward(f, dt);
+      }
+    }
+  }
+}
+
+/* bridge viewport starfield (~44 stars, slow drift, clipped) */
+function initStars() {
+  state.stars = [];
+  for (var i = 0; i < 44; i++) {
+    state.stars.push({
+      x: VIEWPORT.x + Math.random() * VIEWPORT.w,
+      y: VIEWPORT.y + Math.random() * VIEWPORT.h,
+      r: 0.6 + Math.random() * 1.3,
+      spd: 2 + Math.random() * 7,
+      tw: Math.random() * 6.2832
+    });
+  }
+}
+function drawStars(c, dt, t) {
+  c.save();
+  c.beginPath();
+  c.rect(VIEWPORT.x, VIEWPORT.y, VIEWPORT.w, VIEWPORT.h);
+  c.clip();
+  for (var i = 0; i < state.stars.length; i++) {
+    var s = state.stars[i];
+    s.x -= s.spd * dt;
+    if (s.x < VIEWPORT.x) {
+      s.x = VIEWPORT.x + VIEWPORT.w;
+      s.y = VIEWPORT.y + Math.random() * VIEWPORT.h;
+    }
+    c.globalAlpha = 0.35 + 0.35 * Math.sin(t * 1.5 + s.tw);
+    c.fillStyle = '#cfeaff';
+    c.fillRect(s.x, s.y, s.r, s.r);
+  }
+  c.restore();
+  c.globalAlpha = 1;
+}
+
+/* ══ v3.1 INSERT 3 — ambient functions ═════════════════════════════ */
+function initAmbient() {
+  if (typeof WANDER === 'undefined') return;
+  /* per-room wander bounds: copy — never mutate the shared WANDER entries */
+  AMB.wander = {};
+  var ks = Object.keys(WANDER), i, b;
+  for (i = 0; i < ks.length; i++) {
+    b = WANDER[ks[i]];
+    AMB.wander[ks[i]] = { x: b.x, y: b.y, w: b.w, h: b.h };
+  }
+  AMB.wander.lounge = { x: 990, y: 600, w: 320, h: 70 }; /* lounge had none */
+
+  /* console LEDs — bridge consoles (3), ops consoles (3), titan lab pads (5) */
+  AMB.leds = [];
+  function led(x, y, col, rate) {
+    AMB.leds.push({
+      x: x, y: y, col: col,
+      phase: Math.random() * 6.2832, rate: rate,
+      sz: 1.6 + Math.random() * 1.2, steady: Math.random() < 0.25
+    });
+  }
+  var j, x, l;
+  for (j = 0; j < 3; j++) {
+    x = 92 + j * 100; /* matches renderStatic bridge console bodies */
+    for (l = 0; l < 4; l++)
+      led(x + 8 + l * 18, 235, AMB_LED_COLS[(j + l) % 4], 1 + Math.random() * 3);
+  }
+  var cons = [[1020, 210], [1240, 210], [1130, 210]]; /* ops consoles */
+  for (j = 0; j < cons.length; j++) {
+    x = cons[j][0];
+    for (l = 0; l < 4; l++)
+      led(x - 9 + l * 7, cons[j][1] + 5 + (l % 2) * 6,
+          AMB_LED_COLS[(j * 2 + l) % 4], 0.8 + Math.random() * 2.5);
+  }
+  if (typeof AI_ORDER !== 'undefined' && typeof titanSlotX === 'function') {
+    for (j = 0; j < AI_ORDER.length; j++) {
+      x = titanSlotX(AI_ORDER[j]);
+      var acol = (typeof aiColor === 'function') ? aiColor(AI_ORDER[j]) : '#5ff2ff';
+      for (l = 0; l < 3; l++)
+        led(x - 12 + l * 12, 256, acol, 0.6 + Math.random() * 1.4);
+    }
+  }
+
+  /* dust motes */
+  AMB.dust = [];
+  for (j = 0; j < AMB.DUST_N; j++) {
+    AMB.dust.push({
+      x: 60 + Math.random() * 1280, y: 70 + Math.random() * 660,
+      vx: -(3 + Math.random() * 7), ph: Math.random() * 6.2832,
+      sz: 1 + Math.random() * 1.4, al: 0.05 + Math.random() * 0.08
+    });
+  }
+  AMB.sparks = [];
+  AMB.zs = [];
+}
+
+/* inter-room wander target for off-duty crew (called from update()) */
+function pickWanderTarget(f) {
+  if (!f || f.chatting || f.sleeping || !AMB.wander) return;
+  var offDuty = (f.kind === 'live' && !f.project && !f.failed);
+  if (offDuty && Math.random() < 0.5) {
+    var rk = AMB_ROOM_KEYS[(Math.random() * AMB_ROOM_KEYS.length) | 0];
+    var b = AMB.wander[rk];
+    if (b) {
+      var dx = b.x + Math.random() * b.w, dy = b.y + Math.random() * b.h;
+      var cur = f.roomKey || 'titanlab';
+      if (rk !== cur && AMB_DOORS[cur] && AMB_DOORS[rk]) {
+        buildCorridorPath(f, cur, rk, dx, dy);
+        f.roomKey = rk;
+        /* copy: never mutate the shared bounds object */
+        f.room = { x: b.x, y: b.y, w: b.w, h: b.h };
+        return;
+      }
+      f.tx = dx; f.ty = dy; f.moving = true;
+      return;
+    }
+  }
+  /* on-duty / fallback: original in-room behavior */
+  if (f.room) {
+    f.tx = f.room.x + Math.random() * f.room.w;
+    f.ty = f.room.y + Math.random() * f.room.h;
+    f.moving = true;
+  }
+}
+
+/* door → corridor centerline → door waypoint queue (consumed by moveToward) */
+function buildCorridorPath(f, fromRoom, toRoom, dx, dy) {
+  if (!f) return;
+  var d1 = AMB_DOORS[fromRoom], d2 = AMB_DOORS[toRoom];
+  f.wps = [];
+  if (d1) f.wps.push([d1[0], d1[1]]);
+  var midX = (d1 && d2)
+    ? Math.max(84, Math.min(916, (d1[0] + d2[0]) / 2))
+    : 500;
+  f.wps.push([midX, 420]); /* deck B corridor centerline */
+  if (d2) f.wps.push([d2[0], d2[1]]);
+  f.wps.push([dx, dy]);    /* final destination */
+  var first = f.wps.shift();
+  f.tx = first[0]; f.ty = first[1]; f.moving = true;
+}
+
+/* per-frame ambient update — called from frame() after update(dt) */
+function updateAmbient(dt) {
+  if (!state || !state.figures || !AMB.wander) return;
+  if (!(dt > 0)) dt = 0.016;
+  AMB.t += dt;
+  var i, f;
+
+  /* dust drift (slow, wrap around) */
+  for (i = 0; i < AMB.dust.length; i++) {
+    var m = AMB.dust[i];
+    m.x += m.vx * dt;
+    m.y += Math.sin(AMB.t * 0.5 + m.ph) * 6 * dt;
+    if (m.x < 50) { m.x = 1350; m.y = 70 + Math.random() * 660; }
+    if (m.y < 60) m.y = 60; else if (m.y > 740) m.y = 740;
+  }
+
+  /* sparks: physics + cull */
+  for (i = AMB.sparks.length - 1; i >= 0; i--) {
+    var sp = AMB.sparks[i];
+    sp.vy += 140 * dt;
+    sp.x += sp.vx * dt; sp.y += sp.vy * dt; sp.life -= dt;
+    if (sp.life <= 0) AMB.sparks.splice(i, 1);
+  }
+  /* engineering reactor: occasional spark burst */
+  AMB.sparkCD -= dt;
+  if (AMB.sparkCD <= 0 && AMB.sparks.length < AMB.MAX_SPARKS) {
+    AMB.sparkCD = 2 + Math.random() * 4;
+    for (var k = 0; k < 2; k++) {
+      AMB.sparks.push({
+        x: 1290 + (Math.random() * 36 - 18), y: 382 + Math.random() * 14,
+        vx: Math.random() * 50 - 25, vy: -40 - Math.random() * 50,
+        life: 0.9 + Math.random() * 0.6, max: 1.5,
+        col: Math.random() < 0.5 ? '#ffbf47' : '#5ff2ff'
+      });
+    }
+  }
+
+  /* sleeping z particles: rise + fade */
+  for (i = AMB.zs.length - 1; i >= 0; i--) {
+    var z = AMB.zs[i];
+    z.y -= 14 * dt; z.life -= dt;
+    if (z.life <= 0) AMB.zs.splice(i, 1);
+  }
+
+  /* lounge chat clocks (per-table nod sync) */
+  for (i = 0; i < AMB.chatPhase.length; i++) AMB.chatPhase[i] += dt * 6;
+
+  /* typing flags refresh (cheap: every 2 s) */
+  AMB.typeTick -= dt;
+  var refreshType = AMB.typeTick <= 0;
+  if (refreshType) AMB.typeTick = 2;
+
+  var sleepers = 0;
+  for (i = 0; i < state.figures.length; i++) {
+    f = state.figures[i];
+    if (f && f.sleeping) sleepers++;
+  }
+
+  for (i = 0; i < state.figures.length; i++) {
+    f = state.figures[i];
+    if (!f || f.dashed) continue;
+
+    /* typing: specialists at consoles (+ captain sometimes) */
+    if (refreshType) {
+      if (f.kind === 'specialist' && f.station &&
+          /^(bridge|finance|comms|data|titanlab)$/.test(f.station)) {
+        f.typing = (f.status === 'active') || Math.random() < 0.45;
+      } else if (f.kind === 'captain') {
+        f.typing = Math.random() < 0.5;
+      } else {
+        f.typing = false;
+      }
+    }
+    /* occasional tool spark while typing */
+    if (f.typing && Math.random() < dt * 0.3 && AMB.sparks.length < AMB.MAX_SPARKS) {
+      AMB.sparks.push({
+        x: f.x + (Math.random() * 12 - 6), y: f.y - 15 * (f.scale || 1),
+        vx: Math.random() * 40 - 20, vy: -30 - Math.random() * 30,
+        life: 0.5 + Math.random() * 0.3, max: 0.8, col: '#bfefff'
+      });
+    }
+
+    /* quarters sleepers: chat-kind figures doze in bunks */
+    if (f.kind === 'chat') {
+      if (f.sleeping) {
+        f.sleepT -= dt;
+        f.sleepZ -= dt;
+        if (f.sleepZ <= 0 && AMB.zs.length < 12) {
+          AMB.zs.push({
+            x: f.x - 30 * (f.scale || 1), y: f.y - 10,
+            life: 1.8, max: 1.8
+          });
+          f.sleepZ = 1.1 + Math.random() * 0.7;
+        }
+        if (f.sleepT <= 0) { /* wake up, drift again */
+          f.sleeping = false; f.tx = null; f.ty = null; f.moving = false;
+          f.shiftT = 1 + Math.random() * 2;
+        }
+      } else if (!f.chatting && !f.moving && f.tx === null &&
+                 sleepers < AMB.MAX_SLEEPERS && Math.random() < dt * 0.05) {
+        var bk = AMB_BUNKS[(Math.random() * AMB_BUNKS.length) | 0];
+        var rowY = bk.rows[(Math.random() * bk.rows.length) | 0];
+        f.sleeping = true;
+        f.sleepT = 8 + Math.random() * 14;
+        f.sleepZ = 0.5;
+        f.x = bk.x + 25 + Math.random() * 100;
+        f.y = rowY + 11;
+        f.tx = null; f.ty = null; f.moving = false;
+        sleepers++;
+      }
+    }
+
+    /* lounge chat clusters: idle LIVE figures gather at the mess bar, nod along
+       (chat-kind figures never reach the lounge — their drift spots are in
+       quarters — so only 'live' may join; this also avoids stalling the
+       chat branch's moveToward in update()) */
+    if (f.kind === 'live' && !f.sleeping && !f.failed) {
+      if (f.chatting) {
+        if (f.tx === null && !f.moving) { /* arrived: sync nod bob */
+          f.chatT -= dt;
+          if (typeof f.chatTable === 'number')
+            f.bob = AMB.chatPhase[f.chatTable % AMB.chatPhase.length] * 0.35;
+          if (f.chatT <= 0) { f.chatting = false; f.wps = null; }
+        }
+      } else if (!f.moving && f.tx === null && Math.random() < dt * 0.25 &&
+                 typeof LOUNGE_TABLES !== 'undefined' && LOUNGE_TABLES.length) {
+        var lz = AMB_LOUNGE_ZONE;
+        if (f.x >= lz.x && f.x <= lz.x + lz.w &&
+            f.y >= lz.y && f.y <= lz.y + lz.h) {
+          var tbl = LOUNGE_TABLES[(Math.random() * LOUNGE_TABLES.length) | 0];
+          f.chatting = true;
+          f.chatTable = LOUNGE_TABLES.indexOf(tbl);
+          f.chatT = 7 + Math.random() * 9;
+          f.wps = null;
+          f.tx = tbl[0] + (Math.random() < 0.5 ? -26 : 26);
+          f.ty = 688; /* feet in front of the mess bar */
+          f.moving = true;
+        }
+      }
+    }
+  }
+}
+
+/* dynamic overlays drawn UNDER the crew (called in draw() after drawStars) */
+function drawAmbientBelow(c) {
+  if (!c) return;
+  var i, l;
+  /* blinking console LEDs */
+  for (i = 0; i < AMB.leds.length; i++) {
+    l = AMB.leds[i];
+    c.globalAlpha = l.steady ? 0.55
+      : 0.18 + 0.62 * (0.5 + 0.5 * Math.sin(AMB.t * l.rate + l.phase));
+    c.fillStyle = l.col;
+    c.fillRect(l.x, l.y, l.sz, l.sz);
+  }
+  c.globalAlpha = 1;
+  /* engineering reactor pulse (glow sine) */
+  var rp = 0.5 + 0.5 * Math.sin(AMB.t * 2.1);
+  c.save();
+  var gr = 58 + 12 * rp;
+  var g = c.createRadialGradient(1290, 400, 8, 1290, 400, gr);
+  g.addColorStop(0, 'rgba(95,242,255,0.85)');
+  g.addColorStop(0.5, 'rgba(95,242,255,0.18)');
+  g.addColorStop(1, 'rgba(95,242,255,0)');
+  c.globalAlpha = 0.25 + 0.35 * rp;
+  c.fillStyle = g;
+  c.beginPath(); c.arc(1290, 400, gr, 0, 6.2832); c.fill();
+  c.restore();
+  c.globalAlpha = 1;
+  /* dust motes */
+  for (i = 0; i < AMB.dust.length; i++) {
+    var m = AMB.dust[i];
+    c.globalAlpha = m.al;
+    c.fillStyle = '#9db4d8';
+    c.fillRect(m.x, m.y, m.sz, m.sz);
+  }
+  c.globalAlpha = 1;
+}
+
+/* dynamic overlays drawn OVER the crew (called in draw() before name labels) */
+function drawAmbientAbove(c) {
+  if (!c) return;
+  var i;
+  /* sparks (reactor + tools) */
+  c.lineWidth = 2;
+  for (i = 0; i < AMB.sparks.length; i++) {
+    var sp = AMB.sparks[i];
+    c.globalAlpha = Math.max(0, Math.min(1, sp.life / sp.max));
+    c.strokeStyle = sp.col;
+    c.beginPath();
+    c.moveTo(sp.x, sp.y);
+    c.lineTo(sp.x - sp.vx * 0.03, sp.y - sp.vy * 0.03);
+    c.stroke();
+  }
+  c.globalAlpha = 1;
+  /* sleeping "z" particles */
+  c.font = '700 11px ' + (typeof FONT !== 'undefined' ? FONT : 'monospace');
+  c.textAlign = 'center';
+  for (i = 0; i < AMB.zs.length; i++) {
+    var z = AMB.zs[i];
+    c.globalAlpha = 0.75 * Math.max(0, Math.min(1, z.life / z.max));
+    c.fillStyle = '#8fb8e8';
+    c.fillText(z.life > z.max * 0.5 ? 'z' : 'Z', z.x, z.y);
+  }
+  c.globalAlpha = 1;
+  c.textAlign = 'left';
+}
+
+/* pose hook for drawCrew: reproduces the original bob exactly when no
+   ambient flags are set; adds typing jitter, chat nod, sleep rotation. */
+function ambientPreFigure(c, f, t, s) {
+  if (!c || !f) return;
+  var ba = (typeof f.bobAmp === 'number') ? f.bobAmp : 1;
+  var bobY = Math.sin(t * 2.2 + f.bob) * 1.1 * s * ba;
+  var bobX = 0, rot = 0;
+  if (f.typing && !f.seated && !f.dashed)
+    bobY += Math.sin(AMB.t * 13 + f.bob) * 0.7 * s;       /* typing jitter */
+  if (f.chatting && !f.seated && !f.dashed) {             /* bar-chat nod */
+    bobY += Math.sin(AMB.t * 6 + f.bob) * 1.3 * s;
+    bobX = Math.sin(AMB.t * 3 + f.bob) * 0.8 * s;
+  }
+  if (f.sleeping) { rot = -Math.PI / 2; bobY *= 0.15; }   /* lie in bunk */
+  c.translate(f.x + bobX, f.y + bobY);
+  if (rot) c.rotate(rot);
+}
+
+/* ── main draw ───────────────────────────────────────────────────── */
+function draw(t, dt) {
+  var c = state.ctx, v = state.view, i, f;
+  c.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+  c.fillStyle = PAL.bg;
+  c.fillRect(0, 0, v.cw, v.ch);
+
+  c.save();
+  c.translate(v.ox, v.oy);
+  c.scale(v.s, v.s);
+  if (state.bg) c.drawImage(state.bg, 0, 0, VW, VH);
+
+  drawStars(c, dt, t);
+  drawAmbientBelow(c);   /* [v3.1] */
+
+  /* dashed awaiting slots under the crew */
+  for (i = 0; i < state.figures.length; i++) {
+    f = state.figures[i];
+    if (f.dashed) drawAwaiting(c, f, t);
+  }
+  /* crew, painter-sorted by feet y */
+  var figs = state.figures.slice().sort(function (a, b) { return a.y - b.y; });
+  for (i = 0; i < figs.length; i++) {
+    f = figs[i];
+    if (!f.dashed) drawCrew(c, f, t);
+  }
+  /* dock countdown tags */
+  for (i = 0; i < figs.length; i++) {
+    f = figs[i];
+    if (f.kind === 'scheduled' && f.nextRun !== undefined) {
+      drawCountdown(c, f.slotX, f.slotY + 16, fmtCountdown(f.nextRun));
+    }
+  }
+  drawAmbientAbove(c);   /* [v3.1] */
+  /* name labels: hover + pinned (selected) */
+  for (i = 0; i < figs.length; i++) {
+    f = figs[i];
+    if ((state.hoverKey && f.key === state.hoverKey) ||
+        (state.pinnedKey && f.key === state.pinnedKey)) {
+      drawNameTag(c, f);
+    }
+  }
+  c.restore();
+
+  /* red-alert vignette pulse (screen space) */
+  if (state.redAlert) {
+    var a = 0.20 + 0.12 * Math.sin(t * 5);
+    var g = c.createRadialGradient(
+      v.cw / 2, v.ch / 2, Math.min(v.cw, v.ch) * 0.35,
+      v.cw / 2, v.ch / 2, Math.max(v.cw, v.ch) * 0.75);
+    g.addColorStop(0, 'rgba(255,60,90,0)');
+    g.addColorStop(1, 'rgba(255,60,90,' + a.toFixed(3) + ')');
+    c.fillStyle = g;
+    c.fillRect(0, 0, v.cw, v.ch);
+  }
+}
+
+function frame(now) {
+  if (!state.running) return;
+  window.requestAnimationFrame(frame);
+  var t = now / 1000;
+  var dt = Math.min(0.05, t - (state.lastT || t));
+  state.lastT = t;
+  if (typeof document !== 'undefined' && document.hidden) return;
+  update(dt);
+  updateAmbient(dt);   /* [v3.1] */
+  draw(t, dt);
+}
+
+/* ── sizing ──────────────────────────────────────────────────────── */
+function resize() {
+  var cv = state.canvas;
+  if (!cv) return;
+  var rect = cv.getBoundingClientRect();
+  var cw = rect.width, ch = rect.height;
+  if (!cw || !ch) {
+    var p = cv.parentNode;
+    if (p) { cw = p.clientWidth; ch = p.clientHeight; }
+  }
+  if (!cw || cw < 2) cw = 800;
+  if (!ch || ch < 2) ch = 460;
+  var dpr = 1;
+  if (typeof window !== 'undefined' && window.devicePixelRatio) {
+    dpr = Math.min(2, window.devicePixelRatio);
+  }
+  state.dpr = dpr;
+  cv.width = Math.round(cw * dpr);
+  cv.height = Math.round(ch * dpr);
+  /* single authoritative transform; per-frame code never calls scale() */
+  state.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  var s = Math.min(cw / VW, ch / VH);
+  state.view = {
+    s: s, ox: (cw - VW * s) / 2, oy: (ch - VH * s) / 2,
+    cw: cw, ch: ch
+  };
+}
+
+/* ── input: tap + hover ──────────────────────────────────────────── */
+function toVirtual(clientX, clientY) {
+  var rect = state.canvas.getBoundingClientRect();
+  var v = state.view;
+  return {
+    x: (clientX - rect.left - v.ox) / v.s,
+    y: (clientY - rect.top - v.oy) / v.s
+  };
+}
+function nearestFigure(vx, vy) {
+  var best = null, bestD = 26; /* 26 virtual px hit radius */
+  for (var i = 0; i < state.figures.length; i++) {
+    var f = state.figures[i];
+    var cy = f.dashed ? f.y - 14 * f.scale : f.y - 13 * f.scale;
+    var dx = f.x - vx, dy = cy - vy;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    if (d < bestD) { bestD = d; best = f; }
+  }
+  return best;
+}
+function handleTap(clientX, clientY) {
+  var p = toVirtual(clientX, clientY);
+  var f = nearestFigure(p.x, p.y);
+  if (f && state.tapCb) {
+    try { state.tapCb(f.key); } catch (e) {}
+  }
+}
+function handleHover(clientX, clientY) {
+  var p = toVirtual(clientX, clientY);
+  var f = nearestFigure(p.x, p.y);
+  var key = f ? f.key : null;
+  if (key !== state.hoverKey) {
+    state.hoverKey = key;
+    if (typeof state.hoverCb === 'function') {
+      try { state.hoverCb(key); } catch (e) {}
+    }
+  }
+}
+function bindInput() {
+  var cv = state.canvas;
+  cv.addEventListener('mousemove', function (e) { handleHover(e.clientX, e.clientY); });
+  cv.addEventListener('mouseleave', function () {
+    if (state.hoverKey !== null) {
+      state.hoverKey = null;
+      if (typeof state.hoverCb === 'function') {
+        try { state.hoverCb(null); } catch (e) {}
+      }
+    }
+  });
+  cv.addEventListener('click', function (e) { handleTap(e.clientX, e.clientY); });
+  /* mobile: touchstart (no click delay, no double-fire) */
+  cv.addEventListener('touchstart', function (e) {
+    if (e.changedTouches && e.changedTouches.length) {
+      var tc = e.changedTouches[0];
+      handleTap(tc.clientX, tc.clientY);
+      if (e.cancelable) e.preventDefault();
+    }
+  }, { passive: false });
+}
+
+/* ── init + public API ───────────────────────────────────────────── */
+function init(canvasOrId) {
+  if (typeof document === 'undefined') return false;
+  var cv = typeof canvasOrId === 'string'
+    ? document.getElementById(canvasOrId)
+    : canvasOrId;
+  if (!cv || !cv.getContext) return false;
+  if (state.canvas === cv && state.running) return true; /* idempotent */
+  state.canvas = cv;
+  state.ctx = cv.getContext('2d');
+  renderStatic();
+  initStars();
+  initAmbient();   /* [v3.1] */
+  loadSprites();   /* [v3.1: sprite crew] */
+  bindInput();
+  resize();
+  if (!state.running) {
+    state.running = true;
+    state.lastT = 0;
+    window.requestAnimationFrame(frame);
+  }
+  return true;
+}
+
+var api = {
+  version: '3.0.0',
+  init: init,
+  setData: setData,
+  setFilter: setFilter,
+  setRedAlert: function (b) { state.redAlert = !!b; },
+  onTap: function (cb) { state.tapCb = (typeof cb === 'function') ? cb : null; },
+  /* fn → hover callback (entityKey|null); string|null → pin name label
+     (wiring.js passes the selected key so mobile taps show the label) */
+  setHover: function (arg) {
+    if (typeof arg === 'function') { state.hoverCb = arg; }
+    else { state.pinnedKey = (typeof arg === 'string') ? arg : null; }
+  },
+  resize: resize
+};
+
+if (typeof window !== 'undefined') window.FleetScene = api;
+
+/* auto-attach: the v3 shell names its canvas #deck */
+function autoInit() {
+  if (typeof document === 'undefined') return;
+  var cv = document.getElementById('deck') ||
+           document.getElementById('fleet-scene') ||
+           document.querySelector('canvas[data-fleet-scene]');
+  if (cv) init(cv);
+}
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoInit);
+  } else {
+    autoInit();
+  }
+}
+
+})();
+
+</script>
+<script>
+/* panels.js — DOM shell logic */
+/* ══════════ Fleet Command v3 — panel logic (DOM shell) ══════════
+ * Dependency-free. Owns everything around the canvas scene:
+ * header stats, filter chips, crew roster, detail panel, ship's log,
+ * 7-day history strip, help / uplink / red-alert overlays, clocks.
+ *
+ * Exposes window.FleetPanels = {
+ *   renderAll(entities, state), select(key), clearSelection(),
+ *   esc, ago, dur, until, setFilter, toggleRoster
+ * }
+ * Outbound hooks are called on window.FleetApp when present and guarded
+ * with typeof checks (the coordinator's wiring script defines them):
+ *   FleetApp.select(key), FleetApp.setFilter({ai,project}),
+ *   FleetApp.syncNow(), FleetApp.toggleHelp(), FleetApp.toggleSound()
+ * ══════════════════════════════════════════════════════════════════ */
+(function(){
+"use strict";
+
+/* ── AI meta (colors match shell palette) ── */
+var AIS = {
+  sebastian:{label:"SEBASTIAN", color:"#5ff2ff"},
+  claude:    {label:"CLAUDE",    color:"#ff9f43"},
+  grok:      {label:"GROK",      color:"#c084fc"},
+  gemini:    {label:"GEMINI",    color:"#2dd4bf"},
+  chatgpt:   {label:"CHATGPT",   color:"#a3e635"}
+};
+var AI_IDS = Object.keys(AIS);
+
+function aiColor(ai){ return (AIS[ai]||{}).color || "#4a5872"; }
+function aiLabel(ai){ return (AIS[ai]||{}).label || (ai?String(ai).toUpperCase():"—"); }
+
+/* ── time helpers (proven v2 implementations, copied verbatim) ── */
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]); }); }
+function ago(iso){
+  if(!iso) return "—";
+  var s = Math.max(0,(Date.now()-new Date(iso).getTime())/1000);
+  if(s < 60) return Math.floor(s)+"s ago";
+  if(s < 3600) return Math.floor(s/60)+"m ago";
+  if(s < 86400) return Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m ago";
+  return Math.floor(s/86400)+"d ago";
+}
+function dur(sec){
+  if(sec == null) return "—";
+  if(sec < 60) return sec+"s";
+  if(sec < 3600) return Math.floor(sec/60)+"m "+Math.floor(sec%60)+"s";
+  return Math.floor(sec/3600)+"h "+Math.floor(sec%3600/60)+"m";
+}
+function until(iso){
+  if(!iso) return "";
+  var s = (new Date(iso).getTime()-Date.now())/1000;
+  if(s < 0) return "now";
+  if(s < 3600) return "in "+Math.floor(s/60)+"m";
+  if(s < 86400) return "in "+Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m";
+  return "in "+Math.floor(s/86400)+"d";
+}
+
+/* ── state ── */
+var Entities = null;
+var State = { aiFilter:"ALL", projectFilter:"ALL", selectedKey:null, redAlert:false, history:null };
+
+function $(id){ return document.getElementById(id); }
+
+function normState(s){
+  var base = { aiFilter:"ALL", projectFilter:"ALL", selectedKey:null, redAlert:false, history:null };
+  if(!s || typeof s!=="object") return base;
+  if(typeof s.aiFilter==="string") base.aiFilter = s.aiFilter;
+  if(typeof s.projectFilter==="string") base.projectFilter = s.projectFilter;
+  if(typeof s.selectedKey==="string" || s.selectedKey===null) base.selectedKey = s.selectedKey;
+  base.redAlert = !!s.redAlert;
+  base.history = (s.history && typeof s.history==="object") ? s.history : null;
+  base.aiOnline = (s.aiOnline && typeof s.aiOnline==="object") ? s.aiOnline : null;   /* [v3.1] */
+  return base;
+}
+
+function normEntities(e){
+  var d = { captain:null, specialists:[], live:[], scheduled:[], chats:[], recent:[], awaiting:[] };
+  if(!e || typeof e!=="object") return d;
+  ["specialists","live","scheduled","chats","recent","awaiting"].forEach(function(k){
+    if(Array.isArray(e[k])) d[k]=e[k];
+  });
+  if(e.captain && typeof e.captain==="object") d.captain=e.captain;
+  return d;
+}
+
+/* localStorage is best-effort only */
+function lsGet(k){ try{ return window.localStorage?window.localStorage.getItem(k):null; }catch(e){ return null; } }
+function lsSet(k,v){ try{ if(window.localStorage) window.localStorage.setItem(k,v); }catch(e){} }
+
+/* ── filter predicate (roster + log; detail always reachable by key) ── */
+function passFilters(e){
+  if(State.aiFilter!=="ALL" && e.ai!==State.aiFilter) return false;
+  if(State.projectFilter!=="ALL" && e.project!==State.projectFilter) return false;
+  return true;
+}
+
+/* ── header stats ── */
+function renderStats(){
+  var E = Entities, live = E.live, total = 0;
+  total += E.captain?1:0;
+  ["specialists","live","scheduled","chats","recent","awaiting"].forEach(function(k){ total += E[k].length; });
+  var aiOnline;   /* [v3.1] online = fresh feed, not live agents */
+  if(State.aiOnline){
+    aiOnline = AI_IDS.filter(function(id){ return State.aiOnline[id]; }).length;
+  } else {
+    var aiSet={};
+    live.forEach(function(l){ if(l.ai) aiSet[l.ai]=1; });
+    aiOnline = AI_IDS.filter(function(id){ return aiSet[id]; }).length;
+  }
+  var alerts = State.redAlert ? 1 : 0;
+  var crewEl=$("stat-crew"), dutyEl=$("stat-onduty"), aiEl=$("stat-aionline"), alEl=$("stat-alerts");
+  if(crewEl) crewEl.textContent = total;
+  if(dutyEl) dutyEl.textContent = live.length;
+  if(aiEl) aiEl.textContent = aiOnline+"/"+AI_IDS.length;   /* [v3.1] */
+  if(alEl){ alEl.textContent = alerts; alEl.classList.toggle("alert", alerts>0); }
+  var veil=$("redveil");
+  if(veil) veil.hidden = !State.redAlert;
+}
+
+/* ── filter chips ── */
+function renderChips(){
+  var aiBox=$("ai-chips"), prBox=$("project-chips");
+  if(aiBox){
+    var h='<span class="chip-label">AI</span>';
+    h+='<button class="chip'+(State.aiFilter==="ALL"?" on":"")+'" data-ai="ALL"><span class="dot" style="background:var(--cyan)"></span>ALL</button>';
+    AI_IDS.forEach(function(id){
+      h+='<button class="chip'+(State.aiFilter===id?" on":"")+'" data-ai="'+esc(id)+'"><span class="dot" style="background:'+aiColor(id)+'"></span>'+esc(aiLabel(id))+"</button>";
+    });
+    aiBox.innerHTML=h;
+  }
+  if(prBox){
+    var projects={};
+    ["specialists","live","scheduled","recent"].forEach(function(k){
+      Entities[k].forEach(function(e){ if(e.project) projects[e.project]=1; });
+    });
+    var h2='<span class="chip-label">PROJECT</span>';
+    h2+='<button class="chip'+(State.projectFilter==="ALL"?" on":"")+'" data-project="ALL">ALL</button>';
+    Object.keys(projects).sort().forEach(function(p){
+      h2+='<button class="chip'+(State.projectFilter===p?" on":"")+'" data-project="'+esc(p)+'">'+esc(p)+"</button>";
+    });
+    prBox.innerHTML=h2;
+  }
+}
+
+function setFilter(patch){
+  if(patch && typeof patch==="object"){
+    if(patch.ai!==undefined) State.aiFilter = patch.ai;
+    if(patch.project!==undefined) State.projectFilter = patch.project;
+    lsSet("fc3.filters", JSON.stringify({ai:State.aiFilter, project:State.projectFilter}));
+  }
+  var F = window.FleetApp;
+  if(F && typeof F.setFilter==="function"){ try{ F.setFilter({ai:State.aiFilter, project:State.projectFilter}); }catch(e){} }
+  renderChips(); renderRoster(); renderLog();
+}
+
+/* ── roster ── */
+function rowHtml(key, name, sub, dotColor, pill, pillCls){
+  return '<button class="row'+(State.selectedKey===key?" sel":"")+'" data-key="'+esc(key)+'">'
+    +'<span class="dot" style="background:'+esc(dotColor||"#4a5872")+'"></span>'
+    +'<span class="row-main"><span class="row-name">'+esc(name||"—")+'</span>'
+    +'<span class="row-sub">'+esc(sub||"")+'</span></span>'
+    +(pill?'<span class="statuspill '+(pillCls||"")+'">'+esc(pill)+'</span>':"")
+    +'</button>';
+}
+
+function groupHtml(id, title, body, count){
+  return '<div class="rgroup" id="rg-'+esc(id)+'">'
+    +'<div class="rgroup-title"><span>'+esc(title)+'</span><span class="cnt">'+count+'</span></div>'
+    +body+'</div>';
+}
+
+function renderRoster(){
+  var box=$("roster-groups"); if(!box) return;
+  var E=Entities, out="";
+
+  /* COMMAND */
+  (function(){
+    var body="", n=0;
+    if(E.captain && passFilters(E.captain)){
+      n=1;
+      body=rowHtml(E.captain.key, E.captain.name, E.captain.task||E.captain.aiLabel||"", aiColor(E.captain.ai), "CMD");
+    } else body='<div class="rempty">no captain on deck</div>';
+    out+=groupHtml("command","COMMAND",body,n);
+  })();
+
+  /* SPECIALISTS grouped by station */
+  (function(){
+    var items=E.specialists.filter(passFilters), body="", n=items.length;
+    if(n){
+      var byStation={};
+      items.forEach(function(s){ var st=s.station||"UNASSIGNED"; (byStation[st]=byStation[st]||[]).push(s); });
+      Object.keys(byStation).sort().forEach(function(st){
+        body+='<div class="rstation">'+esc(st)+'</div>';
+        byStation[st].forEach(function(s){
+          var sub=(s.specialty||s.status||"");
+          body+=rowHtml(s.key, s.name, sub, aiColor(s.ai), s.status, statusCls(s.status));
+        });
+      });
+    } else body='<div class="rempty">no specialists match filters</div>';
+    out+=groupHtml("specialists","SPECIALISTS",body,n);
+  })();
+
+  /* ON DUTY */
+  (function(){
+    var items=E.live.filter(passFilters), body="", n=items.length;
+    if(n){
+      items.forEach(function(l){
+        var sub=(l.project?l.project+" · ":"")+dur(l.elapsed_s);
+        body+=rowHtml(l.key, l.name, sub, aiColor(l.ai), l.status, statusCls(l.status));
+      });
+    } else body='<div class="rempty">nobody on duty</div>';
+    out+=groupHtml("live","ON DUTY",body,n);
+  })();
+
+  /* DOCKED */
+  (function(){
+    var items=E.scheduled.filter(passFilters), body="", n=items.length;
+    if(n){
+      items.forEach(function(s){
+        var sub=until(s.next_run)+(s.last_status?" · "+s.last_status:"");
+        body+=rowHtml(s.key, s.name, sub, aiColor(s.ai), "SCHED");
+      });
+    } else body='<div class="rempty">nothing docked</div>';
+    out+=groupHtml("scheduled","DOCKED",body,n);
+  })();
+
+  /* STANDING BY (chats) */
+  (function(){
+    var items=E.chats.filter(passFilters), body="", n=items.length;
+    if(n){
+      items.forEach(function(c){
+        body+=rowHtml(c.key, c.name, "last active "+ago(c.last_active), "#4a5872");
+      });
+    } else body='<div class="rempty">no chats</div>';
+    out+=groupHtml("chats","STANDING BY",body,n);
+  })();
+
+  /* ON BREAK (recent) */
+  (function(){
+    var items=E.recent.filter(passFilters), body="", n=items.length;
+    if(n){
+      items.forEach(function(r){
+        var sub=(r.project?r.project+" · ":"")+ago(r.completed_at);
+        body+=rowHtml(r.key, r.name, sub, aiColor(r.ai), r.status, statusCls(r.status));
+      });
+    } else body='<div class="rempty">nothing recent</div>';
+    out+=groupHtml("recent","ON BREAK",body,n);
+  })();
+
+  /* AWAITING CREW */
+  (function(){
+    var items=E.awaiting.filter(passFilters), body="", n=items.length;
+    if(n){
+      items.forEach(function(a){
+        var sub=((a.station||"")+(a.specialty?" · "+a.specialty:"")).replace(/^ · /,"");
+        body+=rowHtml(a.key, (a.station||"open slot"), sub||"awaiting crew", aiColor(a.ai));
+      });
+    } else body='<div class="rempty">no open slots</div>';
+    out+=groupHtml("awaiting","AWAITING CREW",body,n);
+  })();
+
+  box.innerHTML=out;
+}
+
+function statusCls(s){
+  if(!s) return "";
+  var t=String(s).toLowerCase();
+  if(/ok|done|success|complete|active|online|running|live/.test(t)) return "ok";
+  if(/fail|error|down|stuck|alert/.test(t)) return "bad";
+  if(/wait|pend|paus|idle|sched/.test(t)) return "warn";
+  return "";
+}
+
+/* ── entity lookup + detail panel ── */
+function findEntity(key){
+  var E=Entities, found=null;
+  if(!key) return null;
+  function scan(group, arr){
+    for(var i=0;i<arr.length;i++){ if(arr[i]&&arr[i].key===key){ found={group:group, data:arr[i]}; return true; } }
+    return false;
+  }
+  if(E.captain && E.captain.key===key) return {group:"command", data:E.captain};
+  ["specialists","live","scheduled","chats","recent","awaiting"].forEach(function(g){ if(!found) scan(g, E[g]); });
+  return found;
+}
+
+function kv(k, v, dotColor){
+  return '<div class="kv"><span class="k">'+esc(k)+'</span><span class="v">'
+    +(dotColor?'<span class="dot" style="background:'+esc(dotColor)+'"></span>':"")+esc(v==null?"—":v)+'</span></div>';
+}
+
+function renderDetail(){
+  var panel=$("detail"), body=$("detail-body"), title=$("detail-title");
+  if(!panel||!body) return;
+  var hit=findEntity(State.selectedKey);
+  if(!hit){ panel.hidden=true; return; }
+  var d=hit.data, g=hit.group, rows="";
+  switch(g){
+    case "command":
+      if(title) title.textContent="COMMAND";
+      rows+=kv("ROLE","Captain")+kv("AI",aiLabel(d.ai),aiColor(d.ai))
+          +kv("MISSION",d.task)+kv("KEY",d.key);
+      break;
+    case "specialists":
+      if(title) title.textContent="SPECIALIST";
+      rows+=kv("ROLE","Specialist")+kv("AI",aiLabel(d.ai),aiColor(d.ai))
+          +kv("STATION",d.station)+kv("SPECIALTY",d.specialty)+kv("STATUS",d.status)+kv("KEY",d.key);
+      break;
+    case "live":
+      if(title) title.textContent="ON DUTY";
+      rows+=kv("ROLE","Live agent")+kv("AI",aiLabel(d.ai),aiColor(d.ai))
+          +kv("PROJECT",d.project)+kv("MISSION",d.task)+kv("STATUS",d.status)
+          +kv("ELAPSED",dur(d.elapsed_s))+kv("LAST SEEN",ago(d.started_at))+kv("KEY",d.key);
+      break;
+    case "scheduled":
+      if(title) title.textContent="DOCKED";
+      rows+=kv("ROLE","Scheduled job")+kv("AI",aiLabel(d.ai),aiColor(d.ai))
+          +kv("PROJECT",d.project)+kv("SCHEDULE",d.schedule)
+          +kv("LAST RUN",ago(d.last_run))+kv("LAST STATUS",d.last_status)
+          +kv("NEXT RUN",until(d.next_run))+kv("KEY",d.key);
+      break;
+    case "chats":
+      if(title) title.textContent="STANDING BY";
+      rows+=kv("ROLE","Chat")+kv("NAME",d.name)+kv("LAST ACTIVE",ago(d.last_active))+kv("KEY",d.key);
+      break;
+    case "recent":
+      if(title) title.textContent="ON BREAK";
+      rows+=kv("ROLE","Recently completed")+kv("AI",aiLabel(d.ai),aiColor(d.ai))
+          +kv("PROJECT",d.project)+kv("STATUS",d.status)
+          +kv("COMPLETED",ago(d.completed_at))+kv("RESULT",d.summary)+kv("KEY",d.key);
+      break;
+    case "awaiting":
+      if(title) title.textContent="AWAITING CREW";
+      rows+=kv("ROLE","Open crew slot")+kv("AI",d.ai?aiLabel(d.ai):"unassigned",aiColor(d.ai))
+          +kv("STATION",d.station)+kv("SPECIALTY",d.specialty)+kv("KEY",d.key);
+      break;
+  }
+  body.innerHTML=rows;
+  panel.hidden=false;
+}
+
+function select(key){
+  State.selectedKey = key||null;
+  var F=window.FleetApp;
+  if(F && typeof F.select==="function"){ try{ F.select(key); }catch(e){} }
+  renderRoster(); renderDetail();
+}
+function clearSelection(){ select(null); }
+
+/* ── ship's log ── */
+function renderLog(){
+  var box=$("log-list"); if(!box) return;
+  var items=Entities.recent.filter(passFilters).slice().sort(function(a,b){
+    return (new Date(b.completed_at||0).getTime())-(new Date(a.completed_at||0).getTime());
+  }).slice(0,30);
+  if(!items.length){ box.innerHTML='<div class="rempty">log is quiet…</div>'; return; }
+  box.innerHTML=items.map(function(r){
+    return '<div class="logrow" data-key="'+esc(r.key)+'">'
+      +'<span class="t">'+esc(ago(r.completed_at))+'</span>'
+      +'<span class="dot" style="background:'+aiColor(r.ai)+'"></span>'
+      +'<span class="n">'+esc(r.name)+' <span class="sub">'+esc((r.aiLabel||aiLabel(r.ai))+(r.project?" · "+r.project:""))+'</span></span>'
+      +'<span class="statuspill '+statusCls(r.status)+'">'+esc(r.status||"—")+'</span>'
+      +'</div>';
+  }).join("");
+}
+
+/* ── 7-day history strip ──
+ * state.history = { ais:{ aiId:{ label, days:{ "YYYY-MM-DD":{done,failed,active} } } } }
+ * 7 UTC days, ending today. One grid row per AI, one column per day. */
+function last7UTC(){
+  var days=[], now=new Date();
+  var t=Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  for(var i=6;i>=0;i--) days.push(new Date(t-i*86400000));
+  return days;
+}
+function dayKey(d){ return d.toISOString().slice(0,10); }
+
+function renderHistory(){
+  var box=$("history-strip"); if(!box) return;
+  var H=State.history;
+  if(!H || !H.ais || typeof H.ais!=="object"){
+    box.innerHTML='<div class="nohistory">NO HISTORY YET</div>';
+    return;
+  }
+  var days=last7UTC(), maxDone=1, cells={};
+  AI_IDS.forEach(function(id){
+    var per=H.ais[id]||{}, dd=per.days||{};
+    cells[id]=days.map(function(d){
+      var c=dd[dayKey(d)]||{done:0,failed:0,active:0};
+      var done=+c.done||0, failed=+c.failed||0, active=+c.active||0;
+      if(done>maxDone) maxDone=done;
+      return {done:done, failed:failed, active:active, key:dayKey(d)};
+    });
+  });
+  var h='<div class="hist-grid"><div class="hist-corner"></div>';
+  days.forEach(function(d){
+    var label=(d.getUTCMonth()+1)+"/"+d.getUTCDate();
+    h+='<div class="hist-day">'+esc(label)+'</div>';
+  });
+  AI_IDS.forEach(function(id){
+    var label=((H.ais[id]||{}).label)||aiLabel(id);
+    h+='<div class="hist-ai"><span class="dot" style="background:'+aiColor(id)+'"></span>'+esc(label)+'</div>';
+    cells[id].forEach(function(c){
+      var pct=Math.max(4, Math.round(c.done/maxDone*100));
+      var barCls=c.failed>0 && c.done===0 ? "hist-bar failed" : "hist-bar";
+      var tip=dayKeyLabel(c.key)+": "+c.done+" done, "+c.failed+" failed"+(c.active?", "+c.active+" active":"");
+      h+='<div class="hist-cell" title="'+esc(tip)+'"><div class="'+barCls+'" style="height:'+pct+'%"></div></div>';
+    });
+  });
+  h+="</div>";
+  box.innerHTML=h;
+}
+function dayKeyLabel(k){ return k; }
+
+/* ── clocks ── */
+var ptFmt=null;
+function tickClock(){
+  try{
+    var now=new Date();
+    var u=$("clock-utc")||$("clockUtc"), p=$("clock-pt")||$("clockPt");
+    var hh=String(now.getUTCHours()).padStart(2,"0"),
+        mm=String(now.getUTCMinutes()).padStart(2,"0"),
+        ss=String(now.getUTCSeconds()).padStart(2,"0");
+    if(u) u.textContent=hh+":"+mm+":"+ss;
+    if(p){
+      if(!ptFmt) ptFmt=new Intl.DateTimeFormat("en-US",{timeZone:"America/Los_Angeles",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false});
+      p.textContent=ptFmt.format(now);
+    }
+  }catch(e){}
+}
+
+/* ── overlays & drawer ──
+ * #help visibility is .show-class driven (matches the coordinator's
+ * FleetApp.toggleHelp which does classList.toggle("show")). */
+function toggleHelp(show){
+  var h=$("help"); if(!h) return;
+  h.removeAttribute("hidden"); /* class owns visibility now */
+  if(show===undefined) h.classList.toggle("show");
+  else h.classList.toggle("show", !!show);
+}
+function toggleRoster(open){
+  var r=$("roster"); if(!r) return;
+  r.classList.toggle("open", open===undefined ? !r.classList.contains("open") : !!open);
+}
+
+/* ── main render entry ── */
+function renderAll(entities, state){
+  try{
+    Entities = normEntities(entities);
+    if(state!==undefined) State = normState(state);
+    renderStats();
+    renderChips();
+    renderRoster();
+    renderDetail();
+    renderLog();
+    renderHistory();
+  }catch(err){
+    if(window.console && console.error) console.error("FleetPanels.renderAll failed:", err);
+  }
+}
+
+/* ── event wiring (once) ── */
+var wired=false;
+function wire(){
+  if(wired) return; wired=true;
+  var saved=null;
+  try{ saved=JSON.parse(lsGet("fc3.filters")||"null"); }catch(e){}
+  if(saved){
+    if(saved.ai) State.aiFilter=saved.ai;
+    if(saved.project) State.projectFilter=saved.project;
+  }
+
+  var rg=$("roster-groups");
+  if(rg) rg.addEventListener("click", function(ev){
+    var row=ev.target.closest? ev.target.closest("[data-key]") : null;
+    if(row && row.getAttribute("data-key")) select(row.getAttribute("data-key"));
+  });
+
+  var lg=$("log-list");
+  if(lg) lg.addEventListener("click", function(ev){
+    var row=ev.target.closest? ev.target.closest("[data-key]") : null;
+    if(row && row.getAttribute("data-key")) select(row.getAttribute("data-key"));
+  });
+
+  var aiBox=$("ai-chips");
+  if(aiBox) aiBox.addEventListener("click", function(ev){
+    var chip=ev.target.closest? ev.target.closest("[data-ai]") : null;
+    if(chip) setFilter({ai: chip.getAttribute("data-ai")});
+  });
+
+  var prBox=$("project-chips");
+  if(prBox) prBox.addEventListener("click", function(ev){
+    var chip=ev.target.closest? ev.target.closest("[data-project]") : null;
+    if(chip) setFilter({project: chip.getAttribute("data-project")});
+  });
+
+  function hook(id, fn){
+    var el=$(id); if(el) el.addEventListener("click", fn);
+  }
+  hook("btn-sync", function(){
+    var F=window.FleetApp;
+    if(F && typeof F.syncNow==="function"){ try{ F.syncNow(); }catch(e){} }
+  });
+  hook("btn-help", function(){
+    var F=window.FleetApp;
+    if(F && typeof F.toggleHelp==="function"){ try{ F.toggleHelp(); }catch(e){} }
+    else toggleHelp();
+  });
+  hook("help-close", function(){ toggleHelp(false); });
+  hook("btn-sound", function(){
+    var F=window.FleetApp, el=$("btn-sound");
+    if(F && typeof F.toggleSound==="function"){ try{ F.toggleSound(); }catch(e){} }
+    /* toggleSound always flips state, so mirror the label flip ourselves
+       (the coordinator's label target "soundBtn" is not this shell's ID) */
+    if(el){ el.textContent = el.textContent.indexOf("OFF")>=0 ? "SOUND: ON" : "SOUND: OFF"; }
+  });
+  hook("btn-crew", function(){ toggleRoster(); });
+  hook("roster-close", function(){ toggleRoster(false); });
+  hook("detail-close", function(){ clearSelection(); });
+  hook("btn-retry", function(){
+    var F=window.FleetApp;
+    if(F && typeof F.syncNow==="function"){ try{ F.syncNow(); }catch(e){} }
+  });
+
+  document.addEventListener("keydown", function(ev){
+    if(ev.key==="Escape" || ev.key==="Esc"){
+      toggleHelp(false); toggleRoster(false);
+      var d=$("detail"); if(d && !d.hidden) clearSelection();
+    }
+  });
+
+  tickClock();
+  try{ setInterval(tickClock, 1000); }catch(e){}
+}
+
+/* ── boot ── */
+function boot(){
+  try{ wire(); }catch(e){}
+  try{ renderAll(null, null); }catch(e){}
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot);
+else boot();
+
+/* ── public API (no window.onload — coordinator-safe) ── */
+window.FleetPanels = {
+  renderAll: renderAll,
+  select: select,
+  clearSelection: clearSelection,
+  setFilter: setFilter,
+  toggleHelp: toggleHelp,
+  toggleRoster: toggleRoster,
+  esc: esc, ago: ago, dur: dur, until: until,
+  aiColor: aiColor, aiLabel: aiLabel,
+  getState: function(){ return State; },
+  findEntity: findEntity
+};
+
+})();
+
+</script>
+<script>
+/* wiring.js — data + app glue */
+"use strict";
+/* ═══ Fleet Command v3 — data + wiring ═══
+   Same data contract as v2 (DO NOT change): same-origin fetch of
+   data/registry.json + data/fleet-<ai>.json, synced from Drive by the
+   repo's GitHub Action every 5 minutes. */
+async function fetchJSON(path){
+  const r = await fetch("data/" + path + "?t=" + Date.now());
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  return await r.json();
+}
+const STALE_MS = 15 * 60 * 1000;
+const S = { feeds: [], lastSync: null, history: null,
+            aiFilter: "ALL", projectFilter: "ALL", selectedKey: null,
+            projs: [], redAlert: false, alertOn: false };
+
+function feedState(e){
+  if(!e.ok || !e.feed) return "nosig";
+  if(e.feed.placeholder && (e.feed.live||[]).length === 0) return "nosig";
+  return (Date.now() - new Date(e.feed.updated_at).getTime()) > STALE_MS ? "lost" : "on";
+}
+
+/* expected specialist lanes per AI — used ONLY for "awaiting crew" slots
+   when a feed publishes no specialists[] yet. Never presented as real crew. */
+const EXPECTED_SPECIALISTS = {
+  sebastian: ["command", "titan", "comms", "data"],
+  claude:    ["titan", "build"],
+  grok:      ["titan", "finance"],
+  gemini:    ["titan", "email", "data"],
+  chatgpt:   ["titan", "cleanup"]
+};
+const STATION_FOR = [
+  [/titan/, "titanlab"], [/financ/, "finance"],
+  [/command|captain/, "bridge"], [/email|communicat|\bcomms?\b/, "comms"],
+  [/data|cleanup/, "data"], [/build|engineer/, "engineering"],
+  [/deck|renovat/, "engineering"]
+];
+function stationFor(specialty){
+  const s = String(specialty || "").toLowerCase();
+  for(const [re, st] of STATION_FOR) if(re.test(s)) return st;
+  return "quarters";
+}
+function projectToSpecialty(project){
+  const p = String(project || "general").toLowerCase();
+  if(p.includes("titan")) return "titan";
+  if(p.includes("email")) return "email";
+  if(p.includes("financ")) return "finance";
+  if(p.includes("deck") || p.includes("renovat")) return "build";
+  return "command";
+}
+/* canonical lane key — treats email/comms, data/cleanup, build/engineering as the same lane */
+function laneKey(s){
+  s = String(s || "").toLowerCase();
+  if(/titan/.test(s)) return "titan";
+  if(/financ/.test(s)) return "finance";
+  if(/command|captain/.test(s)) return "command";
+  if(/email|communicat|\bcomms?\b/.test(s)) return "comms";
+  if(/data|cleanup/.test(s)) return "data";
+  if(/build|engineer/.test(s)) return "build";
+  if(/command|captain/.test(s)) return "command";
+  return s.trim() || "general";
+}
+function prettySpecialty(s){
+  const map = {command:"Command", titan:"Titan Specialist", finance:"Finance Officer",
+    email:"Email Officer", comms:"Comms Officer", data:"Data Chief", cleanup:"Cleanup Officer",
+    build:"Build Engineer", engineering:"Engineer"};
+  return map[String(s).toLowerCase()] || (s.charAt(0).toUpperCase() + s.slice(1));
+}
+
+function buildEntities(){
+  const E = { captain: null, specialists: [], live: [], scheduled: [],
+              chats: [], recent: [], awaiting: [] };
+  const lookup = {};
+  const reg = (ent) => { lookup[ent.key] = ent; return ent; };
+
+  for(const e of S.feeds){
+    const fd = e.feed, meta = e.meta || {};
+    const ai = fd ? (fd.ai || meta.ai) : meta.ai;
+    if(!ai) continue;
+    const aiLabel = (fd && (fd.label || fd.ai)) || meta.label || ai;
+
+    // real specialists (or captain-only fallback for sebastian)
+    const specs = (fd && fd.specialists) || [];
+    for(const sp of specs){
+      E.specialists.push(reg({
+        key: ai + ":sp:" + sp.id, kind: "specialist",
+        ai, aiLabel, name: sp.name, specialty: sp.specialty,
+        station: stationFor(sp.specialty), status: sp.status || "standby"
+      }));
+    }
+    const seenSpec = new Set(specs.map(sp => laneKey(sp.specialty)));
+
+    // live subagents
+    for(const x of (fd && fd.live) || []){
+      const want = laneKey(projectToSpecialty(x.project));
+      const sp = E.specialists.find(s => s.ai === ai && laneKey(s.specialty) === want)
+              || E.specialists.find(s => s.ai === ai);
+      E.live.push(reg({
+        key: ai + ":" + x.id, kind: "live",
+        ai, aiLabel, name: x.name, project: x.project || "general",
+        task: x.task, status: x.status, started_at: x.started_at,
+        elapsed_s: x.elapsed_s, last_activity_s: x.last_activity_s,
+        specialistKey: sp ? sp.key : null
+      }));
+    }
+    // scheduled
+    for(const x of (fd && fd.scheduled) || []){
+      E.scheduled.push(reg({
+        key: ai + ":cron:" + x.id, kind: "scheduled",
+        ai, aiLabel, name: x.name, project: x.project || "general",
+        schedule: x.schedule, last_run: x.last_run,
+        last_status: x.last_status, next_run: x.next_run
+      }));
+    }
+    // side chats
+    for(const x of (fd && fd.chats) || []){
+      E.chats.push(reg({
+        key: ai + ":chat:" + x.id, kind: "chat",
+        ai, aiLabel, name: x.name, last_active: x.last_active
+      }));
+    }
+    // recent
+    for(const x of (fd && fd.recent) || []){
+      E.recent.push(reg({
+        key: ai + ":rec:" + x.id, kind: "recent",
+        ai, aiLabel, name: x.name, project: x.project || "general",
+        status: x.status, completed_at: x.completed_at, summary: x.summary
+      }));
+    }
+    // awaiting-crew slots for expected specialists not yet publishing
+    for(const esp of EXPECTED_SPECIALISTS[ai] || []){
+      if(seenSpec.has(laneKey(esp))) continue;
+      if(esp === "command" && ai === "sebastian") continue; // captain covers it
+      E.awaiting.push(reg({
+        key: ai + ":await:" + esp, kind: "awaiting",
+        ai, aiLabel, name: prettySpecialty(esp) + " — unfilled",
+        specialty: esp, station: stationFor(esp)
+      }));
+    }
+  }
+
+  // the captain: Sebastian main chat — always aboard, always prominent
+  E.captain = reg({ key: "sebastian:captain", kind: "captain",
+    ai: "sebastian", aiLabel: "Sebastian · Muse",
+    name: "Captain Sebastian", task: "Main chat — Joseph's direct line" });
+
+  E.recent.sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at));
+  return { entities: E, lookup };
+}
+
+/* ── audio (synth, no files) ── */
+let AC = null, soundOn = false, humNodes = null;
+function ac(){ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); return AC; }
+function tone(freq, dur, type, vol, when){
+  if(!soundOn) return;
+  try{
+    const c = ac(), o = c.createOscillator(), g = c.createGain();
+    o.type = type || "sine"; o.frequency.value = freq;
+    const t = c.currentTime + (when || 0);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol || .06, t + .02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + .05);
+  }catch(e){}
+}
+function startHum(){
+  try{
+    const c = ac(), o = c.createOscillator(), o2 = c.createOscillator(), g = c.createGain();
+    o.type = "sine"; o.frequency.value = 54; o2.type = "sine"; o2.frequency.value = 108.5;
+    g.gain.value = 0.018; o.connect(g); o2.connect(g); g.connect(c.destination);
+    o.start(); o2.start(); humNodes = {o, o2, g};
+  }catch(e){}
+}
+function stopHum(){ if(humNodes){ try{humNodes.o.stop(); humNodes.o2.stop();}catch(e){} humNodes = null; } }
+function klaxon(){ for(let i=0;i<3;i++){ tone(468,.28,"square",.05,i*.6); tone(622,.28,"square",.05,i*.6+.3); } }
+function blip(){ tone(1200,.06,"sine",.03); }
+
+/* shell overlays use the `hidden` attribute (see shell.html) */
+function setUplink(down, detail){
+  const ud = document.getElementById("uplinkdown");
+  if(ud) ud.hidden = !down;
+}
+function setRedAlert(on){
+  const rv = document.getElementById("redveil");
+  if(rv) rv.hidden = !on;
+}
+/* hover name tag pinned to the top of the deck */
+function showDeckLabel(key){
+  const dl = document.getElementById("decklabel");
+  if(!dl) return;
+  const ent = key && LOOKUP[key];
+  if(!ent){ dl.hidden = true; return; }
+  dl.textContent = ent.name + (ent.aiLabel ? " · " + ent.aiLabel : "");
+  dl.style.left = "50%"; dl.style.top = "10px";
+  dl.hidden = false;
+}
+/* ── sync ── */
+let ENT = null, LOOKUP = {};
+async function sync(silent){
+  try{
+    const reg = await fetchJSON("registry.json");
+    const results = await Promise.allSettled((reg.feeds||[]).map(async f => {
+      try{ return { meta:f, feed: await fetchJSON(f.file), ok:true }; }
+      catch(e){ return { meta:f, feed:null, ok:false }; }
+    }));
+    S.feeds = results.map(r => r.status==="fulfilled" ? r.value : {meta:{}, feed:null, ok:false});
+    S.lastSync = new Date();
+    setUplink(false);
+  }catch(e){
+    setUplink(true, e.message || e);
+  }
+  // projects for filter chips
+  const set = new Set();
+  for(const e of S.feeds){ if(!e.feed) continue;
+    (e.feed.live||[]).forEach(x => x.project && set.add(x.project));
+    (e.feed.recent||[]).forEach(x => x.project && set.add(x.project));
+    (e.feed.scheduled||[]).forEach(x => x.project && set.add(x.project));
+  }
+  S.projs = [...set].sort();
+  // history (graceful)
+  try{
+    const r = await fetch("data/history.json?t=" + Date.now());
+    S.history = r.ok ? await r.json() : null;
+  }catch(e){ S.history = null; }
+
+  const built = buildEntities();
+  ENT = built.entities; LOOKUP = built.lookup;
+  S.redAlert = ENT.live.some(x => x.status === "failed");
+  if(S.redAlert && !S.alertOn && soundOn) klaxon();
+  S.alertOn = S.redAlert;
+  setRedAlert(S.redAlert);
+
+  if(window.FleetScene){
+    window.FleetScene.setData(ENT);
+    window.FleetScene.setFilter({ai: S.aiFilter, project: S.projectFilter});
+    window.FleetScene.setRedAlert(S.redAlert);
+  }
+  /* [v3.1] AI ONLINE = feed fetched OK + fresh (<15 min), not live agents */
+  const aiOnlineMap = {};
+  for(const e of S.feeds){
+    const ai = (e.feed && e.feed.ai) || (e.meta && e.meta.ai);
+    if(ai) aiOnlineMap[ai] = (feedState(e) === "on");
+  }
+  S.aiOnlineMap = aiOnlineMap;
+  if(window.FleetPanels){
+    window.FleetPanels.renderAll(ENT, {
+      aiFilter: S.aiFilter, projectFilter: S.projectFilter,
+      selectedKey: S.selectedKey, redAlert: S.redAlert,
+      history: S.history, projs: S.projs, lookup: LOOKUP,
+      aiOnline: aiOnlineMap
+    });
+  }
+  if(!silent) blip();
+}
+
+/* ── app hooks for panels/scene ── */
+window.FleetApp = {
+  select(key){
+    S.selectedKey = (S.selectedKey === key) ? null : key;
+    if(window.FleetScene && window.FleetScene.setHover) window.FleetScene.setHover(S.selectedKey);
+    showDeckLabel(S.selectedKey);
+    if(window.FleetPanels && ENT) window.FleetPanels.renderAll(ENT, {
+      aiFilter: S.aiFilter, projectFilter: S.projectFilter,
+      selectedKey: S.selectedKey, redAlert: S.redAlert,
+      history: S.history, projs: S.projs, lookup: LOOKUP,
+      aiOnline: S.aiOnlineMap
+    });
+    blip();
+  },
+  setFilter(f){
+    if(f.ai !== undefined) S.aiFilter = f.ai;
+    if(f.project !== undefined) S.projectFilter = f.project;
+    if(window.FleetScene) window.FleetScene.setFilter({ai: S.aiFilter, project: S.projectFilter});
+    if(window.FleetPanels && ENT) window.FleetPanels.renderAll(ENT, {
+      aiFilter: S.aiFilter, projectFilter: S.projectFilter,
+      selectedKey: S.selectedKey, redAlert: S.redAlert,
+      history: S.history, projs: S.projs, lookup: LOOKUP,
+      aiOnline: S.aiOnlineMap
+    });
+  },
+  syncNow(){ sync(false); },
+  toggleHelp(){
+    const h = document.getElementById("help");
+    if(h) h.classList.toggle("show");
+  },
+  toggleSound(){
+    soundOn = !soundOn;
+    /* panels.js owns the SOUND button label — just flip the audio state here */
+    if(soundOn){ try{ ac(); }catch(e){} startHum(); blip(); } else stopHum();
+  },
+  lookup(key){ return LOOKUP[key] || null; }
+};
+
+/* ── clock ── */
+function clock(){
+  const n = new Date();
+  const u = document.getElementById("clockUtc"), p = document.getElementById("clockPt");
+  if(u) u.textContent = n.toISOString().slice(11,19);
+  if(p) p.textContent = n.toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",timeZone:"America/Los_Angeles"});
+}
+
+/* ── boot ── */
+document.addEventListener("DOMContentLoaded", () => {
+  if(window.FleetScene){
+    if(window.FleetScene.onTap) window.FleetScene.onTap((key) => window.FleetApp.select(key));
+    if(window.FleetScene.setHover) window.FleetScene.setHover((key) => {
+      if(!S.selectedKey) showDeckLabel(key); // selection pin takes precedence
+    });
+    if(window.FleetScene.resize) window.FleetScene.resize();
+  }
+  /* All header/overlay buttons are wired by panels.js (btn-sync, btn-help,
+     btn-sound, btn-retry, help-close) — do not double-wire here. */
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape"){ S.selectedKey = null; window.FleetApp.select(null); const h2 = document.getElementById("help"); if(h2) h2.classList.remove("show"); }
+    else if(e.key === "r" || e.key === "R"){ window.FleetApp.syncNow(); }
+    else if(e.key === "?"){ window.FleetApp.toggleHelp(); }
+  });
+  addEventListener("resize", () => { if(window.FleetScene && window.FleetScene.resize) window.FleetScene.resize(); });
+  setInterval(clock, 1000); clock();
+  sync(true);
+  setInterval(() => sync(true), 60000);
+});
+
+</script>
+</body>
+</html>
