@@ -1,0 +1,30 @@
+{
+  "updated_at": "2026-10-15T04:23:00Z",
+  "feeds": [
+    {
+      "ai": "sebastian",
+      "label": "Sebastian \u00b7 Muse",
+      "file": "fleet-sebastian.json"
+    },
+    {
+      "ai": "claude",
+      "label": "Claude",
+      "file": "fleet-claude.json"
+    },
+    {
+      "ai": "grok",
+      "label": "Grok",
+      "file": "fleet-grok.json"
+    },
+    {
+      "ai": "gemini",
+      "label": "Gemini",
+      "file": "fleet-gemini.json"
+    },
+    {
+      "ai": "chatgpt",
+      "label": "ChatGPT",
+      "file": "fleet-chatgpt.json"
+    }
+  ]
+}
