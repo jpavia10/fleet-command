@@ -28,7 +28,7 @@ jobs:
           for f in reg.get("feeds", []):
               ai = f["ai"]
               try:
-                  raw = get(f["fileId"])
+                  raw = urllib.request.urlopen(urllib.request.Request(f["url"], headers={"User-Agent": "fleet-command-sync"}), timeout=30).read() if "url" in f else get(f["fileId"])
                   json.loads(raw)
                   with open(f"data/fleet-{ai}.json", "w") as fh:
                       fh.write(raw.decode("utf-8"))
