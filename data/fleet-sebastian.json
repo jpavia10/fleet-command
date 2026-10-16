@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
   "label": "Sebastian · Muse",
-  "updated_at": "2026-10-16T03:09:03Z",
+  "updated_at": "2026-10-16T03:38:16Z",
   "specialists": [
     {
       "id": "captain",
@@ -48,7 +48,7 @@
       "specialist": "captain",
       "task": "Joseph's direct line — the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-16T03:09:03Z",
+      "started_at": "2026-10-16T03:38:16Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -68,36 +68,36 @@
       "name": "Dup review inbox check",
       "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-16T03:02:08Z",
+      "last_run": "2026-10-16T03:32:01Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T03:17:08Z"
+      "next_run": "2026-10-16T03:47:01Z"
     },
     {
       "id": "fleet-command-feed",
       "name": "Fleet Command live feed (Sebastian)",
       "project": "command",
       "schedule": "every 5 minutes",
-      "last_run": "2026-10-16T03:04:23Z",
+      "last_run": "2026-10-16T03:33:55Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T03:09:23Z"
+      "next_run": "2026-10-16T03:38:55Z"
     },
     {
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
       "project": "command",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-16T03:00:41Z",
+      "last_run": "2026-10-16T03:30:26Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T03:15:41Z"
+      "next_run": "2026-10-16T03:45:26Z"
     },
     {
       "id": "heartbeat",
       "name": "heartbeat",
       "project": "general",
       "schedule": "every 30 minutes",
-      "last_run": "2026-10-16T03:06:01Z",
+      "last_run": "2026-10-16T03:36:01Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T03:36:01Z"
+      "next_run": "2026-10-16T04:06:01Z"
     },
     {
       "id": "profile-image",
@@ -311,9 +311,9 @@
       "name": "Feed pulse 20:00",
       "project": "general",
       "schedule": "daily at 20:00 (user time)",
-      "last_run": "2026-10-15T03:33:59Z",
+      "last_run": "2026-10-16T03:34:00Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T03:33:59Z"
+      "next_run": "2026-10-17T03:34:00Z"
     },
     {
       "id": "feed-pulse-21",
