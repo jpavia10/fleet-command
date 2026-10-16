@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
-  "label": "Sebastian \u00b7 Muse",
-  "updated_at": "2026-10-16T10:33:20Z",
+  "label": "Sebastian · Muse",
+  "updated_at": "2026-10-16T11:03:07Z",
   "specialists": [
     {
       "id": "captain",
@@ -43,12 +43,12 @@
   "live": [
     {
       "id": "main-chat",
-      "name": "Captain \u2014 main chat",
+      "name": "Captain — main chat",
       "project": "command",
       "specialist": "captain",
-      "task": "Joseph's direct line \u2014 the persistent main chat",
+      "task": "Joseph's direct line — the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-16T10:33:20Z",
+      "started_at": "2026-10-16T11:03:07Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -56,7 +56,8 @@
   "scheduled": [
     {
       "id": "agentic-feature-tour",
-      "name": "Agentic feature tour (disabled)",
+      "name": "Agentic Feature Tour",
+      "enabled": false,
       "project": "general",
       "schedule": "daily at 10:39",
       "last_run": "2026-10-01T17:39:31Z",
@@ -65,16 +66,18 @@
     },
     {
       "id": "deterministic-doctor",
-      "name": "Deterministic doctor",
-      "project": "general",
-      "schedule": "every 1 hours",
-      "last_run": "2026-10-16T10:00:00Z",
+      "name": "Deterministic Doctor",
+      "enabled": true,
+      "project": "command",
+      "schedule": "hourly",
+      "last_run": "2026-10-16T11:00:00Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T11:00:00Z"
+      "next_run": "2026-10-16T12:00:00Z"
     },
     {
       "id": "dup-rescan-hourly",
-      "name": "Duplicate rescan (disabled)",
+      "name": "Dup Rescan Hourly",
+      "enabled": false,
       "project": "general",
       "schedule": "every 30 minutes",
       "last_run": "2026-09-25T14:22:50Z",
@@ -84,15 +87,17 @@
     {
       "id": "dup-review-inbox-poll",
       "name": "Dup review inbox check",
+      "enabled": true,
       "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-16T10:32:13Z",
+      "last_run": "2026-10-16T11:02:06Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T10:46:47Z"
+      "next_run": "2026-10-16T11:16:47Z"
     },
     {
       "id": "feed-pulse-00",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 00",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 00:00",
       "last_run": "2026-10-16T07:58:20Z",
@@ -101,7 +106,8 @@
     },
     {
       "id": "feed-pulse-01",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 01",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 01:00",
       "last_run": "2026-10-16T08:36:27Z",
@@ -110,7 +116,8 @@
     },
     {
       "id": "feed-pulse-02",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 02",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 02:00",
       "last_run": "2026-10-16T09:27:04Z",
@@ -119,7 +126,8 @@
     },
     {
       "id": "feed-pulse-03",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 03",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 03:00",
       "last_run": "2026-10-16T10:13:27Z",
@@ -128,7 +136,8 @@
     },
     {
       "id": "feed-pulse-04",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 04",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 04:00",
       "last_run": "2026-10-15T11:47:23Z",
@@ -137,7 +146,8 @@
     },
     {
       "id": "feed-pulse-05",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 05",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 05:00",
       "last_run": "2026-10-15T12:58:36Z",
@@ -146,7 +156,8 @@
     },
     {
       "id": "feed-pulse-06",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 06",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 06:00",
       "last_run": "2026-10-15T13:53:36Z",
@@ -155,7 +166,8 @@
     },
     {
       "id": "feed-pulse-07",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 07",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 07:00",
       "last_run": "2026-10-15T14:27:11Z",
@@ -164,7 +176,8 @@
     },
     {
       "id": "feed-pulse-08",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 08",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 08:00",
       "last_run": "2026-10-15T15:35:24Z",
@@ -173,7 +186,8 @@
     },
     {
       "id": "feed-pulse-09",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 09",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 09:00",
       "last_run": "2026-10-15T16:16:59Z",
@@ -182,7 +196,8 @@
     },
     {
       "id": "feed-pulse-10",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 10",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 10:00",
       "last_run": "2026-10-15T17:40:35Z",
@@ -191,7 +206,8 @@
     },
     {
       "id": "feed-pulse-11",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 11",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 11:00",
       "last_run": "2026-10-15T18:56:40Z",
@@ -200,16 +216,18 @@
     },
     {
       "id": "feed-pulse-12",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 12",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 12:00",
       "last_run": "2026-10-15T19:45:48Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T19:45:47Z"
+      "next_run": "2026-10-16T20:06:55Z"
     },
     {
       "id": "feed-pulse-13",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 13",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 13:00",
       "last_run": "2026-10-15T20:06:55Z",
@@ -218,7 +236,8 @@
     },
     {
       "id": "feed-pulse-14",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 14",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 14:00",
       "last_run": "2026-10-15T21:30:51Z",
@@ -227,7 +246,8 @@
     },
     {
       "id": "feed-pulse-15",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 15",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 15:00",
       "last_run": "2026-10-15T22:09:37Z",
@@ -236,7 +256,8 @@
     },
     {
       "id": "feed-pulse-16",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 16",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 16:00",
       "last_run": "2026-10-15T23:51:24Z",
@@ -245,7 +266,8 @@
     },
     {
       "id": "feed-pulse-17",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 17",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 17:00",
       "last_run": "2026-10-16T00:04:07Z",
@@ -254,7 +276,8 @@
     },
     {
       "id": "feed-pulse-18",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 18",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 18:00",
       "last_run": "2026-10-16T01:39:16Z",
@@ -263,7 +286,8 @@
     },
     {
       "id": "feed-pulse-19",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 19",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 19:00",
       "last_run": "2026-10-16T02:29:43Z",
@@ -272,7 +296,8 @@
     },
     {
       "id": "feed-pulse-20",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 20",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 20:00",
       "last_run": "2026-10-16T03:34:00Z",
@@ -281,7 +306,8 @@
     },
     {
       "id": "feed-pulse-21",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 21",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 21:00",
       "last_run": "2026-10-16T04:31:48Z",
@@ -290,7 +316,8 @@
     },
     {
       "id": "feed-pulse-22",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 22",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 22:00",
       "last_run": "2026-10-16T05:47:23Z",
@@ -299,7 +326,8 @@
     },
     {
       "id": "feed-pulse-23",
-      "name": "Feed pulse",
+      "name": "Feed Pulse 23",
+      "enabled": true,
       "project": "general",
       "schedule": "daily at 23:00",
       "last_run": "2026-10-16T06:50:39Z",
@@ -309,33 +337,37 @@
     {
       "id": "fleet-command-feed",
       "name": "Fleet Command live feed (Sebastian)",
+      "enabled": true,
       "project": "command",
       "schedule": "every 5 minutes",
-      "last_run": "2026-10-16T10:29:15Z",
+      "last_run": "2026-10-16T11:00:23Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T10:37:40Z"
+      "next_run": "2026-10-16T11:07:40Z"
     },
     {
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
+      "enabled": true,
       "project": "command",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-16T10:30:38Z",
+      "last_run": "2026-10-16T11:00:46Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T10:45:08Z"
+      "next_run": "2026-10-16T11:15:08Z"
     },
     {
       "id": "heartbeat",
       "name": "Heartbeat",
-      "project": "general",
+      "enabled": true,
+      "project": "command",
       "schedule": "every 30 minutes",
-      "last_run": "2026-10-16T10:06:01Z",
+      "last_run": "2026-10-16T10:36:01Z",
       "last_status": "ok",
-      "next_run": "2026-10-16T10:36:01Z"
+      "next_run": "2026-10-16T11:06:01Z"
     },
     {
       "id": "mailbox-scan-progress-updates",
-      "name": "Mailbox scan progress updates (disabled)",
+      "name": "Mailbox Scan Progress Updates",
+      "enabled": false,
       "project": "email",
       "schedule": "every 15 minutes",
       "last_run": "2026-09-26T00:02:21Z",
@@ -344,61 +376,68 @@
     },
     {
       "id": "mexico-coin-verdict-watch",
-      "name": "Mexico coin verdict watch (disabled)",
+      "name": "Mexico Coin Verdict Watch",
+      "enabled": false,
       "project": "titan",
-      "schedule": "one-off 2026-10-07T09:39:00",
+      "schedule": "one-time at 2026-10-07T09:39:00",
       "last_run": null,
       "last_status": "never",
       "next_run": "2026-10-07T16:39:00Z"
     },
     {
       "id": "overnight-marketplace-prep",
-      "name": "Overnight marketplace prep (disabled)",
-      "project": "general",
-      "schedule": "one-off 2026-09-25T04:30:00",
+      "name": "Overnight Marketplace Prep",
+      "enabled": false,
+      "project": "marketplace",
+      "schedule": "one-time at 2026-09-25T04:30:00",
       "last_run": null,
       "last_status": "never",
       "next_run": "2026-09-25T11:30:00Z"
     },
     {
       "id": "overnight-money-sweep",
-      "name": "Overnight money sweep (disabled)",
+      "name": "Overnight Money Sweep",
+      "enabled": false,
       "project": "finances",
-      "schedule": "one-off 2026-09-25T04:00:00",
+      "schedule": "one-time at 2026-09-25T04:00:00",
       "last_run": "2026-09-25T11:03:18Z",
       "last_status": "error",
       "next_run": "2026-09-25T11:00:00Z"
     },
     {
       "id": "overnight-morning-brief",
-      "name": "Overnight morning brief (disabled)",
-      "project": "general",
-      "schedule": "one-off 2026-09-25T07:00:00",
+      "name": "Overnight Morning Brief",
+      "enabled": false,
+      "project": "command",
+      "schedule": "one-time at 2026-09-25T07:00:00",
       "last_run": "2026-09-25T14:03:04Z",
       "last_status": "ok",
       "next_run": "2026-09-25T14:00:00Z"
     },
     {
       "id": "overnight-photo-review",
-      "name": "Overnight photo review (disabled)",
+      "name": "Overnight Photo Review",
+      "enabled": false,
       "project": "general",
-      "schedule": "one-off 2026-09-25T06:00:00",
+      "schedule": "one-time at 2026-09-25T06:00:00",
       "last_run": "2026-09-25T13:48:48Z",
       "last_status": "ok",
       "next_run": "2026-09-25T13:00:00Z"
     },
     {
       "id": "overnight-titan-theme",
-      "name": "Overnight Titan theme (disabled)",
+      "name": "Overnight Titan Theme",
+      "enabled": false,
       "project": "titan",
-      "schedule": "one-off 2026-09-25T05:00:00",
+      "schedule": "one-time at 2026-09-25T05:00:00",
       "last_run": "2026-09-25T13:03:42Z",
       "last_status": "error",
       "next_run": "2026-09-25T12:00:00Z"
     },
     {
       "id": "photo-cleanup-weekly-scan",
-      "name": "Photo cleanup weekly scan (disabled)",
+      "name": "Photo Cleanup Weekly Scan",
+      "enabled": false,
       "project": "general",
       "schedule": "every 12 hours",
       "last_run": "2026-09-25T19:47:10Z",
@@ -407,9 +446,10 @@
     },
     {
       "id": "profile-image",
-      "name": "Profile image refresh",
+      "name": "Profile Image",
+      "enabled": true,
       "project": "general",
-      "schedule": "every 168 hours",
+      "schedule": "weekly",
       "last_run": "2026-10-12T00:29:35Z",
       "last_status": "ok",
       "next_run": "2026-10-19T00:29:35Z"
