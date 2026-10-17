@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
   "label": "Sebastian \u00b7 Muse",
-  "updated_at": "2026-10-17T13:58:52Z",
+  "updated_at": "2026-10-17T14:19:08Z",
   "specialists": [
     {
       "id": "captain",
@@ -48,7 +48,7 @@
       "specialist": "captain",
       "task": "Joseph's direct line \u2014 the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-17T13:58:52Z",
+      "started_at": "2026-10-17T14:19:08Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -68,9 +68,9 @@
       "name": "deterministic-doctor",
       "project": "general",
       "schedule": "every 1h",
-      "last_run": "2026-10-17T13:00:01Z",
+      "last_run": "2026-10-17T14:00:00Z",
       "last_status": "ok",
-      "next_run": "2026-10-17T14:00:00Z"
+      "next_run": "2026-10-17T15:00:00Z"
     },
     {
       "id": "dup-rescan-hourly",
@@ -86,9 +86,9 @@
       "name": "Dup review inbox check",
       "project": "general",
       "schedule": "every 15m",
-      "last_run": "2026-10-17T13:47:24Z",
+      "last_run": "2026-10-17T14:17:23Z",
       "last_status": "ok",
-      "next_run": "2026-10-17T14:01:47Z"
+      "next_run": "2026-10-17T14:31:47Z"
     },
     {
       "id": "feed-pulse-00",
@@ -185,7 +185,7 @@
       "name": "feed-pulse-10",
       "project": "general",
       "schedule": "daily at 10:00 (Joseph local)",
-      "last_run": "2026-10-16T17:40:36Z",
+      "last_run": "2026-10-16T17:40:39Z",
       "last_status": "ok",
       "next_run": "2026-10-17T17:40:35Z"
     },
@@ -311,27 +311,27 @@
       "name": "Fleet Command live feed (Sebastian)",
       "project": "general",
       "schedule": "every 5m",
-      "last_run": "2026-10-17T13:55:12Z",
+      "last_run": "2026-10-17T14:15:19Z",
       "last_status": "ok",
-      "next_run": "2026-10-17T14:02:40Z"
+      "next_run": "2026-10-17T14:22:40Z"
     },
     {
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
       "project": "general",
       "schedule": "every 15m",
-      "last_run": "2026-10-17T13:45:34Z",
+      "last_run": "2026-10-17T14:15:30Z",
       "last_status": "ok",
-      "next_run": "2026-10-17T14:00:08Z"
+      "next_run": "2026-10-17T14:30:08Z"
     },
     {
       "id": "heartbeat",
       "name": "heartbeat",
       "project": "general",
       "schedule": "every 30m",
-      "last_run": "2026-10-17T13:36:01Z",
+      "last_run": "2026-10-17T14:06:01Z",
       "last_status": "ok",
-      "next_run": "2026-10-17T14:06:01Z"
+      "next_run": "2026-10-17T14:36:01Z"
     },
     {
       "id": "mailbox-scan-progress-updates",
@@ -353,7 +353,7 @@
     },
     {
       "id": "overnight-marketplace-prep",
-      "name": "overnight-marketplace-prep (disabled)",
+      "name": "Overnight Marketplace prep (4:30 AM) (disabled)",
       "project": "marketplace",
       "schedule": "one-off at 2026-09-25T04:30:00 (disabled)",
       "last_run": null,
@@ -371,7 +371,7 @@
     },
     {
       "id": "overnight-morning-brief",
-      "name": "overnight-morning-brief (disabled)",
+      "name": "Morning brief (7 AM) (disabled)",
       "project": "general",
       "schedule": "one-off at 2026-09-25T07:00:00 (disabled)",
       "last_run": "2026-09-25T14:03:04Z",
@@ -453,7 +453,7 @@
       "last_active": "2026-09-25T08:05:38Z"
     },
     {
-      "id": "73ca103f-5c80-4609-9434-7bff0c548cd0",
+      "id": "73ca103f-5c80-4609-9434-7bff0c548cd",
       "name": "Photo Cleanup",
       "project": "general",
       "status": "docked",
