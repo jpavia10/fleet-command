@@ -571,7 +571,7 @@ function buildTicker(){
         txt:(r.status==='done'?'✓ ':r.status==='failed'?'✗ ':'■ ')+(r.name||'task')+' — '+label});
     }
     for(const j of (e.feed.scheduled||[])){
-      if(j&&j.last_status==='error'){
+      if(j&&j.last_status==='error'&&!/\(disabled\)/i.test(j.name||'')){
         const t=Date.parse(j.last_run)||0;
         items.push({t:t,alert:true,txt:'⚠ JOB FAILED: '+(j.name||j.id)+' — '+label});
       }
@@ -750,11 +750,13 @@ function drawCryoPods(r){
     drawSprite(px,py-2,{color:'#3a4358',mode:'cryo',dim:true,t:S.t,seed:i*2.3,noPlate:true,ai:r.ai});
     ctx.fillStyle='#5a6578';ctx.font='bold 9px "Courier New",monospace';ctx.textAlign='center';
     ctx.fillText('NO SIGNAL',px,py+32);
-    ctx.font='8px "Courier New",monospace';
-    ctx.fillText('AWAITING FIRST FEED',px,py+44);
     ctx.textAlign='left';
     S.hits.push({x:px,y:py-34,r:34,type:'cryo',ref:{r:r}});
   }
+  /* one shared caption per bay — per-pod captions overlapped */
+  ctx.fillStyle='#5a6578';ctx.font='8px "Courier New",monospace';ctx.textAlign='center';
+  ctx.fillText('AWAITING FIRST FEED',r.x+r.w/2,py+44);
+  ctx.textAlign='left';
 }
 function drawCrewLayer(){
   /* walking crew + live task agents — stationed crew already drew inside rooms */
@@ -805,6 +807,9 @@ function drawDock(){
   ctx.strokeStyle='rgba(95,242,255,0.18)';ctx.beginPath();ctx.moveTo(0,600.5);ctx.lineTo(LW,600.5);ctx.stroke();
   ctx.fillStyle='#5ff2ff';ctx.font='bold 11px "Courier New",monospace';ctx.textAlign='left';
   ctx.fillText('SERVICE DOCK — SCHEDULED JOBS',24,618);
+  ctx.fillStyle='#3a4358';ctx.font='9px "Courier New",monospace';ctx.textAlign='right';
+  ctx.fillText('FLEET COMMAND v5 · TAKEOVER BUILD — SEBASTIAN',1256,618);
+  ctx.textAlign='left';
   for(const bt of S.bots){
     drawBot(bt.x,bt.y,{color:bt.dark?'#3a4358':bt.color,status:bt.status,t:S.t});
     ctx.fillStyle=bt.dark?'#3a4358':'#8b9bb8';ctx.font='7px "Courier New",monospace';ctx.textAlign='center';
@@ -815,8 +820,6 @@ function drawDock(){
     ctx.fillStyle='#8b9bb8';ctx.font='10px "Courier New",monospace';ctx.textAlign='right';
     ctx.fillText('+'+S.botOverflow+' more',1150,690);
   }
-  ctx.fillStyle='#3a4358';ctx.font='9px "Courier New",monospace';ctx.textAlign='right';
-  ctx.fillText('FLEET COMMAND v5 · TAKEOVER BUILD — SEBASTIAN',1256,712);
   ctx.textAlign='left';
 }
 function drawOverlays(){
