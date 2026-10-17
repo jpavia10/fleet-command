@@ -738,7 +738,7 @@ function drawRooms(dt){
         }
         ctx.fillStyle=big?r.color:'#8b9bb8';
         ctx.font=(big?'9px':'7px')+' "Courier New",monospace';ctx.textAlign='center';
-        ctx.fillText(fitLabel((st.spec.name||st.specId||'').toUpperCase(),w+20),st.x,466);
+        ctx.fillText(fitLabel((st.spec.name||st.specId||'').toUpperCase(),Math.max(28,r.w/Math.max(1,r.stations.length)-6)),st.x,466);
         ctx.textAlign='left';
       }
       if(!r.stations.length){
