@@ -13,6 +13,13 @@
       "scheduled": 32,
       "done": 0,
       "failed": 0
+    },
+    {
+      "date": "2026-10-17",
+      "live": 1,
+      "scheduled": 40,
+      "done": 0,
+      "failed": 0
     }
   ]
 }
