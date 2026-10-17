@@ -7,11 +7,6 @@
       "file": "fleet-sebastian.json"
     },
     {
-      "ai": "claude",
-      "label": "Claude",
-      "file": "fleet-claude.json"
-    },
-    {
       "ai": "grok",
       "label": "Grok",
       "file": "fleet-grok.json"
