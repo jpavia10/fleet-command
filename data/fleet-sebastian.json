@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
   "label": "Sebastian · Muse",
-  "updated_at": "2026-10-19T17:54:17Z",
+  "updated_at": "2026-10-19T18:18:40Z",
   "specialists": [
     {
       "id": "captain",
@@ -48,7 +48,7 @@
       "specialist": "captain",
       "task": "Joseph's direct line — the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-19T17:54:17Z",
+      "started_at": "2026-10-19T18:18:40Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -59,18 +59,18 @@
       "name": "deterministic-doctor",
       "project": "general",
       "schedule": "every 1 hour",
-      "last_run": "2026-10-19T17:00:01Z",
+      "last_run": "2026-10-19T18:00:01Z",
       "last_status": "ok",
-      "next_run": null
+      "next_run": "2026-10-19T19:00:01Z"
     },
     {
       "id": "dup-review-inbox-poll",
       "name": "Dup review inbox check",
       "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-19T17:47:07Z",
+      "last_run": "2026-10-19T18:17:16Z",
       "last_status": "ok",
-      "next_run": null
+      "next_run": "2026-10-19T18:32:16Z"
     },
     {
       "id": "feed-pulse-00",
@@ -293,33 +293,42 @@
       "name": "Fleet Command live feed (Sebastian)",
       "project": "general",
       "schedule": "every 5 minutes",
-      "last_run": "2026-10-19T17:50:03Z",
+      "last_run": "2026-10-19T18:14:11Z",
       "last_status": "ok",
-      "next_run": null
+      "next_run": "2026-10-19T18:19:11Z"
     },
     {
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
       "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-19T17:45:38Z",
+      "last_run": "2026-10-19T18:15:27Z",
       "last_status": "ok",
-      "next_run": null
+      "next_run": "2026-10-19T18:30:27Z"
     },
     {
       "id": "heartbeat",
       "name": "heartbeat",
       "project": "general",
       "schedule": "every 30 minutes",
-      "last_run": "2026-10-19T17:36:01Z",
+      "last_run": "2026-10-19T18:06:01Z",
       "last_status": "ok",
-      "next_run": null
+      "next_run": "2026-10-19T18:36:01Z"
+    },
+    {
+      "id": "profile-image",
+      "name": "profile-image",
+      "project": "general",
+      "schedule": "every 168 hours (weekly)",
+      "last_run": "2026-10-19T00:29:35Z",
+      "last_status": "ok",
+      "next_run": "2026-10-26T00:29:35Z"
     },
     {
       "id": "overnight-marketplace-prep",
       "name": "Overnight Marketplace prep (4:30 AM)",
       "project": "marketplace",
-      "schedule": "one-time 2026-09-25 04:30:00",
+      "schedule": "disabled legacy run-once",
       "last_run": null,
       "last_status": "never",
       "next_run": null
@@ -328,18 +337,9 @@
       "id": "overnight-morning-brief",
       "name": "Morning brief (7 AM)",
       "project": "general",
-      "schedule": "one-time 2026-09-25 07:00:00",
+      "schedule": "disabled legacy run-once",
       "last_run": null,
       "last_status": "never",
-      "next_run": null
-    },
-    {
-      "id": "profile-image",
-      "name": "profile-image",
-      "project": "general",
-      "schedule": "every 168 hours",
-      "last_run": "2026-10-19T00:29:35Z",
-      "last_status": "ok",
       "next_run": null
     }
   ],
