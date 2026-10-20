@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian · Muse",
- "updated_at": "2026-10-20T14:39:10Z",
+ "label": "Sebastian \u00b7 Muse",
+ "updated_at": "2026-10-20T15:14:25Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain — main chat",
+   "name": "Captain \u2014 main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line — the persistent main chat",
+   "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-20T14:39:10Z",
+   "started_at": "2026-10-20T15:14:25Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -57,9 +57,9 @@
   {
    "id": "deterministic-doctor",
    "name": "deterministic-doctor",
-   "project": "system",
+   "project": "general",
    "schedule": "every 1 hour",
-   "last_run": "2026-10-20T14:00:00Z",
+   "last_run": "2026-10-20T15:00:00Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -67,224 +67,8 @@
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "general",
-   "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T14:32:08Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-00",
-   "name": "feed-pulse-00",
-   "project": "system",
-   "schedule": "daily at 00:00:00 (user tz)",
-   "last_run": "2026-10-20T07:58:20Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-01",
-   "name": "feed-pulse-01",
-   "project": "system",
-   "schedule": "daily at 01:00:00 (user tz)",
-   "last_run": "2026-10-20T08:36:28Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-02",
-   "name": "feed-pulse-02",
-   "project": "system",
-   "schedule": "daily at 02:00:00 (user tz)",
-   "last_run": "2026-10-20T09:27:04Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-03",
-   "name": "feed-pulse-03",
-   "project": "system",
-   "schedule": "daily at 03:00:00 (user tz)",
-   "last_run": "2026-10-20T10:13:28Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-04",
-   "name": "feed-pulse-04",
-   "project": "system",
-   "schedule": "daily at 04:00:00 (user tz)",
-   "last_run": "2026-10-20T11:47:23Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-05",
-   "name": "feed-pulse-05",
-   "project": "system",
-   "schedule": "daily at 05:00:00 (user tz)",
-   "last_run": "2026-10-20T12:58:36Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-06",
-   "name": "feed-pulse-06",
-   "project": "system",
-   "schedule": "daily at 06:00:00 (user tz)",
-   "last_run": "2026-10-20T13:53:35Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-07",
-   "name": "feed-pulse-07",
-   "project": "system",
-   "schedule": "daily at 07:00:00 (user tz)",
-   "last_run": "2026-10-20T14:27:12Z",
-   "last_status": "ok",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-08",
-   "name": "feed-pulse-08",
-   "project": "system",
-   "schedule": "daily at 08:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-09",
-   "name": "feed-pulse-09",
-   "project": "system",
-   "schedule": "daily at 09:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-10",
-   "name": "feed-pulse-10",
-   "project": "system",
-   "schedule": "daily at 10:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-11",
-   "name": "feed-pulse-11",
-   "project": "system",
-   "schedule": "daily at 11:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-12",
-   "name": "feed-pulse-12",
-   "project": "system",
-   "schedule": "daily at 12:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-13",
-   "name": "feed-pulse-13",
-   "project": "system",
-   "schedule": "daily at 13:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-14",
-   "name": "feed-pulse-14",
-   "project": "system",
-   "schedule": "daily at 14:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-15",
-   "name": "feed-pulse-15",
-   "project": "system",
-   "schedule": "daily at 15:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-16",
-   "name": "feed-pulse-16",
-   "project": "system",
-   "schedule": "daily at 16:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-17",
-   "name": "feed-pulse-17",
-   "project": "system",
-   "schedule": "daily at 17:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-18",
-   "name": "feed-pulse-18",
-   "project": "system",
-   "schedule": "daily at 18:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-19",
-   "name": "feed-pulse-19",
-   "project": "system",
-   "schedule": "daily at 19:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-20",
-   "name": "feed-pulse-20",
-   "project": "system",
-   "schedule": "daily at 20:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-21",
-   "name": "feed-pulse-21",
-   "project": "system",
-   "schedule": "daily at 21:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-22",
-   "name": "feed-pulse-22",
-   "project": "system",
-   "schedule": "daily at 22:00:00 (user tz)",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "feed-pulse-23",
-   "name": "feed-pulse-23",
-   "project": "system",
-   "schedule": "daily at 23:00:00 (user tz)",
-   "last_run": "2026-10-20T06:50:40Z",
+   "schedule": "every 15 min",
+   "last_run": "2026-10-20T15:02:14Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -292,8 +76,8 @@
    "id": "fleet-command-feed",
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
-   "schedule": "every 5 minutes",
-   "last_run": "2026-10-20T14:34:59Z",
+   "schedule": "every 5 min",
+   "last_run": "2026-10-20T15:09:43Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -301,18 +85,243 @@
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
-   "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T14:30:50Z",
+   "schedule": "every 15 min",
+   "last_run": "2026-10-20T15:00:41Z",
    "last_status": "ok",
    "next_run": null
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
-   "project": "system",
-   "schedule": "every 30 minutes",
-   "last_run": "2026-10-20T14:36:01Z",
+   "project": "general",
+   "schedule": "every 30 min",
+   "last_run": "2026-10-20T15:06:01Z",
    "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "profile-image",
+   "name": "profile-image",
+   "project": "general",
+   "schedule": "every 7 days",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-00",
+   "name": "feed-pulse-00",
+   "project": "general",
+   "schedule": "daily at 00:00 (user tz)",
+   "last_run": "2026-10-20T07:58:20Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-01",
+   "name": "feed-pulse-01",
+   "project": "general",
+   "schedule": "daily at 01:00 (user tz)",
+   "last_run": "2026-10-20T08:36:28Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-02",
+   "name": "feed-pulse-02",
+   "project": "general",
+   "schedule": "daily at 02:00 (user tz)",
+   "last_run": "2026-10-20T09:27:04Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-03",
+   "name": "feed-pulse-03",
+   "project": "general",
+   "schedule": "daily at 03:00 (user tz)",
+   "last_run": "2026-10-20T10:13:28Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-04",
+   "name": "feed-pulse-04",
+   "project": "general",
+   "schedule": "daily at 04:00 (user tz)",
+   "last_run": "2026-10-20T11:47:23Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-05",
+   "name": "feed-pulse-05",
+   "project": "general",
+   "schedule": "daily at 05:00 (user tz)",
+   "last_run": "2026-10-20T12:58:36Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-06",
+   "name": "feed-pulse-06",
+   "project": "general",
+   "schedule": "daily at 06:00 (user tz)",
+   "last_run": "2026-10-20T13:53:35Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-07",
+   "name": "feed-pulse-07",
+   "project": "general",
+   "schedule": "daily at 07:00 (user tz)",
+   "last_run": "2026-10-20T14:27:12Z",
+   "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-08",
+   "name": "feed-pulse-08",
+   "project": "general",
+   "schedule": "daily at 08:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-09",
+   "name": "feed-pulse-09",
+   "project": "general",
+   "schedule": "daily at 09:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-10",
+   "name": "feed-pulse-10",
+   "project": "general",
+   "schedule": "daily at 10:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-11",
+   "name": "feed-pulse-11",
+   "project": "general",
+   "schedule": "daily at 11:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-12",
+   "name": "feed-pulse-12",
+   "project": "general",
+   "schedule": "daily at 12:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-13",
+   "name": "feed-pulse-13",
+   "project": "general",
+   "schedule": "daily at 13:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-14",
+   "name": "feed-pulse-14",
+   "project": "general",
+   "schedule": "daily at 14:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-15",
+   "name": "feed-pulse-15",
+   "project": "general",
+   "schedule": "daily at 15:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-16",
+   "name": "feed-pulse-16",
+   "project": "general",
+   "schedule": "daily at 16:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-17",
+   "name": "feed-pulse-17",
+   "project": "general",
+   "schedule": "daily at 17:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-18",
+   "name": "feed-pulse-18",
+   "project": "general",
+   "schedule": "daily at 18:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-19",
+   "name": "feed-pulse-19",
+   "project": "general",
+   "schedule": "daily at 19:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-20",
+   "name": "feed-pulse-20",
+   "project": "general",
+   "schedule": "daily at 20:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-21",
+   "name": "feed-pulse-21",
+   "project": "general",
+   "schedule": "daily at 21:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-22",
+   "name": "feed-pulse-22",
+   "project": "general",
+   "schedule": "daily at 22:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
+  },
+  {
+   "id": "feed-pulse-23",
+   "name": "feed-pulse-23",
+   "project": "general",
+   "schedule": "daily at 23:00 (user tz)",
+   "last_run": null,
+   "last_status": "never",
    "next_run": null
   },
   {
@@ -329,15 +338,6 @@
    "name": "Morning brief (7 AM)",
    "project": "general",
    "schedule": "disabled legacy run-once",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "profile-image",
-   "name": "profile-image",
-   "project": "system",
-   "schedule": "weekly",
    "last_run": null,
    "last_status": "never",
    "next_run": null
