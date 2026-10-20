@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-20T04:36:54Z",
+ "updated_at": "2026-10-20T05:09:14Z",
  "specialists": [
   {
    "id": "captain",
@@ -22,9 +22,9 @@
    "status": "standby"
   },
   {
-   "id": "quartermaster",
-   "name": "Quartermaster",
-   "specialty": "marketplace",
+   "id": "renovations",
+   "name": "Renovation Chief",
+   "specialty": "renovations",
    "status": "standby"
   },
   {
@@ -34,9 +34,9 @@
    "status": "standby"
   },
   {
-   "id": "renovations",
-   "name": "Renovation Chief",
-   "specialty": "renovations",
+   "id": "quartermaster",
+   "name": "Quartermaster",
+   "specialty": "general",
    "status": "standby"
   }
  ],
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-20T04:36:54Z",
+   "started_at": "2026-10-20T05:09:14Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -56,236 +56,220 @@
  "scheduled": [
   {
    "id": "deterministic-doctor",
-   "name": "Deterministic doctor",
+   "name": "deterministic-doctor",
    "project": "general",
-   "schedule": "every hour",
-   "last_run": "2026-10-20T04:00:00Z",
+   "schedule": "every 1 hour",
+   "last_run": "2026-10-20T05:00:00Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T05:00:00Z"
+   "next_run": null
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
-   "project": "duplicates",
+   "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T04:17:24Z",
+   "last_run": "2026-10-20T05:02:22Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:32:24Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-00",
-   "name": "Feed pulse 00",
+   "name": "feed-pulse-00",
    "project": "general",
-   "schedule": "daily 00:00",
+   "schedule": "daily at 00:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-01",
-   "name": "Feed pulse 01",
+   "name": "feed-pulse-01",
    "project": "general",
-   "schedule": "daily 01:00",
+   "schedule": "daily at 01:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-02",
-   "name": "Feed pulse 02",
+   "name": "feed-pulse-02",
    "project": "general",
-   "schedule": "daily 02:00",
+   "schedule": "daily at 02:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-03",
-   "name": "Feed pulse 03",
+   "name": "feed-pulse-03",
    "project": "general",
-   "schedule": "daily 03:00",
+   "schedule": "daily at 03:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-04",
-   "name": "Feed pulse 04",
+   "name": "feed-pulse-04",
    "project": "general",
-   "schedule": "daily 04:00",
+   "schedule": "daily at 04:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-05",
-   "name": "Feed pulse 05",
+   "name": "feed-pulse-05",
    "project": "general",
-   "schedule": "daily 05:00",
+   "schedule": "daily at 05:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-06",
-   "name": "Feed pulse 06",
+   "name": "feed-pulse-06",
    "project": "general",
-   "schedule": "daily 06:00",
+   "schedule": "daily at 06:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-07",
-   "name": "Feed pulse 07",
+   "name": "feed-pulse-07",
    "project": "general",
-   "schedule": "daily 07:00",
+   "schedule": "daily at 07:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-08",
-   "name": "Feed pulse 08",
+   "name": "feed-pulse-08",
    "project": "general",
-   "schedule": "daily 08:00",
+   "schedule": "daily at 08:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-09",
-   "name": "Feed pulse 09",
+   "name": "feed-pulse-09",
    "project": "general",
-   "schedule": "daily 09:00",
+   "schedule": "daily at 09:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-10",
-   "name": "Feed pulse 10",
+   "name": "feed-pulse-10",
    "project": "general",
-   "schedule": "daily 10:00",
+   "schedule": "daily at 10:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-11",
-   "name": "Feed pulse 11",
+   "name": "feed-pulse-11",
    "project": "general",
-   "schedule": "daily 11:00",
+   "schedule": "daily at 11:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-12",
-   "name": "Feed pulse 12",
+   "name": "feed-pulse-12",
    "project": "general",
-   "schedule": "daily 12:00",
+   "schedule": "daily at 12:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-13",
-   "name": "Feed pulse 13",
+   "name": "feed-pulse-13",
    "project": "general",
-   "schedule": "daily 13:00",
-   "last_run": "2026-10-19T20:06:55Z",
-   "last_status": "ok",
-   "next_run": "2026-10-20T20:06:55Z"
+   "schedule": "daily at 13:00 (user local)",
+   "last_run": null,
+   "next_run": null
   },
   {
    "id": "feed-pulse-14",
-   "name": "Feed pulse 14",
+   "name": "feed-pulse-14",
    "project": "general",
-   "schedule": "daily 14:00",
+   "schedule": "daily at 14:00 (user local)",
    "last_run": "2026-10-19T21:30:44Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T21:30:44Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-15",
-   "name": "Feed pulse 15",
+   "name": "feed-pulse-15",
    "project": "general",
-   "schedule": "daily 15:00",
+   "schedule": "daily at 15:00 (user local)",
    "last_run": "2026-10-19T22:09:35Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T22:09:35Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-16",
-   "name": "Feed pulse 16",
+   "name": "feed-pulse-16",
    "project": "general",
-   "schedule": "daily 16:00",
+   "schedule": "daily at 16:00 (user local)",
    "last_run": "2026-10-19T23:51:23Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T23:51:23Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-17",
-   "name": "Feed pulse 17",
+   "name": "feed-pulse-17",
    "project": "general",
-   "schedule": "daily 17:00",
+   "schedule": "daily at 17:00 (user local)",
    "last_run": "2026-10-20T00:04:08Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T00:04:08Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-18",
-   "name": "Feed pulse 18",
+   "name": "feed-pulse-18",
    "project": "general",
-   "schedule": "daily 18:00",
+   "schedule": "daily at 18:00 (user local)",
    "last_run": "2026-10-20T01:39:16Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T01:39:16Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-19",
-   "name": "Feed pulse 19",
+   "name": "feed-pulse-19",
    "project": "general",
-   "schedule": "daily 19:00",
+   "schedule": "daily at 19:00 (user local)",
    "last_run": "2026-10-20T02:29:44Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T02:29:44Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-20",
-   "name": "Feed pulse 20",
+   "name": "feed-pulse-20",
    "project": "general",
-   "schedule": "daily 20:00",
+   "schedule": "daily at 20:00 (user local)",
    "last_run": "2026-10-20T03:34:00Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T03:34:00Z"
+   "next_run": null
   },
   {
    "id": "feed-pulse-21",
-   "name": "Feed pulse 21",
+   "name": "feed-pulse-21",
    "project": "general",
-   "schedule": "daily 21:00",
-   "last_run": null,
-   "last_status": "never",
+   "schedule": "daily at 21:00 (user local)",
+   "last_run": "2026-10-20T04:31:48Z",
+   "last_status": "ok",
    "next_run": null
   },
   {
    "id": "feed-pulse-22",
-   "name": "Feed pulse 22",
+   "name": "feed-pulse-22",
    "project": "general",
-   "schedule": "daily 22:00",
+   "schedule": "daily at 22:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
    "id": "feed-pulse-23",
-   "name": "Feed pulse 23",
+   "name": "feed-pulse-23",
    "project": "general",
-   "schedule": "daily 23:00",
+   "schedule": "daily at 23:00 (user local)",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
@@ -293,35 +277,34 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-20T04:16:40Z",
+   "last_run": "2026-10-20T05:04:51Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:21:40Z"
+   "next_run": null
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T04:16:17Z",
+   "last_run": "2026-10-20T05:00:25Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:31:17Z"
+   "next_run": null
   },
   {
    "id": "heartbeat",
-   "name": "Heartbeat",
+   "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-20T04:06:01Z",
+   "last_run": "2026-10-20T04:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:36:01Z"
+   "next_run": null
   },
   {
    "id": "profile-image",
-   "name": "Profile image",
+   "name": "profile-image",
    "project": "general",
-   "schedule": "weekly",
+   "schedule": "every 168 hours",
    "last_run": null,
-   "last_status": "never",
    "next_run": null
   },
   {
