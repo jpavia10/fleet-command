@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-20T04:09:13Z",
+ "updated_at": "2026-10-20T04:36:54Z",
  "specialists": [
   {
    "id": "captain",
@@ -22,9 +22,9 @@
    "status": "standby"
   },
   {
-   "id": "renovations",
-   "name": "Renovation Chief",
-   "specialty": "renovations",
+   "id": "quartermaster",
+   "name": "Quartermaster",
+   "specialty": "marketplace",
    "status": "standby"
   },
   {
@@ -34,9 +34,9 @@
    "status": "standby"
   },
   {
-   "id": "quartermaster",
-   "name": "Quartermaster",
-   "specialty": "general",
+   "id": "renovations",
+   "name": "Renovation Chief",
+   "specialty": "renovations",
    "status": "standby"
   }
  ],
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-20T04:09:13Z",
+   "started_at": "2026-10-20T04:36:54Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "duplicates",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T04:03:06Z",
+   "last_run": "2026-10-20T04:17:24Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:18:06Z"
+   "next_run": "2026-10-20T04:32:24Z"
   },
   {
    "id": "feed-pulse-00",
@@ -293,18 +293,18 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-20T03:55:39Z",
+   "last_run": "2026-10-20T04:16:40Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:00:39Z"
+   "next_run": "2026-10-20T04:21:40Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-20T04:00:42Z",
+   "last_run": "2026-10-20T04:16:17Z",
    "last_status": "ok",
-   "next_run": "2026-10-20T04:15:42Z"
+   "next_run": "2026-10-20T04:31:17Z"
   },
   {
    "id": "heartbeat",
@@ -314,6 +314,15 @@
    "last_run": "2026-10-20T04:06:01Z",
    "last_status": "ok",
    "next_run": "2026-10-20T04:36:01Z"
+  },
+  {
+   "id": "profile-image",
+   "name": "Profile image",
+   "project": "general",
+   "schedule": "weekly",
+   "last_run": null,
+   "last_status": "never",
+   "next_run": null
   },
   {
    "id": "overnight-marketplace-prep",
@@ -329,15 +338,6 @@
    "name": "Morning brief (7 AM)",
    "project": "general",
    "schedule": "disabled legacy run-once",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "profile-image",
-   "name": "Profile image",
-   "project": "general",
-   "schedule": "every 7 days",
    "last_run": null,
    "last_status": "never",
    "next_run": null
