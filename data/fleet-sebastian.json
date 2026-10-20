@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-20T02:57:53Z",
+ "updated_at": "2026-10-20T03:17:54Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-20T02:57:53Z",
+   "started_at": "2026-10-20T03:17:54Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
