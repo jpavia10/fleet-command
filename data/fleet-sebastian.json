@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
-  "label": "Sebastian \u00b7 Muse",
-  "updated_at": "2026-10-20T15:49:21Z",
+  "label": "Sebastian · Muse",
+  "updated_at": "2026-10-20T16:18:55Z",
   "specialists": [
     {
       "id": "captain",
@@ -43,12 +43,12 @@
   "live": [
     {
       "id": "main-chat",
-      "name": "Captain \u2014 main chat",
+      "name": "Captain — main chat",
       "project": "command",
       "specialist": "captain",
-      "task": "Joseph's direct line \u2014 the persistent main chat",
+      "task": "Joseph's direct line — the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-20T15:49:21Z",
+      "started_at": "2026-10-20T16:18:55Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -59,7 +59,7 @@
       "name": "deterministic-doctor",
       "project": "general",
       "schedule": "every 1 hour seconds",
-      "last_run": "2026-10-20T15:00:00Z",
+      "last_run": "2026-10-20T16:00:00Z",
       "last_status": "ok",
       "next_run": null
     },
@@ -67,8 +67,8 @@
       "id": "dup-review-inbox-poll",
       "name": "Dup review inbox check",
       "project": "general",
-      "schedule": "every 15 minute seconds",
-      "last_run": "2026-10-20T15:47:02Z",
+      "schedule": "every 15 minutes seconds",
+      "last_run": "2026-10-20T16:17:27Z",
       "last_status": "ok",
       "next_run": null
     },
@@ -77,8 +77,8 @@
       "name": "feed-pulse-00",
       "project": "general",
       "schedule": "daily at 00:00",
-      "last_run": "2026-10-20T07:58:20Z",
-      "last_status": "ok",
+      "last_run": null,
+      "last_status": "never",
       "next_run": null
     },
     {
@@ -158,8 +158,8 @@
       "name": "feed-pulse-09",
       "project": "general",
       "schedule": "daily at 09:00",
-      "last_run": null,
-      "last_status": "never",
+      "last_run": "2026-10-20T16:17:00Z",
+      "last_status": "ok",
       "next_run": null
     },
     {
@@ -292,8 +292,8 @@
       "id": "fleet-command-feed",
       "name": "Fleet Command live feed (Sebastian)",
       "project": "command",
-      "schedule": "every 5 minute seconds",
-      "last_run": "2026-10-20T15:44:28Z",
+      "schedule": "every 5 minutes seconds",
+      "last_run": "2026-10-20T16:14:28Z",
       "last_status": "ok",
       "next_run": null
     },
@@ -301,8 +301,8 @@
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
       "project": "command",
-      "schedule": "every 15 minute seconds",
-      "last_run": "2026-10-20T15:45:32Z",
+      "schedule": "every 15 minutes seconds",
+      "last_run": "2026-10-20T16:15:48Z",
       "last_status": "ok",
       "next_run": null
     },
@@ -310,8 +310,8 @@
       "id": "heartbeat",
       "name": "heartbeat",
       "project": "general",
-      "schedule": "every 30 minute seconds",
-      "last_run": "2026-10-20T15:36:01Z",
+      "schedule": "every 30 minutes seconds",
+      "last_run": "2026-10-20T16:06:01Z",
       "last_status": "ok",
       "next_run": null
     },
@@ -337,7 +337,7 @@
       "id": "profile-image",
       "name": "profile-image",
       "project": "general",
-      "schedule": "every 168 hour seconds",
+      "schedule": "every 168 hours seconds",
       "last_run": null,
       "last_status": "never",
       "next_run": null
@@ -378,7 +378,7 @@
       "name": "Renovation",
       "project": "general",
       "status": "docked",
-      "last_active": "2026-09-25T08:05:38Z"
+      "last_active": "2026-09-25T08:05:37Z"
     },
     {
       "id": "73ca103f-5c80-4609-9434-7bff0c548cd0",
