@@ -2,11 +2,6 @@
   "updated_at": "2026-10-16T17:26:00Z",
   "feeds": [
     {
-      "ai": "sebastian",
-      "label": "Sebastian \u00b7 Muse",
-      "file": "fleet-sebastian.json"
-    },
-    {
       "ai": "claude",
       "label": "Claude",
       "file": "fleet-claude.json"
