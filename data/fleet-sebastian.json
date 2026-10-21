@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-21T15:59:56Z",
+ "label": "Sebastian · Muse",
+ "updated_at": "2026-10-21T16:27:50Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain \u2014 main chat",
+   "name": "Captain — main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line \u2014 the persistent main chat",
+   "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-21T15:59:56Z",
+   "started_at": "2026-10-21T16:27:50Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -58,52 +58,52 @@
    "id": "deterministic-doctor",
    "name": "Deterministic doctor",
    "project": "general",
-   "schedule": "every hour",
-   "last_run": "2026-10-21T15:00:00Z",
+   "schedule": "every 1 hours",
+   "last_run": "2026-10-21T16:00:00Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:00:00Z"
+   "next_run": "2026-10-21T17:00:00Z"
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-21T15:52:21Z",
+   "last_run": "2026-10-21T16:17:41Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:01:47Z"
+   "next_run": "2026-10-21T16:31:47Z"
   },
   {
    "id": "fleet-command-feed",
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-21T15:55:27Z",
+   "last_run": "2026-10-21T16:21:29Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:02:40Z"
+   "next_run": "2026-10-21T16:27:40Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-21T15:45:32Z",
+   "last_run": "2026-10-21T16:15:35Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:00:08Z"
+   "next_run": "2026-10-21T16:30:08Z"
   },
   {
    "id": "heartbeat",
    "name": "Heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-21T15:36:01Z",
+   "last_run": "2026-10-21T16:06:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:06:01Z"
+   "next_run": "2026-10-21T16:36:01Z"
   },
   {
    "id": "profile-image",
    "name": "Profile image",
    "project": "general",
-   "schedule": "every 7 days",
+   "schedule": "every 168 hours",
    "last_run": "2026-10-19T00:29:35Z",
    "last_status": "ok",
    "next_run": "2026-10-26T00:29:35Z"
@@ -194,9 +194,9 @@
    "name": "Feed pulse 09",
    "project": "general",
    "schedule": "daily at 09:00",
-   "last_run": "2026-10-20T16:17:00Z",
+   "last_run": "2026-10-21T16:16:59Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T16:16:59Z"
+   "next_run": "2026-10-22T16:16:59Z"
   },
   {
    "id": "feed-pulse-10",
@@ -350,42 +350,42 @@
    "name": "Photo Cleanup",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-09-25T07:33:30Z"
   },
   {
    "id": "510cd117-20c7-42c9-9315-fe3b1ca9da36",
    "name": "Fleet Command",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-10-17T04:25:26Z"
   },
   {
    "id": "43a26931-95ba-4995-b387-8daa97e2a442",
    "name": "Titan Reliquary",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-10-17T04:26:19Z"
   },
   {
    "id": "55c8a29b-c278-4886-b438-2c2b48864d0f",
    "name": "Marketplace",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-09-25T08:05:38Z"
   },
   {
    "id": "bf016325-7261-435b-8ddb-000a195d5a8f",
    "name": "Email Sorting",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-09-25T08:43:32Z"
   },
   {
    "id": "039be64d-f910-4d9d-b962-0973d4fb66ae",
    "name": "Renovation",
    "project": "general",
    "status": "docked",
-   "last_active": null
+   "last_active": "2026-09-25T08:05:38Z"
   }
  ]
 }
