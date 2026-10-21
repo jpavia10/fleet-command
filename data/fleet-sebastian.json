@@ -1,7 +1,7 @@
 {
   "ai": "sebastian",
   "label": "Sebastian · Muse",
-  "updated_at": "2026-10-20T23:43:57Z",
+  "updated_at": "2026-10-21T00:07:21Z",
   "specialists": [
     {
       "id": "captain",
@@ -48,7 +48,7 @@
       "specialist": "captain",
       "task": "Joseph's direct line — the persistent main chat",
       "status": "running",
-      "started_at": "2026-10-20T23:43:57Z",
+      "started_at": "2026-10-21T00:07:21Z",
       "elapsed_s": 0,
       "last_activity_s": 0
     }
@@ -58,19 +58,19 @@
       "id": "deterministic-doctor",
       "name": "deterministic-doctor",
       "project": "general",
-      "schedule": "every 1 hour",
-      "last_run": "2026-10-20T23:00:00Z",
+      "schedule": "every hour",
+      "last_run": "2026-10-21T00:00:00Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T00:00:00Z"
+      "next_run": null
     },
     {
       "id": "dup-review-inbox-poll",
       "name": "Dup review inbox check",
-      "project": "email",
+      "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-20T23:32:09Z",
+      "last_run": "2026-10-20T23:47:39Z",
       "last_status": "ok",
-      "next_run": "2026-10-20T23:47:09Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-00",
@@ -79,7 +79,7 @@
       "schedule": "daily at 00:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T07:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-01",
@@ -88,7 +88,7 @@
       "schedule": "daily at 01:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T08:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-02",
@@ -97,7 +97,7 @@
       "schedule": "daily at 02:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T09:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-03",
@@ -106,7 +106,7 @@
       "schedule": "daily at 03:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T10:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-04",
@@ -115,7 +115,7 @@
       "schedule": "daily at 04:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T11:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-05",
@@ -124,7 +124,7 @@
       "schedule": "daily at 05:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T12:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-06",
@@ -133,7 +133,7 @@
       "schedule": "daily at 06:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T13:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-07",
@@ -142,16 +142,16 @@
       "schedule": "daily at 07:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T14:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-08",
       "name": "feed-pulse-08",
       "project": "general",
       "schedule": "daily at 08:00",
-      "last_run": "2026-10-20T15:35:24Z",
-      "last_status": "ok",
-      "next_run": "2026-10-21T15:00:00Z"
+      "last_run": null,
+      "last_status": "never",
+      "next_run": null
     },
     {
       "id": "feed-pulse-09",
@@ -160,7 +160,7 @@
       "schedule": "daily at 09:00",
       "last_run": "2026-10-20T16:17:00Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T16:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-10",
@@ -169,7 +169,7 @@
       "schedule": "daily at 10:00",
       "last_run": "2026-10-20T17:40:35Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T17:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-11",
@@ -178,7 +178,7 @@
       "schedule": "daily at 11:00",
       "last_run": "2026-10-20T18:56:39Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T18:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-12",
@@ -187,7 +187,7 @@
       "schedule": "daily at 12:00",
       "last_run": "2026-10-20T19:45:47Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T19:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-13",
@@ -196,7 +196,7 @@
       "schedule": "daily at 13:00",
       "last_run": "2026-10-20T20:06:56Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T20:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-14",
@@ -205,7 +205,7 @@
       "schedule": "daily at 14:00",
       "last_run": "2026-10-20T21:30:49Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T21:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-15",
@@ -214,25 +214,25 @@
       "schedule": "daily at 15:00",
       "last_run": "2026-10-20T22:09:35Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T22:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-16",
       "name": "feed-pulse-16",
       "project": "general",
       "schedule": "daily at 16:00",
-      "last_run": null,
-      "last_status": "never",
-      "next_run": "2026-10-21T23:00:00Z"
+      "last_run": "2026-10-20T23:51:23Z",
+      "last_status": "ok",
+      "next_run": null
     },
     {
       "id": "feed-pulse-17",
       "name": "feed-pulse-17",
       "project": "general",
       "schedule": "daily at 17:00",
-      "last_run": null,
-      "last_status": "never",
-      "next_run": "2026-10-21T00:00:00Z"
+      "last_run": "2026-10-21T00:04:08Z",
+      "last_status": "ok",
+      "next_run": null
     },
     {
       "id": "feed-pulse-18",
@@ -241,7 +241,7 @@
       "schedule": "daily at 18:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T01:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-19",
@@ -250,7 +250,7 @@
       "schedule": "daily at 19:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T02:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-20",
@@ -259,7 +259,7 @@
       "schedule": "daily at 20:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T03:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-21",
@@ -268,7 +268,7 @@
       "schedule": "daily at 21:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T04:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-22",
@@ -277,7 +277,7 @@
       "schedule": "daily at 22:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T05:00:00Z"
+      "next_run": null
     },
     {
       "id": "feed-pulse-23",
@@ -286,25 +286,25 @@
       "schedule": "daily at 23:00",
       "last_run": null,
       "last_status": "never",
-      "next_run": "2026-10-21T06:00:00Z"
+      "next_run": null
     },
     {
       "id": "fleet-command-feed",
       "name": "Fleet Command live feed (Sebastian)",
-      "project": "command",
+      "project": "general",
       "schedule": "every 5 minutes",
-      "last_run": "2026-10-20T23:41:11Z",
+      "last_run": "2026-10-21T00:04:36Z",
       "last_status": "ok",
-      "next_run": "2026-10-20T23:46:11Z"
+      "next_run": null
     },
     {
       "id": "fleet-command-watchdog",
       "name": "Fleet Command watchdog",
-      "project": "command",
+      "project": "general",
       "schedule": "every 15 minutes",
-      "last_run": "2026-10-20T23:30:28Z",
+      "last_run": "2026-10-21T00:00:41Z",
       "last_status": "ok",
-      "next_run": "2026-10-20T23:45:28Z"
+      "next_run": null
     },
     {
       "id": "heartbeat",
@@ -313,15 +313,6 @@
       "schedule": "every 30 minutes",
       "last_run": "2026-10-20T23:36:01Z",
       "last_status": "ok",
-      "next_run": "2026-10-21T00:06:01Z"
-    },
-    {
-      "id": "profile-image",
-      "name": "profile-image",
-      "project": "general",
-      "schedule": "weekly",
-      "last_run": null,
-      "last_status": "never",
       "next_run": null
     },
     {
@@ -341,51 +332,60 @@
       "last_run": null,
       "last_status": "never",
       "next_run": null
+    },
+    {
+      "id": "profile-image",
+      "name": "profile-image",
+      "project": "general",
+      "schedule": "every 7 days",
+      "last_run": null,
+      "last_status": "never",
+      "next_run": null
     }
   ],
   "recent": [],
   "chats": [
     {
-      "id": "73ca103f-5c80-4609-9434-7bff0c548cd0",
-      "name": "Photo Cleanup",
+      "id": "43a26931-95ba-4995-b387-8daa97e2a442",
+      "name": "Titan Reliquary",
       "project": "general",
       "status": "docked",
-      "last_active": null
+      "last_active": "2026-10-17T04:26:19Z"
     },
     {
       "id": "510cd117-20c7-42c9-9315-fe3b1ca9da36",
       "name": "Fleet Command",
       "project": "general",
       "status": "docked",
-      "last_active": null
-    },
-    {
-      "id": "43a26931-95ba-4995-b387-8daa97e2a442",
-      "name": "Titan Reliquary",
-      "project": "general",
-      "status": "docked",
-      "last_active": null
-    },
-    {
-      "id": "55c8a29b-c278-4886-b438-2c2b48864d0f",
-      "name": "Marketplace",
-      "project": "general",
-      "status": "docked",
-      "last_active": null
+      "last_active": "2026-10-17T04:25:26Z"
     },
     {
       "id": "bf016325-7261-435b-8ddb-000a195d5a8f",
       "name": "Email Sorting",
       "project": "general",
       "status": "docked",
-      "last_active": null
+      "last_active": "2026-09-25T08:43:32Z"
     },
     {
       "id": "039be64d-f910-4d9d-b962-0973d4fb66ae",
       "name": "Renovation",
       "project": "general",
       "status": "docked",
-      "last_active": null
+      "last_active": "2026-09-25T08:05:38Z"
+    },
+    {
+      "id": "55c8a29b-c278-4886-b438-2c2b48864d0f",
+      "name": "Marketplace",
+      "project": "general",
+      "status": "docked",
+      "last_active": "2026-09-25T08:05:38Z"
+    },
+    {
+      "id": "73ca103f-5c80-4609-9434-7bff0c548cd0",
+      "name": "Photo Cleanup",
+      "project": "general",
+      "status": "docked",
+      "last_active": "2026-09-25T07:33:30Z"
     }
   ]
 }
