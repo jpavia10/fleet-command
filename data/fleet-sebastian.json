@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-21T21:42:44Z",
+ "updated_at": "2026-10-21T22:05:04Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-21T21:42:44Z",
+   "started_at": "2026-10-21T22:05:04Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-21T21:32:18Z",
+   "last_run": "2026-10-21T21:47:30Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T21:47:18Z"
+   "next_run": "2026-10-21T22:02:30Z"
   },
   {
    "id": "feed-pulse-00",
@@ -293,18 +293,18 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-21T21:40:15Z",
-   "last_status": "error",
-   "next_run": "2026-10-21T21:45:15Z"
+   "last_run": "2026-10-21T21:42:40Z",
+   "last_status": "ok",
+   "next_run": "2026-10-21T21:47:40Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-21T21:30:41Z",
+   "last_run": "2026-10-21T21:46:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-21T21:45:41Z"
+   "next_run": "2026-10-21T22:01:01Z"
   },
   {
    "id": "heartbeat",
