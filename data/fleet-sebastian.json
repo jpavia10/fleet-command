@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-21T23:07:43Z",
+ "label": "Sebastian · Muse",
+ "updated_at": "2026-10-21T23:31:10Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain \u2014 main chat",
+   "name": "Captain — main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line \u2014 the persistent main chat",
+   "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-21T23:07:43Z",
+   "started_at": "2026-10-21T23:31:10Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -293,9 +293,9 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-21T22:52:40Z",
-   "last_status": "ok",
-   "next_run": "2026-10-21T22:57:40Z"
+   "last_run": "2026-10-21T23:12:46Z",
+   "last_status": "error",
+   "next_run": "2026-10-21T23:17:46Z"
   },
   {
    "id": "fleet-command-watchdog",
