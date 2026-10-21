@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-21T14:13:24Z",
+ "updated_at": "2026-10-21T14:52:46Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-21T14:13:24Z",
+   "started_at": "2026-10-21T14:52:46Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,7 +68,7 @@
    "name": "Dup review inbox check",
    "project": "general",
    "schedule": "every 15m",
-   "last_run": "2026-10-21T14:02:42Z",
+   "last_run": "2026-10-21T14:47:06Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -140,8 +140,8 @@
    "name": "feed-pulse-07",
    "project": "general",
    "schedule": "daily at 07:00:00",
-   "last_run": null,
-   "last_status": "never",
+   "last_run": "2026-10-21T14:27:11Z",
+   "last_status": "ok",
    "next_run": null
   },
   {
@@ -293,7 +293,7 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5m",
-   "last_run": "2026-10-21T14:10:20Z",
+   "last_run": "2026-10-21T14:46:36Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -302,7 +302,7 @@
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15m",
-   "last_run": "2026-10-21T14:00:43Z",
+   "last_run": "2026-10-21T14:45:44Z",
    "last_status": "ok",
    "next_run": null
   },
@@ -311,8 +311,17 @@
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30m",
-   "last_run": "2026-10-21T14:06:01Z",
+   "last_run": "2026-10-21T14:36:01Z",
    "last_status": "ok",
+   "next_run": null
+  },
+  {
+   "id": "profile-image",
+   "name": "profile-image",
+   "project": "general",
+   "schedule": "every 168h",
+   "last_run": null,
+   "last_status": "never",
    "next_run": null
   },
   {
@@ -329,15 +338,6 @@
    "name": "Morning brief (7 AM)",
    "project": "general",
    "schedule": "disabled legacy run-once",
-   "last_run": null,
-   "last_status": "never",
-   "next_run": null
-  },
-  {
-   "id": "profile-image",
-   "name": "profile-image",
-   "project": "general",
-   "schedule": "every 168h",
    "last_run": null,
    "last_status": "never",
    "next_run": null
