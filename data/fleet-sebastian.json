@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian · Muse",
- "updated_at": "2026-10-22T00:34:41Z",
+ "label": "Sebastian \u00b7 Muse",
+ "updated_at": "2026-10-22T01:09:43Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain — main chat",
+   "name": "Captain \u2014 main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line — the persistent main chat",
+   "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-22T00:34:41Z",
+   "started_at": "2026-10-22T01:09:43Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -241,7 +241,7 @@
    "schedule": "daily at 18:00 (user time)",
    "last_run": null,
    "last_status": "never",
-   "next_run": "2026-10-22T01:00:00Z"
+   "next_run": "2026-10-23T01:00:00Z"
   },
   {
    "id": "feed-pulse-19",
