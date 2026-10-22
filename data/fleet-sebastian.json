@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-22T04:53:59Z",
+ "updated_at": "2026-10-22T05:14:50Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-22T04:53:59Z",
+   "started_at": "2026-10-22T05:14:50Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -277,7 +277,7 @@
    "schedule": "daily at 22:00 (user time)",
    "last_run": null,
    "last_status": "never",
-   "next_run": "2026-10-22T05:00:00Z"
+   "next_run": "2026-10-23T05:00:00Z"
   },
   {
    "id": "feed-pulse-23",
@@ -293,9 +293,9 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-22T04:36:02Z",
+   "last_run": "2026-10-22T04:34:24Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T04:41:02Z"
+   "next_run": "2026-10-22T04:39:24Z"
   },
   {
    "id": "fleet-command-watchdog",
@@ -337,7 +337,7 @@
    "id": "profile-image",
    "name": "profile-image",
    "project": "general",
-   "schedule": "every 7 days",
+   "schedule": "every 30 minutes",
    "last_run": null,
    "last_status": "never",
    "next_run": null
