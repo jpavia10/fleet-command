@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-22T23:09:09Z",
+ "label": "Sebastian · Muse",
+ "updated_at": "2026-10-22T23:39:32Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain \u2014 main chat",
+   "name": "Captain — main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line \u2014 the persistent main chat",
+   "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-22T23:09:09Z",
+   "started_at": "2026-10-22T23:39:32Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -59,18 +59,18 @@
    "name": "deterministic-doctor",
    "project": "general",
    "schedule": "every 1 hour",
-   "last_run": "2026-10-22T23:00:00Z",
+   "last_run": "2026-10-22T22:57:05Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T00:00:00Z"
+   "next_run": "2026-10-22T23:57:05Z"
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-22T23:02:09Z",
+   "last_run": "2026-10-22T23:32:08Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T23:17:09Z"
+   "next_run": "2026-10-22T23:47:08Z"
   },
   {
    "id": "feed-pulse-00",
@@ -293,18 +293,18 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-22T23:05:57Z",
+   "last_run": "2026-10-22T23:32:43Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T23:10:57Z"
+   "next_run": "2026-10-22T23:37:43Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-22T23:00:30Z",
+   "last_run": "2026-10-22T23:30:31Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T23:15:30Z"
+   "next_run": "2026-10-22T23:45:31Z"
   },
   {
    "id": "heartbeat",
