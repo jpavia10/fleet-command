@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-22T19:53:32Z",
+ "updated_at": "2026-10-22T20:13:12Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-22T19:53:32Z",
+   "started_at": "2026-10-22T20:13:12Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -59,18 +59,18 @@
    "name": "deterministic-doctor",
    "project": "general",
    "schedule": "every 1 hour",
-   "last_run": "2026-10-22T19:00:00Z",
+   "last_run": "2026-10-22T20:00:00Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T20:00:00Z"
+   "next_run": "2026-10-22T21:00:00Z"
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-22T19:33:54Z",
+   "last_run": "2026-10-22T19:47:39Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T19:48:54Z"
+   "next_run": "2026-10-22T20:02:39Z"
   },
   {
    "id": "feed-pulse-00",
@@ -185,8 +185,8 @@
    "name": "feed-pulse-12",
    "project": "general",
    "schedule": "daily at 12:00 (user time)",
-   "last_run": null,
-   "last_status": "never",
+   "last_run": "2026-10-22T19:45:47Z",
+   "last_status": "ok",
    "next_run": "2026-10-23T19:00:00Z"
   },
   {
@@ -196,7 +196,7 @@
    "schedule": "daily at 13:00 (user time)",
    "last_run": null,
    "last_status": "never",
-   "next_run": "2026-10-22T20:00:00Z"
+   "next_run": "2026-10-23T20:00:00Z"
   },
   {
    "id": "feed-pulse-14",
@@ -293,18 +293,18 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-22T19:41:05Z",
+   "last_run": "2026-10-22T20:00:16Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T19:46:05Z"
+   "next_run": "2026-10-22T20:05:16Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-22T19:31:57Z",
+   "last_run": "2026-10-22T20:01:11Z",
    "last_status": "ok",
-   "next_run": "2026-10-22T19:46:57Z"
+   "next_run": "2026-10-22T20:16:11Z"
   },
   {
    "id": "heartbeat",
