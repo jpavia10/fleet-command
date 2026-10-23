@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
- "label": "Sebastian · Muse",
- "updated_at": "2026-10-23T05:28:00Z",
+ "label": "Sebastian \u00b7 Muse",
+ "updated_at": "2026-10-23T06:04:31Z",
  "specialists": [
   {
    "id": "captain",
@@ -43,12 +43,12 @@
  "live": [
   {
    "id": "main-chat",
-   "name": "Captain — main chat",
+   "name": "Captain \u2014 main chat",
    "project": "command",
    "specialist": "captain",
-   "task": "Joseph's direct line — the persistent main chat",
+   "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-23T05:28:00Z",
+   "started_at": "2026-10-23T06:04:31Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -59,18 +59,18 @@
    "name": "deterministic-doctor",
    "project": "general",
    "schedule": "every 1 hour",
-   "last_run": "2026-10-23T05:00:00Z",
+   "last_run": "2026-10-23T06:00:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T06:00:00Z"
+   "next_run": "2026-10-23T07:00:01Z"
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-23T05:17:02Z",
+   "last_run": "2026-10-23T06:02:02Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T05:32:02Z"
+   "next_run": "2026-10-23T06:17:02Z"
   },
   {
    "id": "feed-pulse-00",
@@ -275,8 +275,8 @@
    "name": "feed-pulse-22",
    "project": "general",
    "schedule": "daily at 22:00 (user time)",
-   "last_run": null,
-   "last_status": "never",
+   "last_run": "2026-10-23T05:47:24Z",
+   "last_status": "ok",
    "next_run": "2026-10-24T05:00:00Z"
   },
   {
@@ -286,34 +286,34 @@
    "schedule": "daily at 23:00 (user time)",
    "last_run": null,
    "last_status": "never",
-   "next_run": "2026-10-23T06:00:00Z"
+   "next_run": "2026-10-24T06:00:00Z"
   },
   {
    "id": "fleet-command-feed",
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-23T05:24:24Z",
+   "last_run": "2026-10-23T06:01:52Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T05:29:24Z"
+   "next_run": "2026-10-23T06:06:52Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-23T05:15:49Z",
+   "last_run": "2026-10-23T06:00:36Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T05:30:49Z"
+   "next_run": "2026-10-23T06:15:36Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-23T05:06:01Z",
+   "last_run": "2026-10-23T05:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T05:36:01Z"
+   "next_run": "2026-10-23T06:06:01Z"
   },
   {
    "id": "overnight-marketplace-prep",
