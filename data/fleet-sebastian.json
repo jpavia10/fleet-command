@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian · Muse",
- "updated_at": "2026-10-23T18:35:59Z",
+ "updated_at": "2026-10-23T19:05:27Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line — the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-23T18:35:59Z",
+   "started_at": "2026-10-23T19:05:27Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-23T18:21:29Z",
+   "last_run": "2026-10-23T18:48:24Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T18:36:29Z"
+   "next_run": "2026-10-23T19:03:24Z"
   },
   {
    "id": "feed-pulse-00",
@@ -187,7 +187,7 @@
    "schedule": "daily at 12:00 (user time)",
    "last_run": "2026-10-22T19:45:47Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T19:00:00Z"
+   "next_run": "2026-10-24T19:00:00Z"
   },
   {
    "id": "feed-pulse-13",
@@ -293,27 +293,27 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-23T18:31:34Z",
+   "last_run": "2026-10-23T18:55:17Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T18:36:34Z"
+   "next_run": "2026-10-23T19:00:17Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-23T18:30:36Z",
+   "last_run": "2026-10-23T18:45:35Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T18:45:36Z"
+   "next_run": "2026-10-23T19:00:35Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-23T18:06:01Z",
+   "last_run": "2026-10-23T18:36:02Z",
    "last_status": "ok",
-   "next_run": "2026-10-23T18:36:01Z"
+   "next_run": "2026-10-23T19:06:02Z"
   },
   {
    "id": "overnight-marketplace-prep",
