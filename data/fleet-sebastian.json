@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-24T05:33:31Z",
+ "updated_at": "2026-10-24T06:02:42Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-24T05:33:31Z",
+   "started_at": "2026-10-24T06:02:42Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T05:32:04Z",
+   "last_run": "2026-10-24T05:47:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T05:47:04Z"
+   "next_run": "2026-10-24T06:02:01Z"
   },
   {
    "id": "feed-pulse-00",
@@ -275,7 +275,7 @@
    "name": "feed-pulse-22",
    "project": "general",
    "schedule": "daily at 22:00 (user time)",
-   "last_run": "2026-10-23T05:47:24Z",
+   "last_run": "2026-10-24T05:47:24Z",
    "last_status": "ok",
    "next_run": "2026-10-25T05:00:00Z"
   },
@@ -286,34 +286,34 @@
    "schedule": "daily at 23:00 (user time)",
    "last_run": "2026-10-23T06:50:39Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T06:00:00Z"
+   "next_run": "2026-10-25T06:00:00Z"
   },
   {
    "id": "fleet-command-feed",
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-24T05:26:34Z",
+   "last_run": "2026-10-24T06:00:07Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T05:31:34Z"
+   "next_run": "2026-10-24T06:05:07Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T05:30:30Z",
+   "last_run": "2026-10-24T05:45:29Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T05:45:30Z"
+   "next_run": "2026-10-24T06:00:29Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-24T05:06:01Z",
+   "last_run": "2026-10-24T05:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T05:36:01Z"
+   "next_run": "2026-10-24T06:06:01Z"
   },
   {
    "id": "overnight-marketplace-prep",
