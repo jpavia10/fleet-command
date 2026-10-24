@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-24T08:38:38Z",
+ "updated_at": "2026-10-24T09:04:11Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-24T08:38:38Z",
+   "started_at": "2026-10-24T09:04:11Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -59,18 +59,18 @@
    "name": "deterministic-doctor",
    "project": "general",
    "schedule": "every 1 hour",
-   "last_run": "2026-10-24T08:00:00Z",
+   "last_run": "2026-10-24T09:00:00Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T09:00:00Z"
+   "next_run": "2026-10-24T10:00:00Z"
   },
   {
    "id": "dup-review-inbox-poll",
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T08:32:01Z",
+   "last_run": "2026-10-24T09:01:59Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T08:47:01Z"
+   "next_run": "2026-10-24T09:16:59Z"
   },
   {
    "id": "feed-pulse-00",
@@ -97,7 +97,7 @@
    "schedule": "daily at 02:00 (user time)",
    "last_run": "2026-10-23T09:27:03Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T09:00:00Z"
+   "next_run": "2026-10-25T09:00:00Z"
   },
   {
    "id": "feed-pulse-03",
@@ -293,18 +293,18 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-24T07:58:39Z",
+   "last_run": "2026-10-24T08:39:27Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T08:03:39Z"
+   "next_run": "2026-10-24T08:44:27Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T08:30:22Z",
+   "last_run": "2026-10-24T09:00:22Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T08:45:22Z"
+   "next_run": "2026-10-24T09:15:22Z"
   },
   {
    "id": "heartbeat",
