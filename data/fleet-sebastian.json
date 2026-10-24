@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-24T18:23:51Z",
+ "updated_at": "2026-10-24T18:54:08Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-24T18:23:51Z",
+   "started_at": "2026-10-24T18:54:08Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T18:17:10Z",
+   "last_run": "2026-10-24T18:47:03Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T18:32:10Z"
+   "next_run": "2026-10-24T19:02:03Z"
   },
   {
    "id": "feed-pulse-00",
@@ -293,27 +293,27 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-24T18:18:46Z",
+   "last_run": "2026-10-24T18:49:20Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T18:23:46Z"
+   "next_run": "2026-10-24T18:54:20Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T18:15:23Z",
+   "last_run": "2026-10-24T18:45:21Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T18:30:23Z"
+   "next_run": "2026-10-24T19:00:21Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-24T18:06:01Z",
+   "last_run": "2026-10-24T18:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T18:36:01Z"
+   "next_run": "2026-10-24T19:06:01Z"
   },
   {
    "id": "overnight-marketplace-prep",
