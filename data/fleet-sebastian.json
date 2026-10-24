@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-24T14:33:41Z",
+ "updated_at": "2026-10-24T15:00:18Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-24T14:33:41Z",
+   "started_at": "2026-10-24T15:00:18Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T14:32:11Z",
+   "last_run": "2026-10-24T14:47:03Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T14:47:11Z"
+   "next_run": "2026-10-24T15:02:03Z"
   },
   {
    "id": "feed-pulse-00",
@@ -151,7 +151,7 @@
    "schedule": "daily at 08:00 (user time)",
    "last_run": "2026-10-23T15:35:23Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T15:00:00Z"
+   "next_run": "2026-10-25T15:00:00Z"
   },
   {
    "id": "feed-pulse-09",
@@ -293,27 +293,27 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-24T14:29:15Z",
+   "last_run": "2026-10-24T14:54:08Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T14:34:15Z"
+   "next_run": "2026-10-24T14:59:08Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-24T14:30:34Z",
+   "last_run": "2026-10-24T14:45:32Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T14:45:34Z"
+   "next_run": "2026-10-24T15:00:32Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-24T14:06:01Z",
+   "last_run": "2026-10-24T14:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-24T14:36:01Z"
+   "next_run": "2026-10-24T15:06:01Z"
   },
   {
    "id": "overnight-marketplace-prep",
