@@ -76,6 +76,13 @@
       "scheduled": 32,
       "done": 0,
       "failed": 0
+    },
+    {
+      "date": "2026-10-28",
+      "live": 1,
+      "scheduled": 32,
+      "done": 0,
+      "failed": 0
     }
   ],
   "chatgpt": [
