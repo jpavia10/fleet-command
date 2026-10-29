@@ -1,7 +1,7 @@
 {
  "ai": "sebastian",
  "label": "Sebastian \u00b7 Muse",
- "updated_at": "2026-10-29T01:14:43Z",
+ "updated_at": "2026-10-29T01:59:26Z",
  "specialists": [
   {
    "id": "captain",
@@ -48,7 +48,7 @@
    "specialist": "captain",
    "task": "Joseph's direct line \u2014 the persistent main chat",
    "status": "running",
-   "started_at": "2026-10-29T01:14:43Z",
+   "started_at": "2026-10-29T01:59:26Z",
    "elapsed_s": 0,
    "last_activity_s": 0
   }
@@ -68,9 +68,9 @@
    "name": "Dup review inbox check",
    "project": "email",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-29T01:02:34Z",
+   "last_run": "2026-10-29T01:47:11Z",
    "last_status": "ok",
-   "next_run": "2026-10-29T01:17:34Z"
+   "next_run": "2026-10-29T02:02:11Z"
   },
   {
    "id": "feed-pulse-00",
@@ -239,7 +239,7 @@
    "name": "feed-pulse-18",
    "project": "general",
    "schedule": "daily at 18:00 (user time)",
-   "last_run": "2026-10-28T01:39:15Z",
+   "last_run": "2026-10-29T01:39:15Z",
    "last_status": "ok",
    "next_run": "2026-10-30T01:00:00Z"
   },
@@ -293,27 +293,27 @@
    "name": "Fleet Command live feed (Sebastian)",
    "project": "general",
    "schedule": "every 5 minutes",
-   "last_run": "2026-10-29T01:11:28Z",
+   "last_run": "2026-10-29T01:56:21Z",
    "last_status": "ok",
-   "next_run": "2026-10-29T01:16:28Z"
+   "next_run": "2026-10-29T02:01:21Z"
   },
   {
    "id": "fleet-command-watchdog",
    "name": "Fleet Command watchdog",
    "project": "general",
    "schedule": "every 15 minutes",
-   "last_run": "2026-10-29T01:00:36Z",
+   "last_run": "2026-10-29T01:45:28Z",
    "last_status": "ok",
-   "next_run": "2026-10-29T01:15:36Z"
+   "next_run": "2026-10-29T02:00:28Z"
   },
   {
    "id": "heartbeat",
    "name": "heartbeat",
    "project": "general",
    "schedule": "every 30 minutes",
-   "last_run": "2026-10-29T01:06:01Z",
+   "last_run": "2026-10-29T01:36:01Z",
    "last_status": "ok",
-   "next_run": "2026-10-29T01:36:01Z"
+   "next_run": "2026-10-29T02:06:01Z"
   },
   {
    "id": "overnight-marketplace-prep",
