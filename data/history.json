@@ -122,6 +122,13 @@
       "scheduled": 0,
       "done": 0,
       "failed": 0
+    },
+    {
+      "date": "2026-11-02",
+      "live": 0,
+      "scheduled": 0,
+      "done": 0,
+      "failed": 0
     }
   ]
 }
