@@ -298,6 +298,10 @@ main { position: relative; z-index: 2; }
   text-decoration-thickness: 1px;
 }
 
+.sheet-copy .quiet {
+  text-shadow: 0 1px 1px #05060a, 0 0 12px #05060a;
+}
+
 .quiet-btn {
   background: transparent;
   color: var(--ink);
@@ -491,8 +495,17 @@ button.card:focus-visible { border-color: rgba(159, 212, 232, 0.7); }
 
 .dock-cta:hover { background: rgba(255, 255, 255, 0.16); }
 
-#houses { padding-bottom: calc(36px + env(safe-area-inset-bottom)); }
+#houses { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 #record { padding-bottom: calc(132px + env(safe-area-inset-bottom)); }
+
+@media (min-width: 900px) {
+  #houses .sheet-inner { width: min(980px, 100%); }
+  #houses .stack {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+}
 
 .fallback {
   position: relative;
