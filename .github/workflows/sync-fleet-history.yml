@@ -1,8 +1,8 @@
 name: Sync fleet history from repo data
 
+# Paused with the bridge. No schedule — the daily rollup stays a manual
+# dispatch until the role of Fleet Command is decided.
 on:
-  schedule:
-    - cron: '23 4 * * *'
   workflow_dispatch:
 
 jobs:

@@ -1,13 +1,31 @@
 {
+  "id": "./",
   "name": "Fleet Command",
-  "short_name": "FleetCmd",
-  "description": "Live tactical display of Joseph's AI agent fleet.",
-  "start_url": ".",
+  "short_name": "Fleet",
+  "description": "Fleet Command, the paused ops bridge. A held fleet report and the Discord door. No live watch.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#04060d",
-  "theme_color": "#04060d",
+  "background_color": "#05060a",
+  "theme_color": "#05060a",
+  "lang": "en",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Houses",
+      "short_name": "Houses",
+      "url": "./#houses",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Record",
+      "short_name": "Record",
+      "url": "./#record",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
   ]
 }
