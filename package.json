@@ -1,0 +1,17 @@
+{
+  "name": "fleet-command",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --format=esm --outfile=fleet.js --minify && node scripts/copy-fonts.mjs && node scripts/make-icons.mjs",
+    "dev": "esbuild src/main.js --bundle --format=esm --outfile=fleet.js --servedir=. --watch",
+    "check": "node --test test/bridge.test.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/outfit": "^5.2.8",
+    "esbuild": "^0.25.12",
+    "pngjs": "^7.0.0",
+    "three": "^0.164.1"
+  }
+}
